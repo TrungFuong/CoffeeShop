@@ -13,6 +13,7 @@ namespace CoffeeShop
         public DbSet<Employee> Employees { get; set; }
         public DbSet<PayRate> PayRates { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Salary> Salaries { get; set; }
 
@@ -86,6 +87,10 @@ namespace CoffeeShop
                 .HasForeignKey(product => product.CategoryId);
 
             modelBuilder.Entity<Product>()
+                .HasMany(product => product.ProductImages)
+                .WithOne(productImage => productImage.Product);
+
+            modelBuilder.Entity<Product>()
                 .HasMany(product => product.ReceiptDetails)
                 .WithOne(receiptDetail => receiptDetail.Product);
 
@@ -132,46 +137,61 @@ namespace CoffeeShop
                 new Product { ProductId = 4, ProductName = "Croissant", CategoryId = 3, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" " }
             );
 
+            modelBuilder.Entity<ProductImage>().HasData(
+               new ProductImage
+               {
+                   ProductImageId = 1,
+                   ProductImagePath = "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg",
+                   ProductImageDescription = "Espresso coffee shot",
+                   ProductId = 1
+               },
+               new ProductImage
+               {
+                   ProductImageId = 2,
+                   ProductImagePath = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg",
+                   ProductImageDescription = "Cappuccino with milk foam",
+                   ProductId = 2
+               });
+
             modelBuilder.Entity<Role>().HasData(
-                new Role { RoleId = 1, RoleName = "Admin" },
-                new Role { RoleId = 2, RoleName = "Employee" }
-            );
+                 new Role { RoleId = 1, RoleName = "Admin" },
+                 new Role { RoleId = 2, RoleName = "Employee" }
+             );
 
             modelBuilder.Entity<Account>().HasData(
-                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword= "admin", RoleId = 1 },
-                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword= "1", RoleId = 1 }
+                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", RoleId = 1 },
+                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", RoleId = 1 }
             );
 
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { EmployeeId = bossId, EmployeeName = "John The Boss", AccountId = adminId, EmployeePosition="Owner", EmployeeWorkingHour=10},
-                new Employee { EmployeeId = employeeId, EmployeeName = "Jane Cashier", AccountId = normalEmployeeId, EmployeePosition="Cashier", EmployeeWorkingHour=10}
+                new Employee { EmployeeId = bossId, EmployeeName = "John The Boss", AccountId = adminId, EmployeePosition = "Owner", EmployeeWorkingHour = 10 },
+                new Employee { EmployeeId = employeeId, EmployeeName = "Jane Cashier", AccountId = normalEmployeeId, EmployeePosition = "Cashier", EmployeeWorkingHour = 10 }
             );
 
             modelBuilder.Entity<PayRate>().HasData(
-                new PayRate { PayRateId = 1, PayrateName="Hoc viec", PayrateValue = 20000 },
+                new PayRate { PayRateId = 1, PayrateName = "Hoc viec", PayrateValue = 20000 },
                 new PayRate { PayRateId = 2, PayrateName = "Junior", PayrateValue = 25000 },
                 new PayRate { PayRateId = 3, PayrateName = "Senior", PayrateValue = 30000 }
             );
 
             modelBuilder.Entity<Salary>().HasData(
-                new Salary { SalaryId = 1, EmployeeId = employeeId, PayrateId = 1,  TotalSalary = 250000 }
+                new Salary { SalaryId = 1, EmployeeId = employeeId, PayrateId = 1, TotalSalary = 250000 }
             );
 
             modelBuilder.Entity<Customer>().HasData(
-                new Customer { CustomerId = customerId, CustomerName = "Jane Smith", CustomerPhone = "0934516636", CustomerBirthday = DateTime.Now}
+                new Customer { CustomerId = customerId, CustomerName = "Jane Smith", CustomerPhone = "0934516636", CustomerBirthday = DateTime.Now }
             );
 
             modelBuilder.Entity<Receipt>().HasData(
-                new Receipt {ReceiptId = receiptId, CustomerId = customerId, EmployeeId = employeeId, ReceiptDate = DateTime.Now, ReceiptTotal = 70000 }
+                new Receipt { ReceiptId = receiptId, CustomerId = customerId, EmployeeId = employeeId, ReceiptDate = DateTime.Now, ReceiptTotal = 70000 }
             );
 
             modelBuilder.Entity<ReceiptDetail>().HasData(
                 new ReceiptDetail { ReceiptId = receiptId, ProductId = 1, ProductQuantity = 2 },
                 new ReceiptDetail { ReceiptId = receiptId, ProductId = 4, ProductQuantity = 1 }
-                
             );
         }
-               
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

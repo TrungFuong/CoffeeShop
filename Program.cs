@@ -21,6 +21,8 @@ namespace CoffeeShop
 
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IProductImageService, ProductImageService>();
+            builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 
             var app = builder.Build();
 

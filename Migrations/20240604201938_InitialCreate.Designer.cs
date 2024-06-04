@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeShop.Migrations
 {
     [DbContext(typeof(CoffeeShopDBContext))]
-    [Migration("20240602192026_InitialCreate")]
+    [Migration("20240604201938_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -53,14 +53,14 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            AccountId = new Guid("50ffc507-0a86-4428-8276-32689425a805"),
+                            AccountId = new Guid("b5edf14d-9c1f-455f-bab7-c0ad2b87febc"),
                             AccountPassword = "admin",
                             AccountUsername = "admin",
                             RoleId = 1
                         },
                         new
                         {
-                            AccountId = new Guid("5f65227e-888b-47cd-a34d-ffe976892377"),
+                            AccountId = new Guid("a38c4fea-a34b-45c1-bf75-133a8eee9d29"),
                             AccountPassword = "1",
                             AccountUsername = "cashier",
                             RoleId = 1
@@ -153,8 +153,8 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            CustomerId = new Guid("438cad0e-2e5f-4f81-ba59-0f78cbce22ee"),
-                            CustomerBirthday = new DateTime(2024, 6, 3, 2, 20, 25, 719, DateTimeKind.Local).AddTicks(9501),
+                            CustomerId = new Guid("3b351c5f-519b-40b0-9979-a385323bd452"),
+                            CustomerBirthday = new DateTime(2024, 6, 5, 3, 19, 37, 270, DateTimeKind.Local).AddTicks(6854),
                             CustomerName = "Jane Smith",
                             CustomerPhone = "0934516636"
                         });
@@ -192,16 +192,16 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            EmployeeId = new Guid("9973721e-e24c-4d7a-b6f1-304ee0cc74bf"),
-                            AccountId = new Guid("50ffc507-0a86-4428-8276-32689425a805"),
+                            EmployeeId = new Guid("01831e1e-e1cc-4937-a743-064311205f4d"),
+                            AccountId = new Guid("b5edf14d-9c1f-455f-bab7-c0ad2b87febc"),
                             EmployeeName = "John The Boss",
                             EmployeePosition = "Owner",
                             EmployeeWorkingHour = (byte)10
                         },
                         new
                         {
-                            EmployeeId = new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"),
-                            AccountId = new Guid("5f65227e-888b-47cd-a34d-ffe976892377"),
+                            EmployeeId = new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"),
+                            AccountId = new Guid("a38c4fea-a34b-45c1-bf75-133a8eee9d29"),
                             EmployeeName = "Jane Cashier",
                             EmployeePosition = "Cashier",
                             EmployeeWorkingHour = (byte)10
@@ -339,7 +339,23 @@ namespace CoffeeShop.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImages");
+
+                    b.HasData(
+                        new
+                        {
+                            ProductImageId = 1,
+                            ProductId = 1,
+                            ProductImageDescription = "Espresso coffee shot",
+                            ProductImagePath = "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg"
+                        },
+                        new
+                        {
+                            ProductImageId = 2,
+                            ProductId = 2,
+                            ProductImageDescription = "Cappuccino with milk foam",
+                            ProductImagePath = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg"
+                        });
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.Receipt", b =>
@@ -372,10 +388,10 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            ReceiptId = new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"),
-                            CustomerId = new Guid("438cad0e-2e5f-4f81-ba59-0f78cbce22ee"),
-                            EmployeeId = new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"),
-                            ReceiptDate = new DateTime(2024, 6, 3, 2, 20, 25, 719, DateTimeKind.Local).AddTicks(9527),
+                            ReceiptId = new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"),
+                            CustomerId = new Guid("3b351c5f-519b-40b0-9979-a385323bd452"),
+                            EmployeeId = new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"),
+                            ReceiptDate = new DateTime(2024, 6, 5, 3, 19, 37, 270, DateTimeKind.Local).AddTicks(6890),
                             ReceiptTotal = 70000m
                         });
                 });
@@ -403,14 +419,14 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            ReceiptId = new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"),
+                            ReceiptId = new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"),
                             ProductId = 1,
                             ProductPrice = 0m,
                             ProductQuantity = 2
                         },
                         new
                         {
-                            ReceiptId = new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"),
+                            ReceiptId = new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"),
                             ProductId = 4,
                             ProductPrice = 0m,
                             ProductQuantity = 1
@@ -477,7 +493,7 @@ namespace CoffeeShop.Migrations
                         new
                         {
                             SalaryId = 1,
-                            EmployeeId = new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"),
+                            EmployeeId = new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"),
                             PayrateId = 1,
                             TotalSalary = 250000m
                         });

@@ -26,10 +26,10 @@ namespace CoffeeShop.Controllers
         }
 
         // GET: api/Categories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GetCategoryDTO>> GetCategory(int id)
+        [HttpGet("{categoryId}")]
+        public async Task<ActionResult<GetCategoryDTO>> GetCategory(int categoryId)
         {
-            var category = await _categoryService.GetCategoryByIdAsync(id);
+            var category = await _categoryService.GetCategoryByIdAsync(categoryId);
             if (category == null)
             {
                 return NotFound();
@@ -38,15 +38,15 @@ namespace CoffeeShop.Controllers
         }
 
         // PUT: api/Categories/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, UpdateCategoryDTO categoryDTO)
+        [HttpPut("{categoryId}")]
+        public async Task<IActionResult> PutCategory(int categoryId, UpdateCategoryDTO categoryDTO)
         {
-            if (id != categoryDTO.CategoryId)
+            if (categoryId != categoryDTO.CategoryId)
             {
                 return BadRequest();
             }
 
-            await _categoryService.UpdateCategoryAsync(id, categoryDTO);
+            await _categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
             return NoContent();
         }
 
@@ -60,10 +60,10 @@ namespace CoffeeShop.Controllers
         }
 
         // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        [HttpDelete("{categoryId}")]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            await _categoryService.DeleteCategoryAsync(id);
+            await _categoryService.DeleteCategoryAsync(categoryId);
             return NoContent();
         }
     }

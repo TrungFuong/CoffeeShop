@@ -110,7 +110,7 @@ namespace CoffeeShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductImage",
+                name: "ProductImages",
                 columns: table => new
                 {
                     ProductImageId = table.Column<int>(type: "int", nullable: false)
@@ -121,9 +121,9 @@ namespace CoffeeShop.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductImage", x => x.ProductImageId);
+                    table.PrimaryKey("PK_ProductImages", x => x.ProductImageId);
                     table.ForeignKey(
-                        name: "FK_ProductImage_Products_ProductId",
+                        name: "FK_ProductImages_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
@@ -265,7 +265,7 @@ namespace CoffeeShop.Migrations
             migrationBuilder.InsertData(
                 table: "Customers",
                 columns: new[] { "CustomerId", "CustomerBirthday", "CustomerName", "CustomerPhone" },
-                values: new object[] { new Guid("438cad0e-2e5f-4f81-ba59-0f78cbce22ee"), new DateTime(2024, 6, 3, 2, 20, 25, 719, DateTimeKind.Local).AddTicks(9501), "Jane Smith", "0934516636" });
+                values: new object[] { new Guid("3b351c5f-519b-40b0-9979-a385323bd452"), new DateTime(2024, 6, 5, 3, 19, 37, 270, DateTimeKind.Local).AddTicks(6854), "Jane Smith", "0934516636" });
 
             migrationBuilder.InsertData(
                 table: "PayRates",
@@ -291,8 +291,8 @@ namespace CoffeeShop.Migrations
                 columns: new[] { "AccountId", "AccountPassword", "AccountUsername", "RoleId" },
                 values: new object[,]
                 {
-                    { new Guid("50ffc507-0a86-4428-8276-32689425a805"), "admin", "admin", 1 },
-                    { new Guid("5f65227e-888b-47cd-a34d-ffe976892377"), "1", "cashier", 1 }
+                    { new Guid("a38c4fea-a34b-45c1-bf75-133a8eee9d29"), "1", "cashier", 1 },
+                    { new Guid("b5edf14d-9c1f-455f-bab7-c0ad2b87febc"), "admin", "admin", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -311,27 +311,36 @@ namespace CoffeeShop.Migrations
                 columns: new[] { "EmployeeId", "AccountId", "EmployeeName", "EmployeePosition", "EmployeeWorkingHour" },
                 values: new object[,]
                 {
-                    { new Guid("9973721e-e24c-4d7a-b6f1-304ee0cc74bf"), new Guid("50ffc507-0a86-4428-8276-32689425a805"), "John The Boss", "Owner", (byte)10 },
-                    { new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"), new Guid("5f65227e-888b-47cd-a34d-ffe976892377"), "Jane Cashier", "Cashier", (byte)10 }
+                    { new Guid("01831e1e-e1cc-4937-a743-064311205f4d"), new Guid("b5edf14d-9c1f-455f-bab7-c0ad2b87febc"), "John The Boss", "Owner", (byte)10 },
+                    { new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"), new Guid("a38c4fea-a34b-45c1-bf75-133a8eee9d29"), "Jane Cashier", "Cashier", (byte)10 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductImages",
+                columns: new[] { "ProductImageId", "ProductId", "ProductImageDescription", "ProductImagePath" },
+                values: new object[,]
+                {
+                    { 1, 1, "Espresso coffee shot", "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg" },
+                    { 2, 2, "Cappuccino with milk foam", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Receipts",
                 columns: new[] { "ReceiptId", "CustomerId", "EmployeeId", "ReceiptDate", "ReceiptTotal" },
-                values: new object[] { new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"), new Guid("438cad0e-2e5f-4f81-ba59-0f78cbce22ee"), new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"), new DateTime(2024, 6, 3, 2, 20, 25, 719, DateTimeKind.Local).AddTicks(9527), 70000m });
+                values: new object[] { new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"), new Guid("3b351c5f-519b-40b0-9979-a385323bd452"), new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"), new DateTime(2024, 6, 5, 3, 19, 37, 270, DateTimeKind.Local).AddTicks(6890), 70000m });
 
             migrationBuilder.InsertData(
                 table: "Salaries",
                 columns: new[] { "SalaryId", "EmployeeId", "PayrateId", "TotalSalary" },
-                values: new object[] { 1, new Guid("9fef1a72-28fe-4fb2-bd32-e4ddcb9d955c"), 1, 250000m });
+                values: new object[] { 1, new Guid("cbc1d18e-c1ae-4c37-b3c3-9dfa794e13ae"), 1, 250000m });
 
             migrationBuilder.InsertData(
                 table: "ReceiptDetail",
                 columns: new[] { "ProductId", "ReceiptId", "ProductPrice", "ProductQuantity" },
                 values: new object[,]
                 {
-                    { 1, new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"), 0m, 2 },
-                    { 4, new Guid("c647dee8-4746-4f25-b337-1bff9310a6d0"), 0m, 1 }
+                    { 1, new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"), 0m, 2 },
+                    { 4, new Guid("a8392033-e36a-4c64-97e7-047bbd3bd8f0"), 0m, 1 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -351,8 +360,8 @@ namespace CoffeeShop.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductImage_ProductId",
-                table: "ProductImage",
+                name: "IX_ProductImages_ProductId",
+                table: "ProductImages",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -395,7 +404,7 @@ namespace CoffeeShop.Migrations
                 name: "CheckTimes");
 
             migrationBuilder.DropTable(
-                name: "ProductImage");
+                name: "ProductImages");
 
             migrationBuilder.DropTable(
                 name: "ReceiptDetail");
