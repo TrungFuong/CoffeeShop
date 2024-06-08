@@ -1,17 +1,11 @@
 ﻿namespace CoffeeShop.DTOs
 {
-    public class AddCategoryDTO
+    public class CategoryRequestDTO
     {
         public string CategoryName { get; set; }
     }
 
-    public class UpdateCategoryDTO
-    {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set;}
-    }
-
-    public class GetCategoryDTO
+    public class CategoryResponseDTO
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set;}

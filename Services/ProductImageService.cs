@@ -13,7 +13,7 @@ namespace CoffeeShop.Services
             _productImageRepository = productImageRepository;
         }
 
-        public async Task AddProductImageAsync(AddProductImageDTO addProductImageDTO)
+        public async Task AddProductImageAsync(ProductImageRequestDTO addProductImageDTO)
         {
             var productImage = new ProductImage
             {
@@ -33,10 +33,10 @@ namespace CoffeeShop.Services
             }
         }
 
-        public async Task<IEnumerable<GetProductImageDTO>> GetAllProductImageAsync()
+        public async Task<IEnumerable<ProductResponseDTO>> GetAllProductImageAsync()
         {
             var productImages = await _productImageRepository.GetAllProductImagesAsync();
-            return productImages.Select(pi => new GetProductImageDTO
+            return productImages.Select(pi => new ProductResponseDTO
             {
                 ProductImageId = pi.ProductImageId,
                 ProductImagePath = pi.ProductImagePath,
@@ -45,11 +45,11 @@ namespace CoffeeShop.Services
             });
         }
 
-        public async Task<GetProductImageDTO> GetProductImageByIdAsync(int ProductImageId)
+        public async Task<ProductResponseDTO> GetProductImageByIdAsync(int ProductImageId)
         {
             var productImage = await _productImageRepository.GetProductImageByIdAsync(ProductImageId);
             if (productImage == null) return null;
-            return new GetProductImageDTO
+            return new ProductResponseDTO
             {
                 ProductImageId = productImage.ProductImageId,
                 ProductImagePath = productImage.ProductImagePath,

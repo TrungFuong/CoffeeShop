@@ -19,7 +19,7 @@ namespace CoffeeShop.Controllers
 
         // GET: api/Categories
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetCategoryDTO>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryResponseDTO>>> GetCategories()
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
             return Ok(categories);
@@ -27,7 +27,7 @@ namespace CoffeeShop.Controllers
 
         // GET: api/Categories/5
         [HttpGet("{categoryId}")]
-        public async Task<ActionResult<GetCategoryDTO>> GetCategory(int categoryId)
+        public async Task<ActionResult<CategoryResponseDTO>> GetCategory(int categoryId)
         {
             var category = await _categoryService.GetCategoryByIdAsync(categoryId);
             if (category == null)
@@ -39,20 +39,20 @@ namespace CoffeeShop.Controllers
 
         // PUT: api/Categories/5
         [HttpPut("{categoryId}")]
-        public async Task<IActionResult> PutCategory(int categoryId, UpdateCategoryDTO categoryDTO)
+        public async Task<IActionResult> PutCategory(int categoryId, CategoryResponseDTO categoryDTO)
         {
             if (categoryId != categoryDTO.CategoryId)
             {
                 return BadRequest();
             }
 
-            await _categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
+            await _categoryService.UpdateCategoryAsync(categoryId, CategoryRequestDTO);
             return NoContent();
         }
 
         // POST: api/Categories
         [HttpPost]
-        public async Task<ActionResult<GetCategoryDTO>> PostCategory(AddCategoryDTO categoryDTO)
+        public async Task<ActionResult<CategoryResponseDTO>> PostCategory(CategoryRequestDTO categoryDTO)
         {
             await _categoryService.AddCategoryAsync(categoryDTO);
             var addedCategory = await _categoryService.GetCategoryByNameAsync(categoryDTO.CategoryName);

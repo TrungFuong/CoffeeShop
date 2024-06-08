@@ -25,7 +25,7 @@ namespace CoffeeShop.Controllers
 
         // GET: api/ProductImages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetProductImageDTO>>> GetProductImages()
+        public async Task<ActionResult<IEnumerable<ProductResponseDTO>>> GetProductImages()
         {
             var productImages = await _productImageService.GetAllProductImageAsync();
             return Ok(productImages);
@@ -61,7 +61,7 @@ namespace CoffeeShop.Controllers
         // POST: api/ProductImages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostProductImage(AddProductImageDTO productImageDTO)
+        public async Task<IActionResult> PostProductImage(ProductImageRequestDTO productImageDTO)
         {
             try
             {
