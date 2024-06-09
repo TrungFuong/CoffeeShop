@@ -19,7 +19,7 @@ namespace CoffeeShop.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteProductImageAsync(int ProductImageId)
+        public async Task DeleteProductImageAsync(Guid ProductImageId)
         {
             var currentImage = await GetProductImageByIdAsync(ProductImageId);
             if (currentImage != null)
@@ -34,12 +34,12 @@ namespace CoffeeShop.Repositories
             return await _dbContext.ProductImages.ToListAsync();
         }
 
-        public async Task<ProductImage> GetProductImageByIdAsync(int ImageId)
+        public async Task<ProductImage> GetProductImageByIdAsync(Guid ImageId)
         {
             return await _dbContext.ProductImages.FindAsync(ImageId);
         }
 
-        public async Task UpdateProductImageAsync(int ProductImageId, ProductImage productImage)
+        public async Task UpdateProductImageAsync(Guid ProductImageId, ProductImage productImage)
         {
             var existingImage = await GetProductImageByIdAsync(ProductImageId);
             if (existingImage != null)

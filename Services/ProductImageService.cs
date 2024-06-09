@@ -1,7 +1,6 @@
 ﻿using CoffeeShop.DTOs;
 using CoffeeShop.Models;
 using CoffeeShop.Repositories;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace CoffeeShop.Services
 {
@@ -13,18 +12,18 @@ namespace CoffeeShop.Services
             _productImageRepository = productImageRepository;
         }
 
-        public async Task AddProductImageAsync(ProductImageRequestDTO addProductImageDTO)
+        public async Task AddProductImageAsync(ProductImageRequestDTO productImageDTO)
         {
             var productImage = new ProductImage
             {
-                ProductImagePath = addProductImageDTO.ProductImagePath,
-                ProductImageDescription = addProductImageDTO.ProductImageDescription,
-                ProductId = addProductImageDTO.ProductId
+                ProductImagePath = productImageDTO.ProductImagePath,
+                ProductImageDescription = productImageDTO.ProductImageDescription,
+                ProductId = productImageDTO.ProductId
             };
             await _productImageRepository.AddProductImageAsync(productImage);
         }
 
-        public async Task DeleteProductImageAsync(int productImageId)
+        public async Task DeleteProductImageAsync(Guid productImageId)
         {
             var currentProductImage = await _productImageRepository.GetProductImageByIdAsync(productImageId);
             if (currentProductImage != null)
@@ -33,10 +32,10 @@ namespace CoffeeShop.Services
             }
         }
 
-        public async Task<IEnumerable<ProductResponseDTO>> GetAllProductImageAsync()
+        public async Task<IEnumerable<ProductImageResponseDTO>> GetAllProductImageAsync()
         {
             var productImages = await _productImageRepository.GetAllProductImagesAsync();
-            return productImages.Select(pi => new ProductResponseDTO
+            return productImages.Select(pi => new ProductImageResponseDTO
             {
                 ProductImageId = pi.ProductImageId,
                 ProductImagePath = pi.ProductImagePath,
@@ -45,11 +44,10 @@ namespace CoffeeShop.Services
             });
         }
 
-        public async Task<ProductResponseDTO> GetProductImageByIdAsync(int ProductImageId)
+        public async Task<ProductImageResponseDTO> GetProductImageByIdAsync(Guid ProductImageId)
         {
             var productImage = await _productImageRepository.GetProductImageByIdAsync(ProductImageId);
-            if (productImage == null) return null;
-            return new ProductResponseDTO
+            return new ProductImageResponseDTO
             {
                 ProductImageId = productImage.ProductImageId,
                 ProductImagePath = productImage.ProductImagePath,
@@ -58,15 +56,16 @@ namespace CoffeeShop.Services
             };
         }
 
-        public async Task UpdateProductImageAsync(int productImageId, UpdateProductImageDTO updateProductImageDTO)
+
+        public async Task UpdateProductImageAsync(Guid productImageId, ProductImageRequestDTO productImageDTO)
         {
             var currentProductImage = await _productImageRepository.GetProductImageByIdAsync(productImageId);
-            if (currentProductImage == null)
-            {
-                currentProductImage.ProductImagePath = updateProductImageDTO.ProductImagePath;
-                currentProductImage.ProductImageDescription = updateProductImageDTO.ProductImageDescription;
-                currentProductImage.ProductId = updateProductImageDTO.ProductId;
-            };
+
+            currentProductImage.ProductImagePath = productImageDTO.ProductImagePath;
+            currentProductImage.ProductImageDescription = productImageDTO.ProductImageDescription;
+            currentProductImage.ProductId = productImageDTO.ProductId;
+            await _productImageRepository.UpdateProductImageAsync(productImageId, currentProductImage);
+
         }
     }
 }

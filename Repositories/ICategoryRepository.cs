@@ -6,10 +6,10 @@ namespace CoffeeShop.Repositories
     public interface ICategoryRepository
     {
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
-        Task<Category> GetCategoryByIdAsync(int categoryId);
+        Task<Category> GetCategoryByIdAsync(Guid categoryId);
         Task<Category> GetCategoryByNameAsync(string categoryName);
         Task AddCategoryAsync(Category category);
-        Task DeleteCategoryAsync(int categoryId);
-        Task UpdateCategoryAsync(int categoryId, Category category);
+        Task DeleteCategoryAsync(Guid categoryId);
+        Task UpdateCategoryAsync(Guid categoryId, Category category);
     }
 }

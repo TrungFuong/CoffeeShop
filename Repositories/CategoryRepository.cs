@@ -18,9 +18,9 @@ namespace CoffeeShop.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(int categoryId)
+        public async Task DeleteCategoryAsync(Guid categoryId)
         {
-            var category = await _dbContext.Categories.FindAsync(categoryId);
+            var category = await GetCategoryByIdAsync(categoryId);
             if (category != null)
             {
                 _dbContext.Categories.Remove(category);
@@ -33,7 +33,7 @@ namespace CoffeeShop.Repositories
             return await _dbContext.Categories.ToListAsync();
         }
 
-        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        public async Task<Category> GetCategoryByIdAsync(Guid categoryId)
         {
             return await _dbContext.Categories.FindAsync(categoryId);
         }
@@ -43,12 +43,13 @@ namespace CoffeeShop.Repositories
             return await _dbContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
         }
 
-        public async Task UpdateCategoryAsync(int categoryId, Category category)
+        public async Task UpdateCategoryAsync(Guid categoryId, Category category)
         {
-            var existingCategory = await _dbContext.Categories.FindAsync(categoryId);
-            if (existingCategory != null)
+            var currentCategory = await GetCategoryByIdAsync(categoryId);
+            if (currentCategory != null)
             {
-                existingCategory.CategoryName = category.CategoryName;
+                //existingCategory.CategoryName = category.CategoryName;
+                _dbContext.Update(currentCategory);
                 await _dbContext.SaveChangesAsync();
             }
         }

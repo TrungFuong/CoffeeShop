@@ -6,7 +6,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public int RecordId { get; set; }
+        public Guid RecordId { get; set; }
         [Required]
         public DateTime CheckinTime { get; set; }
         [Required]

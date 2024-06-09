@@ -49,15 +49,6 @@ namespace CoffeeShop
                 .HasMany(employee => employee.Receipts)
                 .WithOne(receipt => receipt.Employee);
 
-            modelBuilder.Entity<Account>()
-                .HasOne(account => account.Role)
-                .WithMany(role => role.Accounts)
-                .HasForeignKey(account => account.RoleId);
-
-            modelBuilder.Entity<Role>()
-                .HasMany(role => role.Accounts)
-                .WithOne(account => account.Role);
-
             modelBuilder.Entity<CheckTime>()
                 .HasOne(checkTime => checkTime.Employee)
                 .WithMany(employee => employee.CheckTimes)
@@ -123,44 +114,49 @@ namespace CoffeeShop
             var employeeId = Guid.NewGuid();
             var customerId = Guid.NewGuid();
             var receiptId = Guid.NewGuid();
+            var coffeeCateId = Guid.NewGuid();
+            var teaCateId = Guid.NewGuid();
+            var pastryCateId = Guid.NewGuid();
+            var productId1 = Guid.NewGuid();
+            var productId2 = Guid.NewGuid();
+            var productId3 = Guid.NewGuid();
+            var productId4 = Guid.NewGuid();
+            var payRateId1 = Guid.NewGuid();
+            var payRateId2 = Guid.NewGuid();
+            var payRateId3 = Guid.NewGuid();
 
             modelBuilder.Entity<Category>().HasData(
-              new Category { CategoryId = 1, CategoryName = "Coffee" },
-              new Category { CategoryId = 2, CategoryName = "Tea" },
-              new Category { CategoryId = 3, CategoryName = "Pastry" }
+              new Category { CategoryId = coffeeCateId, CategoryName = "Coffee" },
+              new Category { CategoryId = teaCateId, CategoryName = "Tea" },
+              new Category { CategoryId = pastryCateId, CategoryName = "Pastry" }
           );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = 1, ProductName = "Espresso", CategoryId = 1, ProductPrice = 25000, ProductDescription = "Coffee shot" },
-                new Product { ProductId = 2, ProductName = "Cappuccino", CategoryId = 1, ProductPrice = 30000, ProductDescription = "Milky coffee" },
-                new Product { ProductId = 3, ProductName = "Green Tea", CategoryId = 2, ProductPrice = 15000, ProductDescription = "Green thing" },
-                new Product { ProductId = 4, ProductName = "Croissant", CategoryId = 3, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" " }
+                new Product { ProductId = productId1, ProductName = "Espresso", CategoryId = coffeeCateId, ProductPrice = 25000, ProductDescription = "Coffee shot" },
+                new Product { ProductId = productId2, ProductName = "Cappuccino", CategoryId = coffeeCateId, ProductPrice = 30000, ProductDescription = "Milky coffee" },
+                new Product { ProductId = productId3, ProductName = "Green Tea", CategoryId = teaCateId, ProductPrice = 15000, ProductDescription = "Green thing" },
+                new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" " }
             );
 
             modelBuilder.Entity<ProductImage>().HasData(
                new ProductImage
                {
-                   ProductImageId = 1,
+                   ProductImageId = Guid.NewGuid(),
                    ProductImagePath = "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg",
                    ProductImageDescription = "Espresso coffee shot",
-                   ProductId = 1
+                   ProductId = productId1
                },
                new ProductImage
                {
-                   ProductImageId = 2,
+                   ProductImageId = Guid.NewGuid(),
                    ProductImagePath = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg",
                    ProductImageDescription = "Cappuccino with milk foam",
-                   ProductId = 2
+                   ProductId = productId2
                });
 
-            modelBuilder.Entity<Role>().HasData(
-                 new Role { RoleId = 1, RoleName = "Admin" },
-                 new Role { RoleId = 2, RoleName = "Employee" }
-             );
-
             modelBuilder.Entity<Account>().HasData(
-                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", RoleId = 1 },
-                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", RoleId = 1 }
+                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", Role = Account.UserRole.Admin },
+                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", Role = Account.UserRole.Employee }
             );
 
             modelBuilder.Entity<Employee>().HasData(
@@ -169,9 +165,9 @@ namespace CoffeeShop
             );
 
             modelBuilder.Entity<PayRate>().HasData(
-                new PayRate { PayRateId = 1, PayrateName = "Hoc viec", PayrateValue = 20000 },
-                new PayRate { PayRateId = 2, PayrateName = "Junior", PayrateValue = 25000 },
-                new PayRate { PayRateId = 3, PayrateName = "Senior", PayrateValue = 30000 }
+                new PayRate { PayRateId = payRateId1, PayrateName = "Hoc viec", PayrateValue = 20000 },
+                new PayRate { PayRateId = payRateId2, PayrateName = "Junior", PayrateValue = 25000 },
+                new PayRate { PayRateId = payRateId3, PayrateName = "Senior", PayrateValue = 30000 }
             );
 
             modelBuilder.Entity<Salary>().HasData(
@@ -187,15 +183,9 @@ namespace CoffeeShop
             );
 
             modelBuilder.Entity<ReceiptDetail>().HasData(
-                new ReceiptDetail { ReceiptId = receiptId, ProductId = 1, ProductQuantity = 2 },
-                new ReceiptDetail { ReceiptId = receiptId, ProductId = 4, ProductQuantity = 1 }
+                new ReceiptDetail { ReceiptId = receiptId, ProductId = productId1, ProductQuantity = 2 },
+                new ReceiptDetail { ReceiptId = receiptId, ProductId = productId4, ProductQuantity = 1 }
             );
-        }
-
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=TRUNGFUONG;Initial Catalog=CoffeeShop;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
     }
 }

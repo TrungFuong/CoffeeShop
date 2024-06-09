@@ -6,10 +6,10 @@ namespace CoffeeShop.Services
 {
     public interface IProductImageService
     {
-        Task<IEnumerable<ProductResponseDTO>> GetAllProductImageAsync();
-        Task<ProductResponseDTO> GetProductImageByIdAsync(int productImageId);
+        Task<IEnumerable<ProductImageResponseDTO>> GetAllProductImageAsync();
+        Task<ProductImageResponseDTO> GetProductImageByIdAsync(Guid productImageId);
         Task AddProductImageAsync(ProductImageRequestDTO addProductImageDTO);
-        Task DeleteProductImageAsync(int productImageId);
-        Task UpdateProductImageAsync(int productImageId, UpdateProductImageDTO updateProductImageDTO);
+        Task DeleteProductImageAsync(Guid productImageId);
+        Task UpdateProductImageAsync(Guid productImageId, ProductImageRequestDTO updateProductImageDTO);
     }
 }

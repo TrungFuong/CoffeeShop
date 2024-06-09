@@ -8,10 +8,10 @@ namespace CoffeeShop.Services
     public interface ICategoryService
     {
         Task<IEnumerable<CategoryResponseDTO>> GetAllCategoriesAsync();
-        Task<CategoryResponseDTO> GetCategoryByIdAsync(int categoryId);
+        Task<CategoryResponseDTO> GetCategoryByIdAsync(Guid categoryId);
         Task<CategoryResponseDTO> GetCategoryByNameAsync(string categoryName);
         Task AddCategoryAsync(CategoryRequestDTO categoryDTO);
-        Task DeleteCategoryAsync(int categoryId);
-        Task UpdateCategoryAsync(int categoryId, CategoryRequestDTO categoryDTO);
+        Task DeleteCategoryAsync(Guid categoryId);
+        Task UpdateCategoryAsync(Guid categoryId, CategoryRequestDTO categoryDTO);
     }
 }

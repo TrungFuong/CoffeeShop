@@ -1,9 +1,7 @@
 ﻿using CoffeeShop.DTOs;
 using CoffeeShop.Models;
 using CoffeeShop.Repositories;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using CoffeeShop.Exceptions;
 
 namespace CoffeeShop.Services
 {
@@ -25,14 +23,17 @@ namespace CoffeeShop.Services
             await _categoryRepository.AddCategoryAsync(category);
         }
 
-        public async Task DeleteCategoryAsync(int categoryId)
+        public async Task DeleteCategoryAsync(Guid categoryId)
         {
             var currentCategory = await _categoryRepository.GetCategoryByIdAsync(categoryId);
             if (currentCategory != null)
             {
                 await _categoryRepository.DeleteCategoryAsync(categoryId);
-            }            
-                throw new NullReferenceException("Category not found.");
+            }
+            else
+            {
+                throw new NotFoundException(typeof(Category), categoryId);
+            }
         }
 
         public async Task<IEnumerable<CategoryResponseDTO>> GetAllCategoriesAsync()
@@ -49,12 +50,12 @@ namespace CoffeeShop.Services
             });
         }
 
-        public async Task<CategoryResponseDTO> GetCategoryByIdAsync(int categoryId)
+        public async Task<CategoryResponseDTO> GetCategoryByIdAsync(Guid categoryId)
         {
             var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
             if (category == null)
             {
-                throw new NullReferenceException("Category not found.");
+                throw new NotFoundException(typeof(Category), categoryId);
             }
             return new CategoryResponseDTO
             {
@@ -68,7 +69,7 @@ namespace CoffeeShop.Services
             var category = await _categoryRepository.GetCategoryByNameAsync(categoryName);
             if (category == null)
             {
-                throw new NullReferenceException("Category not found.");
+                throw new NotFoundException(typeof(Category), Guid.Empty);
             }
             return new CategoryResponseDTO
             {
@@ -77,7 +78,7 @@ namespace CoffeeShop.Services
             };
         }
 
-        public async Task UpdateCategoryAsync(int categoryId, CategoryRequestDTO categoryDTO)
+        public async Task UpdateCategoryAsync(Guid categoryId, CategoryRequestDTO categoryDTO)
         {
             var currentCategory = await _categoryRepository.GetCategoryByIdAsync(categoryId);
             if (currentCategory != null)
@@ -85,7 +86,10 @@ namespace CoffeeShop.Services
                 currentCategory.CategoryName = categoryDTO.CategoryName;
                 await _categoryRepository.UpdateCategoryAsync(categoryId, currentCategory);
             }
-            throw new NullReferenceException("Category not found.");
+            else
+            {
+                throw new NotFoundException(typeof(Category), categoryId);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public int PayRateId { get; set; }
+        public Guid PayRateId { get; set; }
         [Required]
         [MaxLength(255)]
         public string PayrateName{ get; set; }

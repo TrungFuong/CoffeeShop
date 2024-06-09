@@ -4,13 +4,13 @@
     {
         public string ProductImagePath { get; set; }
         public string ProductImageDescription { get; set; }
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
     }
     public class ProductImageResponseDTO
     {
-        public int ProductImageId { get; set; }
+        public Guid ProductImageId { get; set; }
         public string ProductImagePath { get; set; }
         public string ProductImageDescription { get; set; }
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
     }
 }

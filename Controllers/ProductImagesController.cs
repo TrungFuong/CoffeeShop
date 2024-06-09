@@ -46,7 +46,7 @@ namespace CoffeeShop.Controllers
         // PUT: api/ProductImages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{productImageId}")]
-        public async Task<IActionResult> PutProductImage(int productImageId, UpdateProductImageDTO productImageDTO)
+        public async Task<IActionResult> PutProductImage(Guid productImageId, ProductImageRequestDTO productImageDTO)
         {
             var existingProductImage = await _productImageService.GetProductImageByIdAsync(productImageId);
             if (existingProductImage == null)

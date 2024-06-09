@@ -15,12 +15,13 @@ namespace CoffeeShop.Models
         [Required]
         [MaxLength(255)]
         public string AccountPassword { get; set; }
-        [Required]
-        [ForeignKey("RoleId")]
-        public int RoleId { get; set; }
-        [Required]
-        public Role Role { get; set; }
-        [Required]
         public Employee Employee { get; set; }
+        public UserRole Role { get; set; }
+
+        public enum UserRole
+        {
+            Admin = 0,
+            Employee = 1
+        }
     }
 }

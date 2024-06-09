@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoffeeShop.DTOs;
+using CoffeeShop.Exceptions;
 using CoffeeShop.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +28,7 @@ namespace CoffeeShop.Controllers
 
         // GET: api/Categories/5
         [HttpGet("{categoryId}")]
-        public async Task<ActionResult<CategoryResponseDTO>> GetCategory(int categoryId)
+        public async Task<ActionResult<CategoryResponseDTO>> GetCategory(Guid categoryId)
         {
             var category = await _categoryService.GetCategoryByIdAsync(categoryId);
             if (category == null)
@@ -39,15 +40,21 @@ namespace CoffeeShop.Controllers
 
         // PUT: api/Categories/5
         [HttpPut("{categoryId}")]
-        public async Task<IActionResult> PutCategory(int categoryId, CategoryResponseDTO categoryDTO)
+        public async Task<IActionResult> PutCategory(Guid categoryId, CategoryRequestDTO categoryDTO)
         {
-            if (categoryId != categoryDTO.CategoryId)
+            try
             {
-                return BadRequest();
+                await _categoryService.UpdateCategoryAsync(categoryId, categoryDTO);
+                return NoContent();
             }
-
-            await _categoryService.UpdateCategoryAsync(categoryId, CategoryRequestDTO);
-            return NoContent();
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST: api/Categories
@@ -61,7 +68,7 @@ namespace CoffeeShop.Controllers
 
         // DELETE: api/Categories/5
         [HttpDelete("{categoryId}")]
-        public async Task<IActionResult> DeleteCategory(int categoryId)
+        public async Task<IActionResult> DeleteCategory(Guid categoryId)
         {
             await _categoryService.DeleteCategoryAsync(categoryId);
             return NoContent();

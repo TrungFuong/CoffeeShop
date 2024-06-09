@@ -6,7 +6,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         [Required]
         [MaxLength(255)]
         public string CategoryName { get; set; }

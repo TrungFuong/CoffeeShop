@@ -7,7 +7,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
         [Required]
         [MaxLength(255)]
         public string ProductName { get; set; }
@@ -18,7 +18,7 @@ namespace CoffeeShop.Models
         public string ProductDescription { get; set; }
         [Required]
         [ForeignKey("CategoryId")]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }

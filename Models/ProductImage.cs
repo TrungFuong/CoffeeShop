@@ -8,7 +8,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public int ProductImageId { get; set; }
+        public Guid ProductImageId { get; set; }
         [Required]
         [MaxLength(255)]
         public string ProductImagePath { get; set; }
@@ -17,7 +17,7 @@ namespace CoffeeShop.Models
         public string ProductImageDescription { get; set; }
         [Required]
         [ForeignKey("ProductId")]
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
         public Product Product { get; set; }
     }
 }
