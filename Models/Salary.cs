@@ -7,12 +7,12 @@ namespace CoffeeShop.Models
     public class Salary
     {
         [Key]
-        public int SalaryId { get; set; }
+        public Guid SalaryId { get; set; }
         [Required]
         public Guid EmployeeId { get; set; }
         [ForeignKey("PayrateId")]
         [Required]
-        public int PayrateId { get; set; }
+        public Guid PayrateId { get; set; }
         [Required]
         public decimal TotalSalary { get; set; }
         public Employee Employee { get; set; }

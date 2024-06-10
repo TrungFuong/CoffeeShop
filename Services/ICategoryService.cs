@@ -13,5 +13,6 @@ namespace CoffeeShop.Services
         Task AddCategoryAsync(CategoryRequestDTO categoryDTO);
         Task DeleteCategoryAsync(Guid categoryId);
         Task UpdateCategoryAsync(Guid categoryId, CategoryRequestDTO categoryDTO);
+        Task<IEnumerable<ProductResponseDTO>> GetProductByCategory(Guid categoryId);
     }
 }

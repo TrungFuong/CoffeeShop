@@ -33,7 +33,7 @@ namespace CoffeeShop.Controllers
 
         // GET: api/ProductImages/5
         [HttpGet("{productImageId}")]
-        public async Task<ActionResult<ProductImage>> GetProductImage(int productImageId)
+        public async Task<ActionResult<ProductImage>> GetProductImage(Guid productImageId)
         {
             var productImage = await _productImageService.GetProductImageByIdAsync(productImageId);
             if (productImage == null)
@@ -76,7 +76,7 @@ namespace CoffeeShop.Controllers
 
         // DELETE: api/ProductImages/5
         [HttpDelete("{productImageId}")]
-        public async Task<IActionResult> DeleteProductImage(int productImageId)
+        public async Task<IActionResult> DeleteProductImage(Guid productImageId)
         {
             await _productImageService.DeleteProductImageAsync(productImageId);
             return NoContent();

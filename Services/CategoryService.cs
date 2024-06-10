@@ -78,6 +78,19 @@ namespace CoffeeShop.Services
             };
         }
 
+        public async Task<IEnumerable<ProductResponseDTO>> GetProductByCategory(Guid categoryId)
+        {
+            var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            var products = await _categoryRepository.GetProductByCategoryAsync(categoryId);
+            return products.Select(p => new ProductResponseDTO
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                ProductDescription = p.ProductDescription,
+                ProductPrice = p.ProductPrice
+            });
+        }
+
         public async Task UpdateCategoryAsync(Guid categoryId, CategoryRequestDTO categoryDTO)
         {
             var currentCategory = await _categoryRepository.GetCategoryByIdAsync(categoryId);

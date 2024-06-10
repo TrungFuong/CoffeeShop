@@ -11,5 +11,6 @@ namespace CoffeeShop.Repositories
         Task AddCategoryAsync(Category category);
         Task DeleteCategoryAsync(Guid categoryId);
         Task UpdateCategoryAsync(Guid categoryId, Category category);
+        Task<IEnumerable<Product>> GetProductByCategoryAsync(Guid categoryId);
     }
 }

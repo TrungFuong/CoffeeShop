@@ -38,6 +38,17 @@ namespace CoffeeShop.Controllers
             return Ok(category);
         }
 
+        [HttpGet("{categoryId}/Products")]
+        public async Task<ActionResult<IEnumerable<ProductResponseDTO>>> GetProductByCategoryAsync(Guid categoryId) 
+        {
+            var product = await _categoryService.GetProductByCategory(categoryId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
         // PUT: api/Categories/5
         [HttpPut("{categoryId}")]
         public async Task<IActionResult> PutCategory(Guid categoryId, CategoryRequestDTO categoryDTO)

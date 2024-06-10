@@ -124,6 +124,8 @@ namespace CoffeeShop
             var payRateId1 = Guid.NewGuid();
             var payRateId2 = Guid.NewGuid();
             var payRateId3 = Guid.NewGuid();
+            var salaryId1 = Guid.NewGuid();
+            
 
             modelBuilder.Entity<Category>().HasData(
               new Category { CategoryId = coffeeCateId, CategoryName = "Coffee" },
@@ -171,7 +173,7 @@ namespace CoffeeShop
             );
 
             modelBuilder.Entity<Salary>().HasData(
-                new Salary { SalaryId = 1, EmployeeId = employeeId, PayrateId = 1, TotalSalary = 250000 }
+                new Salary { SalaryId = salaryId1, EmployeeId = employeeId, PayrateId = payRateId1, TotalSalary = 250000 }
             );
 
             modelBuilder.Entity<Customer>().HasData(

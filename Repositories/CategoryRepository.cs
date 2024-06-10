@@ -23,6 +23,15 @@ namespace CoffeeShop.Repositories
             var category = await GetCategoryByIdAsync(categoryId);
             if (category != null)
             {
+                var products = await _dbContext.Products
+                                               .Where(p => p.CategoryId == categoryId)
+                                               .ToListAsync();
+
+                if (products.Any())
+                {
+                    throw new InvalidOperationException("Cannot delete category with products in it.");
+                }
+
                 _dbContext.Categories.Remove(category);
                 await _dbContext.SaveChangesAsync();
             }
@@ -41,6 +50,13 @@ namespace CoffeeShop.Repositories
         public async Task<Category> GetCategoryByNameAsync(string categoryName)
         {
             return await _dbContext.Categories.FirstOrDefaultAsync(c => c.CategoryName == categoryName);
+        }
+
+        public async Task<IEnumerable<Product>> GetProductByCategoryAsync(Guid categoryId)
+        {
+            return await _dbContext.Products
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
         }
 
         public async Task UpdateCategoryAsync(Guid categoryId, Category category)
