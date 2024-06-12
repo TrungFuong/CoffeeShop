@@ -38,6 +38,7 @@ namespace CoffeeShop.Controllers
             return Ok(category);
         }
 
+        // GET: api/cateId/Products
         [HttpGet("{categoryId}/Products")]
         public async Task<ActionResult<IEnumerable<ProductResponseDTO>>> GetProductByCategoryAsync(Guid categoryId) 
         {

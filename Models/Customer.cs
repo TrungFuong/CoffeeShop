@@ -17,5 +17,6 @@ namespace CoffeeShop.Models
         [MaxLength(255)]
         public DateTime CustomerBirthday { get; set; }
         public Receipt Receipt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

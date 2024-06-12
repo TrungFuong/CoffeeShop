@@ -1,7 +1,7 @@
 ﻿using CoffeeShop.Models;
 using System.Collections.Generic;
 
-namespace CoffeeShop.Repositories
+namespace CoffeeShop.Repositories.Interfaces
 {
     public interface ICategoryRepository
     {

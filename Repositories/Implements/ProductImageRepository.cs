@@ -1,8 +1,9 @@
 ﻿using CoffeeShop.Models;
+using CoffeeShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
-namespace CoffeeShop.Repositories
+namespace CoffeeShop.Repositories.Implements
 {
     public class ProductImageRepository : IProductImageRepository
     {

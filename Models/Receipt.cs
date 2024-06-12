@@ -18,6 +18,9 @@ namespace CoffeeShop.Models
         public DateTime ReceiptDate { get; set; }
         [Required]
         public decimal ReceiptTotal { get; set; }
+        public int Table { get; set; }
         public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
+        public bool IsDeleted { get; set; }
+        
     }
 }

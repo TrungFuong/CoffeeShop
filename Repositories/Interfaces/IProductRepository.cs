@@ -1,6 +1,6 @@
 ﻿using CoffeeShop.Models;
 
-namespace CoffeeShop.Repositories
+namespace CoffeeShop.Repositories.Interfaces
 {
     public interface IProductRepository
     {
@@ -8,7 +8,7 @@ namespace CoffeeShop.Repositories
         Task<Product> GetProductByIdAsync(int productId);
         Task<Product> GetProductByNameAsync(string productName);
         void AddProduct(Product product);
-        void UpdateProduct (Product product, int categoryId);
+        void UpdateProduct(Product product, int categoryId);
         void DeleteProduct(int productId);
     }
 }

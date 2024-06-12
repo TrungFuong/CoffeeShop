@@ -6,6 +6,7 @@
         public Guid EmployeeId { get; set; }
         public Guid CustomerId { get; set; }
         public DateTime ReceiptDate { get; set; }
+        public int Table {  get; set; }
         public decimal ReceiptTotal { get; set; }
     }
     public class ReceiptRequestDTO
@@ -13,5 +14,6 @@
         public Guid EmployeeId { get; set; }
         public Guid CustomerId { get; set; }
         public decimal ReceiptTotal { get; set; }
+        public int Table { get; set; }
     }
 }

@@ -27,5 +27,6 @@ namespace CoffeeShop.Models
         public ICollection<Receipt>? Receipts { get; set; }
         public ICollection<CheckTime>? CheckTimes { get; set; }
         public Salary? Salary { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

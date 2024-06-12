@@ -14,6 +14,6 @@ namespace CoffeeShop.Models
         [Required]
         [Column(TypeName = "text")]
         public string IngredientCondition { get; set; }
-        
+        public bool IsDeleted { get; set; }
     }
 }

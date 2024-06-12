@@ -19,5 +19,6 @@ namespace CoffeeShop.Models
         [ForeignKey("ProductId")]
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

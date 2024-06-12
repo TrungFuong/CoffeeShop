@@ -1,4 +1,4 @@
-﻿namespace CoffeeShop.Repositories
+﻿namespace CoffeeShop.Repositories.Implements
 {
     public class AccountRepository
     {

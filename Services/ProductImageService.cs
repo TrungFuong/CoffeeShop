@@ -1,6 +1,6 @@
 ﻿using CoffeeShop.DTOs;
 using CoffeeShop.Models;
-using CoffeeShop.Repositories;
+using CoffeeShop.Repositories.Interfaces;
 
 namespace CoffeeShop.Services
 {

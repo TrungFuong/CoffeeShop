@@ -15,5 +15,6 @@ namespace CoffeeShop.Models
         public Guid EmployeeId { get; set; }
         [Required]
         public Employee Employee { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

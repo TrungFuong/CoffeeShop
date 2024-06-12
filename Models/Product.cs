@@ -22,5 +22,6 @@ namespace CoffeeShop.Models
         public Category Category { get; set; }
         public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
         public ICollection<ProductImage> ProductImages { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

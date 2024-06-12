@@ -1,7 +1,7 @@
 ﻿using CoffeeShop.DTOs;
 using CoffeeShop.Models;
-using CoffeeShop.Repositories;
 using CoffeeShop.Exceptions;
+using CoffeeShop.Repositories.Interfaces;
 
 namespace CoffeeShop.Services
 {
@@ -87,7 +87,8 @@ namespace CoffeeShop.Services
                 ProductId = p.ProductId,
                 ProductName = p.ProductName,
                 ProductDescription = p.ProductDescription,
-                ProductPrice = p.ProductPrice
+                ProductPrice = p.ProductPrice,
+                CategoryId = p.CategoryId
             });
         }
 

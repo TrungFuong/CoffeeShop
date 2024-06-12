@@ -128,16 +128,16 @@ namespace CoffeeShop
             
 
             modelBuilder.Entity<Category>().HasData(
-              new Category { CategoryId = coffeeCateId, CategoryName = "Coffee" },
-              new Category { CategoryId = teaCateId, CategoryName = "Tea" },
-              new Category { CategoryId = pastryCateId, CategoryName = "Pastry" }
+              new Category { CategoryId = coffeeCateId, CategoryName = "Coffee", IsDeleted = false },
+              new Category { CategoryId = teaCateId, CategoryName = "Tea", IsDeleted = false },
+              new Category { CategoryId = pastryCateId, CategoryName = "Pastry", IsDeleted = false }
           );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = productId1, ProductName = "Espresso", CategoryId = coffeeCateId, ProductPrice = 25000, ProductDescription = "Coffee shot" },
-                new Product { ProductId = productId2, ProductName = "Cappuccino", CategoryId = coffeeCateId, ProductPrice = 30000, ProductDescription = "Milky coffee" },
-                new Product { ProductId = productId3, ProductName = "Green Tea", CategoryId = teaCateId, ProductPrice = 15000, ProductDescription = "Green thing" },
-                new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" " }
+                new Product { ProductId = productId1, ProductName = "Espresso", CategoryId = coffeeCateId, ProductPrice = 25000, ProductDescription = "Coffee shot", IsDeleted = false },
+                new Product { ProductId = productId2, ProductName = "Cappuccino", CategoryId = coffeeCateId, ProductPrice = 30000, ProductDescription = "Milky coffee", IsDeleted = false },
+                new Product { ProductId = productId3, ProductName = "Green Tea", CategoryId = teaCateId, ProductPrice = 15000, ProductDescription = "Green thing" , IsDeleted = false },
+                new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" ", IsDeleted = false }
             );
 
             modelBuilder.Entity<ProductImage>().HasData(
@@ -157,31 +157,31 @@ namespace CoffeeShop
                });
 
             modelBuilder.Entity<Account>().HasData(
-                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", Role = Account.UserRole.Admin },
-                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", Role = Account.UserRole.Employee }
+                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", Role = Account.UserRole.Admin, IsDeleted = false },
+                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", Role = Account.UserRole.Employee, IsDeleted = false}
             );
 
             modelBuilder.Entity<Employee>().HasData(
-                new Employee { EmployeeId = bossId, EmployeeName = "John The Boss", AccountId = adminId, EmployeePosition = "Owner", EmployeeWorkingHour = 10 },
-                new Employee { EmployeeId = employeeId, EmployeeName = "Jane Cashier", AccountId = normalEmployeeId, EmployeePosition = "Cashier", EmployeeWorkingHour = 10 }
+                new Employee { EmployeeId = bossId, EmployeeName = "John The Boss", AccountId = adminId, EmployeePosition = "Owner", EmployeeWorkingHour = 10, IsDeleted = false },
+                new Employee { EmployeeId = employeeId, EmployeeName = "Jane Cashier", AccountId = normalEmployeeId, EmployeePosition = "Cashier", EmployeeWorkingHour = 10, IsDeleted = false }
             );
 
             modelBuilder.Entity<PayRate>().HasData(
-                new PayRate { PayRateId = payRateId1, PayrateName = "Hoc viec", PayrateValue = 20000 },
-                new PayRate { PayRateId = payRateId2, PayrateName = "Junior", PayrateValue = 25000 },
-                new PayRate { PayRateId = payRateId3, PayrateName = "Senior", PayrateValue = 30000 }
+                new PayRate { PayRateId = payRateId1, PayrateName = "Hoc viec", PayrateValue = 20000, IsDeleted = false },
+                new PayRate { PayRateId = payRateId2, PayrateName = "Junior", PayrateValue = 25000 , IsDeleted = false },
+                new PayRate { PayRateId = payRateId3, PayrateName = "Senior", PayrateValue = 30000 , IsDeleted = false }
             );
 
             modelBuilder.Entity<Salary>().HasData(
-                new Salary { SalaryId = salaryId1, EmployeeId = employeeId, PayrateId = payRateId1, TotalSalary = 250000 }
+                new Salary { SalaryId = salaryId1, EmployeeId = employeeId, PayrateId = payRateId1, TotalSalary = 250000, IsDeleted = false }
             );
 
             modelBuilder.Entity<Customer>().HasData(
-                new Customer { CustomerId = customerId, CustomerName = "Jane Smith", CustomerPhone = "0934516636", CustomerBirthday = DateTime.Now }
+                new Customer { CustomerId = customerId, CustomerName = "Jane Smith", CustomerPhone = "0934516636", CustomerBirthday = DateTime.Now, IsDeleted = false }
             );
 
             modelBuilder.Entity<Receipt>().HasData(
-                new Receipt { ReceiptId = receiptId, CustomerId = customerId, EmployeeId = employeeId, ReceiptDate = DateTime.Now, ReceiptTotal = 70000 }
+                new Receipt { ReceiptId = receiptId, CustomerId = customerId, EmployeeId = employeeId, Table = 1, ReceiptDate = DateTime.Now, ReceiptTotal = 70000, IsDeleted = false }
             );
 
             modelBuilder.Entity<ReceiptDetail>().HasData(

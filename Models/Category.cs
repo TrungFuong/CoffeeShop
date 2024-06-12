@@ -10,6 +10,7 @@ namespace CoffeeShop.Models
         [Required]
         [MaxLength(255)]
         public string CategoryName { get; set; }
+        public bool IsDeleted { get; set; }
         public ICollection<Product> Products { get; set; }
     }
 }

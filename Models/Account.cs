@@ -17,6 +17,7 @@ namespace CoffeeShop.Models
         public string AccountPassword { get; set; }
         public Employee Employee { get; set; }
         public UserRole Role { get; set; }
+        public bool IsDeleted { get; set; }
 
         public enum UserRole
         {

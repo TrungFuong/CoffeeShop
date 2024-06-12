@@ -1,7 +1,8 @@
 ﻿using CoffeeShop.Models;
+using CoffeeShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoffeeShop.Repositories
+namespace CoffeeShop.Repositories.Implements
 {
     public class CategoryRepository : ICategoryRepository
     {
@@ -32,14 +33,15 @@ namespace CoffeeShop.Repositories
                     throw new InvalidOperationException("Cannot delete category with products in it.");
                 }
 
-                _dbContext.Categories.Remove(category);
+                category.IsDeleted = true;
+                _dbContext.Categories.Update(category);
                 await _dbContext.SaveChangesAsync();
             }
         }
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
-            return await _dbContext.Categories.ToListAsync();
+            return await _dbContext.Categories.Where(c => c.IsDeleted == false).ToListAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(Guid categoryId)
@@ -54,9 +56,10 @@ namespace CoffeeShop.Repositories
 
         public async Task<IEnumerable<Product>> GetProductByCategoryAsync(Guid categoryId)
         {
-            return await _dbContext.Products
+            var products = await _dbContext.Products
                 .Where(p => p.CategoryId == categoryId)
                 .ToListAsync();
+            return products;
         }
 
         public async Task UpdateCategoryAsync(Guid categoryId, Category category)

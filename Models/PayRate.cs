@@ -14,5 +14,6 @@ namespace CoffeeShop.Models
         [Required]
         public decimal PayrateValue { get; set; }
         public ICollection<Salary> Salaries { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

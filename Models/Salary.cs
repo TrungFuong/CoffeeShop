@@ -17,5 +17,7 @@ namespace CoffeeShop.Models
         public decimal TotalSalary { get; set; }
         public Employee Employee { get; set; }
         public PayRate PayRate { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace CoffeeShop.Repositories
+﻿namespace CoffeeShop.Repositories.Interfaces
 {
     public interface ICustomerRepository
     {
