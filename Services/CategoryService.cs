@@ -20,7 +20,7 @@ namespace CoffeeShop.Services
             {
                 CategoryName = categoryDTO.CategoryName
             };
-            await _categoryRepository.AddCategoryAsync(category);
+            _categoryRepository.AddCategoryAsync(category);
         }
 
         public async Task DeleteCategoryAsync(Guid categoryId)
@@ -28,7 +28,7 @@ namespace CoffeeShop.Services
             var currentCategory = await _categoryRepository.GetCategoryByIdAsync(categoryId);
             if (currentCategory != null)
             {
-                await _categoryRepository.DeleteCategoryAsync(categoryId);
+                 _categoryRepository.DeleteCategoryAsync(categoryId);
             }
             else
             {
@@ -98,7 +98,7 @@ namespace CoffeeShop.Services
             if (currentCategory != null)
             {
                 currentCategory.CategoryName = categoryDTO.CategoryName;
-                await _categoryRepository.UpdateCategoryAsync(categoryId, currentCategory);
+                _categoryRepository.UpdateCategoryAsync(categoryId, currentCategory);
             }
             else
             {

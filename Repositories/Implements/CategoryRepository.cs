@@ -13,10 +13,11 @@ namespace CoffeeShop.Repositories.Implements
             _dbContext = dbContext;
         }
 
-        public async Task AddCategoryAsync(Category category)
+        public async Task<Category> AddCategoryAsync(Category category)
         {
             await _dbContext.Categories.AddAsync(category);
             await _dbContext.SaveChangesAsync();
+            return category;
         }
 
         public async Task DeleteCategoryAsync(Guid categoryId)

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CoffeeShop.Models
 {
@@ -8,11 +9,11 @@ namespace CoffeeShop.Models
         [Required]
         [Key]
         public Guid ReceiptId { get; set; }     
-        [ForeignKey("EmployeeId")]
-        public Guid EmployeeId { get; set; }
-        public Employee Employee { get; set; }
+        [ForeignKey("UserId")]
+        public Guid UserId { get; set; }
+        public User User { get; set; }
         [ForeignKey("CustomerId")]
-        public Guid CustomerId { get; set; }
+        public Guid? CustomerId { get; set; }
         public Customer Customer { get; set; }
         [Required]
         public DateTime ReceiptDate { get; set; }

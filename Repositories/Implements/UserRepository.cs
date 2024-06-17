@@ -1,6 +1,6 @@
 ﻿namespace CoffeeShop.Repositories.Implements
 {
-    public class EmployeeRepository
+    public class UserRepository
     {
     }
 }

@@ -9,13 +9,13 @@ namespace CoffeeShop.Models
         [Key]
         public Guid SalaryId { get; set; }
         [Required]
-        public Guid EmployeeId { get; set; }
+        public Guid UserId { get; set; }
         [ForeignKey("PayrateId")]
         [Required]
         public Guid PayrateId { get; set; }
         [Required]
         public decimal TotalSalary { get; set; }
-        public Employee Employee { get; set; }
+        public User User { get; set; }
         public PayRate PayRate { get; set; }
 
         public bool IsDeleted { get; set; }

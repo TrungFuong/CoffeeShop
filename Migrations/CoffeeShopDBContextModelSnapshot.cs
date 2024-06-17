@@ -22,51 +22,6 @@ namespace CoffeeShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("CoffeeShop.Models.Account", b =>
-                {
-                    b.Property<Guid>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AccountPassword")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("AccountUsername")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.HasKey("AccountId");
-
-                    b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            AccountId = new Guid("78dd2fac-9cb6-424f-8a92-a4f8857f527e"),
-                            AccountPassword = "admin",
-                            AccountUsername = "admin",
-                            IsDeleted = false,
-                            Role = 0
-                        },
-                        new
-                        {
-                            AccountId = new Guid("973edf72-0a06-49c5-b630-d005583ba1ad"),
-                            AccountPassword = "1",
-                            AccountUsername = "cashier",
-                            IsDeleted = false,
-                            Role = 1
-                        });
-                });
-
             modelBuilder.Entity("CoffeeShop.Models.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
@@ -88,19 +43,19 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            CategoryId = new Guid("d10594b0-1c6a-4a4f-bd62-aa670af7c7b2"),
+                            CategoryId = new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"),
                             CategoryName = "Coffee",
                             IsDeleted = false
                         },
                         new
                         {
-                            CategoryId = new Guid("537503bf-adca-44e1-9a32-99bf05d2b2d9"),
+                            CategoryId = new Guid("df2645f1-008c-4e07-9f28-d7222dba8811"),
                             CategoryName = "Tea",
                             IsDeleted = false
                         },
                         new
                         {
-                            CategoryId = new Guid("4364fa40-5733-43a9-917a-3253d18b7e4b"),
+                            CategoryId = new Guid("fd5bfcfb-378d-4812-92a5-6954dcf54942"),
                             CategoryName = "Pastry",
                             IsDeleted = false
                         });
@@ -118,15 +73,15 @@ namespace CoffeeShop.Migrations
                     b.Property<DateTime>("CheckoutTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("RecordId");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("CheckTimes");
                 });
@@ -161,63 +116,10 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            CustomerId = new Guid("972ab33a-8295-4e32-b351-715359f7283c"),
-                            CustomerBirthday = new DateTime(2024, 6, 11, 22, 49, 2, 53, DateTimeKind.Local).AddTicks(9399),
+                            CustomerId = new Guid("8e2b5b72-0ed5-4e21-910e-99573884cd7c"),
+                            CustomerBirthday = new DateTime(2024, 6, 17, 10, 24, 47, 530, DateTimeKind.Local).AddTicks(6409),
                             CustomerName = "Jane Smith",
                             CustomerPhone = "0934516636",
-                            IsDeleted = false
-                        });
-                });
-
-            modelBuilder.Entity("CoffeeShop.Models.Employee", b =>
-                {
-                    b.Property<Guid>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("EmployeeName")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("EmployeePosition")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<byte>("EmployeeWorkingHour")
-                        .HasColumnType("tinyint");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("EmployeeId");
-
-                    b.HasIndex("AccountId")
-                        .IsUnique();
-
-                    b.ToTable("Employees");
-
-                    b.HasData(
-                        new
-                        {
-                            EmployeeId = new Guid("042e72a4-b4b2-4b98-8297-557c7d5d0921"),
-                            AccountId = new Guid("78dd2fac-9cb6-424f-8a92-a4f8857f527e"),
-                            EmployeeName = "John The Boss",
-                            EmployeePosition = "Owner",
-                            EmployeeWorkingHour = (byte)10,
-                            IsDeleted = false
-                        },
-                        new
-                        {
-                            EmployeeId = new Guid("8a5f677e-d77d-4c1e-b044-44ca391a1979"),
-                            AccountId = new Guid("973edf72-0a06-49c5-b630-d005583ba1ad"),
-                            EmployeeName = "Jane Cashier",
-                            EmployeePosition = "Cashier",
-                            EmployeeWorkingHour = (byte)10,
                             IsDeleted = false
                         });
                 });
@@ -246,21 +148,21 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            PayRateId = new Guid("30b8d7b5-7dde-45a4-9060-7b064de7bddf"),
+                            PayRateId = new Guid("02c9adc0-e8db-40aa-bcf3-72f19782c0cc"),
                             IsDeleted = false,
                             PayrateName = "Hoc viec",
                             PayrateValue = 20000m
                         },
                         new
                         {
-                            PayRateId = new Guid("bdbd4de4-f13d-4e45-8fb7-7a88822e853f"),
+                            PayRateId = new Guid("ccba49c8-4bfc-48bb-a723-1a703b13a0cb"),
                             IsDeleted = false,
                             PayrateName = "Junior",
                             PayrateValue = 25000m
                         },
                         new
                         {
-                            PayRateId = new Guid("dc5135a8-9490-41bc-9aa0-8752c4986fa4"),
+                            PayRateId = new Guid("17d7d325-1523-4786-90fc-f41f0c8e75a7"),
                             IsDeleted = false,
                             PayrateName = "Senior",
                             PayrateValue = 30000m
@@ -301,8 +203,8 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            ProductId = new Guid("c9b3e98b-5612-4f26-a6b5-bd2d893e46e3"),
-                            CategoryId = new Guid("d10594b0-1c6a-4a4f-bd62-aa670af7c7b2"),
+                            ProductId = new Guid("3e2f883b-329b-4340-bb32-7e69e51e3b87"),
+                            CategoryId = new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"),
                             IsDeleted = false,
                             ProductDescription = "Coffee shot",
                             ProductName = "Espresso",
@@ -310,8 +212,8 @@ namespace CoffeeShop.Migrations
                         },
                         new
                         {
-                            ProductId = new Guid("275f9714-236e-457e-a5c5-39034a510d04"),
-                            CategoryId = new Guid("d10594b0-1c6a-4a4f-bd62-aa670af7c7b2"),
+                            ProductId = new Guid("ac12a34c-93af-40a7-a7eb-8faaa0644477"),
+                            CategoryId = new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"),
                             IsDeleted = false,
                             ProductDescription = "Milky coffee",
                             ProductName = "Cappuccino",
@@ -319,8 +221,8 @@ namespace CoffeeShop.Migrations
                         },
                         new
                         {
-                            ProductId = new Guid("8dd7a8c4-1c22-4b23-b0ca-a9cf1864f192"),
-                            CategoryId = new Guid("537503bf-adca-44e1-9a32-99bf05d2b2d9"),
+                            ProductId = new Guid("be6b678e-aaa0-4141-b12e-48d87317747e"),
+                            CategoryId = new Guid("df2645f1-008c-4e07-9f28-d7222dba8811"),
                             IsDeleted = false,
                             ProductDescription = "Green thing",
                             ProductName = "Green Tea",
@@ -328,59 +230,12 @@ namespace CoffeeShop.Migrations
                         },
                         new
                         {
-                            ProductId = new Guid("6f8b6c6e-7d78-4ab3-950d-a4f6ed87f35e"),
-                            CategoryId = new Guid("4364fa40-5733-43a9-917a-3253d18b7e4b"),
+                            ProductId = new Guid("f4c1859e-7e1c-47d8-b76f-d6f044928a95"),
+                            CategoryId = new Guid("fd5bfcfb-378d-4812-92a5-6954dcf54942"),
                             IsDeleted = false,
                             ProductDescription = "It's pronounced \"KhoaSoong\" ",
                             ProductName = "Croissant",
                             ProductPrice = 20000m
-                        });
-                });
-
-            modelBuilder.Entity("CoffeeShop.Models.ProductImage", b =>
-                {
-                    b.Property<Guid>("ProductImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductImageDescription")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("ProductImagePath")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasKey("ProductImageId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductImages");
-
-                    b.HasData(
-                        new
-                        {
-                            ProductImageId = new Guid("8e395b9f-bc9d-4956-95ef-8093a7fd797a"),
-                            IsDeleted = false,
-                            ProductId = new Guid("c9b3e98b-5612-4f26-a6b5-bd2d893e46e3"),
-                            ProductImageDescription = "Espresso coffee shot",
-                            ProductImagePath = "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg"
-                        },
-                        new
-                        {
-                            ProductImageId = new Guid("4c9b4a27-577d-46ad-95d4-3c8f1a2e4b48"),
-                            IsDeleted = false,
-                            ProductId = new Guid("275f9714-236e-457e-a5c5-39034a510d04"),
-                            ProductImageDescription = "Cappuccino with milk foam",
-                            ProductImagePath = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg"
                         });
                 });
 
@@ -390,10 +245,7 @@ namespace CoffeeShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EmployeeId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -408,25 +260,29 @@ namespace CoffeeShop.Migrations
                     b.Property<int>("Table")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("ReceiptId");
 
                     b.HasIndex("CustomerId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[CustomerId] IS NOT NULL");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Receipts");
 
                     b.HasData(
                         new
                         {
-                            ReceiptId = new Guid("5c51c26e-da45-4fa1-8298-ef58ce4c1ba8"),
-                            CustomerId = new Guid("972ab33a-8295-4e32-b351-715359f7283c"),
-                            EmployeeId = new Guid("8a5f677e-d77d-4c1e-b044-44ca391a1979"),
+                            ReceiptId = new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"),
+                            CustomerId = new Guid("8e2b5b72-0ed5-4e21-910e-99573884cd7c"),
                             IsDeleted = false,
-                            ReceiptDate = new DateTime(2024, 6, 11, 22, 49, 2, 53, DateTimeKind.Local).AddTicks(9436),
+                            ReceiptDate = new DateTime(2024, 6, 17, 10, 24, 47, 530, DateTimeKind.Local).AddTicks(6444),
                             ReceiptTotal = 70000m,
-                            Table = 1
+                            Table = 1,
+                            UserId = new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb")
                         });
                 });
 
@@ -453,15 +309,15 @@ namespace CoffeeShop.Migrations
                     b.HasData(
                         new
                         {
-                            ReceiptId = new Guid("5c51c26e-da45-4fa1-8298-ef58ce4c1ba8"),
-                            ProductId = new Guid("c9b3e98b-5612-4f26-a6b5-bd2d893e46e3"),
+                            ReceiptId = new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"),
+                            ProductId = new Guid("3e2f883b-329b-4340-bb32-7e69e51e3b87"),
                             ProductPrice = 0m,
                             ProductQuantity = 2
                         },
                         new
                         {
-                            ReceiptId = new Guid("5c51c26e-da45-4fa1-8298-ef58ce4c1ba8"),
-                            ProductId = new Guid("6f8b6c6e-7d78-4ab3-950d-a4f6ed87f35e"),
+                            ReceiptId = new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"),
+                            ProductId = new Guid("f4c1859e-7e1c-47d8-b76f-d6f044928a95"),
                             ProductPrice = 0m,
                             ProductQuantity = 1
                         });
@@ -473,9 +329,6 @@ namespace CoffeeShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -485,46 +338,92 @@ namespace CoffeeShop.Migrations
                     b.Property<decimal>("TotalSalary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("SalaryId");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
                     b.HasIndex("PayrateId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Salaries");
 
                     b.HasData(
                         new
                         {
-                            SalaryId = new Guid("cf44dcd4-1901-4e86-95b0-19a17686c21a"),
-                            EmployeeId = new Guid("8a5f677e-d77d-4c1e-b044-44ca391a1979"),
+                            SalaryId = new Guid("f37d9174-1bd3-47e1-bf55-3691d5ce1501"),
                             IsDeleted = false,
-                            PayrateId = new Guid("30b8d7b5-7dde-45a4-9060-7b064de7bddf"),
-                            TotalSalary = 250000m
+                            PayrateId = new Guid("02c9adc0-e8db-40aa-bcf3-72f19782c0cc"),
+                            TotalSalary = 250000m,
+                            UserId = new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb")
+                        });
+                });
+
+            modelBuilder.Entity("CoffeeShop.Models.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FirstName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashPassword")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("UserPosition")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<byte?>("UserWorkingHour")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb"),
+                            IsDeleted = false,
+                            Role = 0,
+                            Username = "test"
                         });
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.CheckTime", b =>
                 {
-                    b.HasOne("CoffeeShop.Models.Employee", "Employee")
+                    b.HasOne("CoffeeShop.Models.User", "User")
                         .WithMany("CheckTimes")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("CoffeeShop.Models.Employee", b =>
-                {
-                    b.HasOne("CoffeeShop.Models.Account", "Account")
-                        .WithOne("Employee")
-                        .HasForeignKey("CoffeeShop.Models.Employee", "AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.Product", b =>
@@ -538,34 +437,21 @@ namespace CoffeeShop.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("CoffeeShop.Models.ProductImage", b =>
-                {
-                    b.HasOne("CoffeeShop.Models.Product", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("CoffeeShop.Models.Receipt", b =>
                 {
                     b.HasOne("CoffeeShop.Models.Customer", "Customer")
                         .WithOne("Receipt")
-                        .HasForeignKey("CoffeeShop.Models.Receipt", "CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CoffeeShop.Models.Receipt", "CustomerId");
 
-                    b.HasOne("CoffeeShop.Models.Employee", "Employee")
+                    b.HasOne("CoffeeShop.Models.User", "User")
                         .WithMany("Receipts")
-                        .HasForeignKey("EmployeeId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Employee");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.ReceiptDetail", b =>
@@ -589,27 +475,21 @@ namespace CoffeeShop.Migrations
 
             modelBuilder.Entity("CoffeeShop.Models.Salary", b =>
                 {
-                    b.HasOne("CoffeeShop.Models.Employee", "Employee")
-                        .WithOne("Salary")
-                        .HasForeignKey("CoffeeShop.Models.Salary", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CoffeeShop.Models.PayRate", "PayRate")
                         .WithMany("Salaries")
                         .HasForeignKey("PayrateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
+                    b.HasOne("CoffeeShop.Models.User", "User")
+                        .WithOne("Salary")
+                        .HasForeignKey("CoffeeShop.Models.Salary", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("PayRate");
-                });
 
-            modelBuilder.Entity("CoffeeShop.Models.Account", b =>
-                {
-                    b.Navigation("Employee")
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.Category", b =>
@@ -623,15 +503,6 @@ namespace CoffeeShop.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CoffeeShop.Models.Employee", b =>
-                {
-                    b.Navigation("CheckTimes");
-
-                    b.Navigation("Receipts");
-
-                    b.Navigation("Salary");
-                });
-
             modelBuilder.Entity("CoffeeShop.Models.PayRate", b =>
                 {
                     b.Navigation("Salaries");
@@ -639,14 +510,21 @@ namespace CoffeeShop.Migrations
 
             modelBuilder.Entity("CoffeeShop.Models.Product", b =>
                 {
-                    b.Navigation("ProductImages");
-
                     b.Navigation("ReceiptDetails");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.Receipt", b =>
                 {
                     b.Navigation("ReceiptDetails");
+                });
+
+            modelBuilder.Entity("CoffeeShop.Models.User", b =>
+                {
+                    b.Navigation("CheckTimes");
+
+                    b.Navigation("Receipts");
+
+                    b.Navigation("Salary");
                 });
 #pragma warning restore 612, 618
         }

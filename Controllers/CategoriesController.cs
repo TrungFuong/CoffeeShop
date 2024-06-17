@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/category")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {
@@ -39,7 +39,7 @@ namespace CoffeeShop.Controllers
         }
 
         // GET: api/cateId/Products
-        [HttpGet("{categoryId}/Products")]
+        [HttpGet("{categoryId}/Product")]
         public async Task<ActionResult<IEnumerable<ProductResponseDTO>>> GetProductByCategoryAsync(Guid categoryId) 
         {
             var product = await _categoryService.GetProductByCategory(categoryId);

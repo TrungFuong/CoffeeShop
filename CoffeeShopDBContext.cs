@@ -6,14 +6,12 @@ namespace CoffeeShop
     public class CoffeeShopDBContext : DbContext
     {
         public CoffeeShopDBContext(DbContextOptions<CoffeeShopDBContext> dbContextOptions) : base(dbContextOptions) { }
-        public DbSet<Account> Accounts { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CheckTime> CheckTimes { get; set; }
         public DbSet<Customer> Customers { get; set; }
-        public DbSet<Employee> Employees { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<PayRate> PayRates { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
         public DbSet<Salary> Salaries { get; set; }
 
@@ -29,35 +27,30 @@ namespace CoffeeShop
                 .HasForeignKey(salary => salary.PayrateId);
 
             modelBuilder.Entity<Salary>()
-                .HasOne(salary => salary.Employee)
+                .HasOne(salary => salary.User)
                 .WithOne(employee => employee.Salary);
 
-            modelBuilder.Entity<Employee>()
+            modelBuilder.Entity<User>()
                 .HasOne(employee => employee.Salary)
-                .WithOne(salary => salary.Employee);
+                .WithOne(salary => salary.User);
 
-            modelBuilder.Entity<Employee>()
-                .HasOne(employee => employee.Account)
-                .WithOne(account => account.Employee)
-                .HasForeignKey<Employee>(account => account.AccountId);
-
-            modelBuilder.Entity<Employee>()
+            modelBuilder.Entity<User>()
                 .HasMany(employee => employee.CheckTimes)
-                .WithOne(checkTime => checkTime.Employee);
+                .WithOne(checkTime => checkTime.User);
 
-            modelBuilder.Entity<Employee>()
+            modelBuilder.Entity<User>()
                 .HasMany(employee => employee.Receipts)
-                .WithOne(receipt => receipt.Employee);
+                .WithOne(receipt => receipt.User);
 
             modelBuilder.Entity<CheckTime>()
-                .HasOne(checkTime => checkTime.Employee)
+                .HasOne(checkTime => checkTime.User)
                 .WithMany(employee => employee.CheckTimes)
-                .HasForeignKey(checkTime => checkTime.EmployeeId);
+                .HasForeignKey(checkTime => checkTime.UserId);
 
             modelBuilder.Entity<Receipt>()
-                .HasOne(receipt => receipt.Employee)
+                .HasOne(receipt => receipt.User)
                 .WithMany(employee => employee.Receipts)
-                .HasForeignKey(receipt => receipt.EmployeeId);
+                .HasForeignKey(receipt => receipt.UserId);
 
             modelBuilder.Entity<Receipt>()
                 .HasOne(receipt => receipt.Customer)
@@ -76,10 +69,6 @@ namespace CoffeeShop
                 .HasOne(product => product.Category)
                 .WithMany(category => category.Products)
                 .HasForeignKey(product => product.CategoryId);
-
-            modelBuilder.Entity<Product>()
-                .HasMany(product => product.ProductImages)
-                .WithOne(productImage => productImage.Product);
 
             modelBuilder.Entity<Product>()
                 .HasMany(product => product.ReceiptDetails)
@@ -102,14 +91,9 @@ namespace CoffeeShop
                 .HasMany(category => category.Products)
                 .WithOne(product => product.Category);
 
-            modelBuilder.Entity<ProductImage>()
-                .HasOne(productImage => productImage.Product)
-                .WithMany(product => product.ProductImages)
-                .HasForeignKey(productImage => productImage.ProductId);
-
             //Seed data
             var adminId = Guid.NewGuid();
-            var normalEmployeeId = Guid.NewGuid();
+            var normalUserId = Guid.NewGuid();
             var bossId = Guid.NewGuid();
             var employeeId = Guid.NewGuid();
             var customerId = Guid.NewGuid();
@@ -140,31 +124,9 @@ namespace CoffeeShop
                 new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" ", IsDeleted = false }
             );
 
-            modelBuilder.Entity<ProductImage>().HasData(
-               new ProductImage
-               {
-                   ProductImageId = Guid.NewGuid(),
-                   ProductImagePath = "https://cdn.tgdd.vn/Files/2023/07/11/1537842/espresso-la-gi-nguyen-tac-pha-espresso-dung-chuan-202307120715077669.jpg",
-                   ProductImageDescription = "Espresso coffee shot",
-                   ProductId = productId1
-               },
-               new ProductImage
-               {
-                   ProductImageId = Guid.NewGuid(),
-                   ProductImagePath = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/1200px-Cappuccino_at_Sightglass_Coffee.jpg",
-                   ProductImageDescription = "Cappuccino with milk foam",
-                   ProductId = productId2
-               });
-
-            modelBuilder.Entity<Account>().HasData(
-                new Account { AccountId = adminId, AccountUsername = "admin", AccountPassword = "admin", Role = Account.UserRole.Admin, IsDeleted = false },
-                new Account { AccountId = normalEmployeeId, AccountUsername = "cashier", AccountPassword = "1", Role = Account.UserRole.Employee, IsDeleted = false}
-            );
-
-            modelBuilder.Entity<Employee>().HasData(
-                new Employee { EmployeeId = bossId, EmployeeName = "John The Boss", AccountId = adminId, EmployeePosition = "Owner", EmployeeWorkingHour = 10, IsDeleted = false },
-                new Employee { EmployeeId = employeeId, EmployeeName = "Jane Cashier", AccountId = normalEmployeeId, EmployeePosition = "Cashier", EmployeeWorkingHour = 10, IsDeleted = false }
-            );
+            modelBuilder.Entity<User>().HasData(
+                new User { UserId = employeeId, Username = "test", IsDeleted = false, Role = Role.Employee}
+                );
 
             modelBuilder.Entity<PayRate>().HasData(
                 new PayRate { PayRateId = payRateId1, PayrateName = "Hoc viec", PayrateValue = 20000, IsDeleted = false },
@@ -173,7 +135,7 @@ namespace CoffeeShop
             );
 
             modelBuilder.Entity<Salary>().HasData(
-                new Salary { SalaryId = salaryId1, EmployeeId = employeeId, PayrateId = payRateId1, TotalSalary = 250000, IsDeleted = false }
+                new Salary { SalaryId = salaryId1, UserId = employeeId, PayrateId = payRateId1, TotalSalary = 250000, IsDeleted = false }
             );
 
             modelBuilder.Entity<Customer>().HasData(
@@ -181,7 +143,7 @@ namespace CoffeeShop
             );
 
             modelBuilder.Entity<Receipt>().HasData(
-                new Receipt { ReceiptId = receiptId, CustomerId = customerId, EmployeeId = employeeId, Table = 1, ReceiptDate = DateTime.Now, ReceiptTotal = 70000, IsDeleted = false }
+                new Receipt { ReceiptId = receiptId, CustomerId = customerId, UserId = employeeId, Table = 1, ReceiptDate = DateTime.Now, ReceiptTotal = 70000, IsDeleted = false }
             );
 
             modelBuilder.Entity<ReceiptDetail>().HasData(

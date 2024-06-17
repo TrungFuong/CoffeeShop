@@ -12,9 +12,9 @@ namespace CoffeeShop.Models
         [Required]
         public DateTime CheckoutTime { get; set; }
         [Required]
-        public Guid EmployeeId { get; set; }
+        public Guid UserId { get; set; }
         [Required]
-        public Employee Employee { get; set; }
+        public User User { get; set; }
         public bool IsDeleted { get; set; }
     }
 }
