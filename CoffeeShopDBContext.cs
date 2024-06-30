@@ -118,14 +118,14 @@ namespace CoffeeShop
           );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product { ProductId = productId1, ProductName = "Espresso", CategoryId = coffeeCateId, ProductPrice = 25000, ProductDescription = "Coffee shot", IsDeleted = false },
-                new Product { ProductId = productId2, ProductName = "Cappuccino", CategoryId = coffeeCateId, ProductPrice = 30000, ProductDescription = "Milky coffee", IsDeleted = false },
-                new Product { ProductId = productId3, ProductName = "Green Tea", CategoryId = teaCateId, ProductPrice = 15000, ProductDescription = "Green thing" , IsDeleted = false },
-                new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" ", IsDeleted = false }
+                new Product { ProductId = productId1, ProductName = "Espresso", CategoryId = coffeeCateId, ProductPrice = 25000, ProductDescription = "Coffee shot", IsDeleted = false, ImageUrl = "" },
+                new Product { ProductId = productId2, ProductName = "Cappuccino", CategoryId = coffeeCateId, ProductPrice = 30000, ProductDescription = "Milky coffee", IsDeleted = false, ImageUrl = "" },
+                new Product { ProductId = productId3, ProductName = "Green Tea", CategoryId = teaCateId, ProductPrice = 15000, ProductDescription = "Green thing" , IsDeleted = false, ImageUrl = "" },
+                new Product { ProductId = productId4, ProductName = "Croissant", CategoryId = pastryCateId, ProductPrice = 20000, ProductDescription = "It's pronounced \"KhoaSoong\" ", IsDeleted = false, ImageUrl = "" }
             );
 
             modelBuilder.Entity<User>().HasData(
-                new User { UserId = employeeId, Username = "test", IsDeleted = false, Role = Role.Employee}
+                new User { UserId = employeeId, Username = "test", IsDeleted = false, Role = Models.Enums.EnumRole.Employee}
                 );
 
             modelBuilder.Entity<PayRate>().HasData(

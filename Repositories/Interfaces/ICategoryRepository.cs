@@ -5,14 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace CoffeeShop.Repositories.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        Task<IEnumerable<Category>> GetAllCategoriesAsync();
-        Task<Category> GetCategoryByIdAsync(Guid categoryId);
-        Task<Category> GetCategoryByNameAsync(string categoryName);
-        Task<Category> AddCategoryAsync(Category category);
-        Task DeleteCategoryAsync(Guid categoryId);
-        Task UpdateCategoryAsync(Guid categoryId, Category category);
-        Task<IEnumerable<Product>> GetProductByCategoryAsync(Guid categoryId);
     }
 }

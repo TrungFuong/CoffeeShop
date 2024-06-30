@@ -1,6 +1,8 @@
-﻿namespace CoffeeShop.Repositories.Interfaces
+﻿using CoffeeShop.Models;
+
+namespace CoffeeShop.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IGenericRepository<User>
     {
     }
 }

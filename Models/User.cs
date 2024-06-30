@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoffeeShop.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,16 +10,21 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public Guid UserId { get; set; }
+        public Guid UserId { get; set; } = Guid.NewGuid();
         [Required]
         [MaxLength(255)]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
         //[Required]
         [MaxLength(255)]
-        public string? FirstName { get; set; }
-                //[Required]
+        public string FirstName { get; set; } = string.Empty;
+        //[Required]
         [MaxLength(255)]
-        public string? LastName { get; set; }
+        public string LastName { get; set; } = string.Empty;
+        [Required]
+        public DateOnly DateOfBirth { get; set; }
+        public EnumGender Gender { get; set; }
+        public string PhoneNumber { get; set; } 
+        public EnumRole Role { get; set; }
         //[Required]
         [MaxLength(255)]
         public string? HashPassword { get; set; }
@@ -35,11 +41,6 @@ namespace CoffeeShop.Models
         public ICollection<CheckTime>? CheckTimes { get; set; }
         public Salary? Salary { get; set; }
         public bool IsDeleted { get; set; }
-        public Role Role { get; set; }
-    }
-    public enum Role
-    {
-        Employee = 0,
-        Owner = 1
+        public bool IsFirstLogin { get; set; } = true;
     }
 }

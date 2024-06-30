@@ -21,7 +21,7 @@ namespace CoffeeShop.Models
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
-        //public IFormFile Image { get; set; }
+        public string? ImageUrl { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

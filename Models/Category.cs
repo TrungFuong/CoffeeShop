@@ -9,8 +9,8 @@ namespace CoffeeShop.Models
         public Guid CategoryId { get; set; }
         [Required]
         [MaxLength(255)]
-        public string CategoryName { get; set; }
+        public string CategoryName { get; set; } =string.Empty;
         public bool IsDeleted { get; set; }
-        public ICollection<Product> Products { get; set; }
+        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

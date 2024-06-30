@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeShop.Migrations
 {
     /// <inheritdoc />
-    public partial class IniCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -84,6 +84,7 @@ namespace CoffeeShop.Migrations
                     ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProductDescription = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -204,59 +205,59 @@ namespace CoffeeShop.Migrations
                 columns: new[] { "CategoryId", "CategoryName", "IsDeleted" },
                 values: new object[,]
                 {
-                    { new Guid("df2645f1-008c-4e07-9f28-d7222dba8811"), "Tea", false },
-                    { new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"), "Coffee", false },
-                    { new Guid("fd5bfcfb-378d-4812-92a5-6954dcf54942"), "Pastry", false }
+                    { new Guid("1ab2fb68-0f7e-40a4-959a-4fc031ba78dc"), "Pastry", false },
+                    { new Guid("48252c2b-85c1-41fc-a53a-0823d05e4d9a"), "Tea", false },
+                    { new Guid("b34b4d69-a99e-446c-a023-f2395e4b5084"), "Coffee", false }
                 });
 
             migrationBuilder.InsertData(
                 table: "Customers",
                 columns: new[] { "CustomerId", "CustomerBirthday", "CustomerName", "CustomerPhone", "IsDeleted" },
-                values: new object[] { new Guid("8e2b5b72-0ed5-4e21-910e-99573884cd7c"), new DateTime(2024, 6, 17, 10, 24, 47, 530, DateTimeKind.Local).AddTicks(6409), "Jane Smith", "0934516636", false });
+                values: new object[] { new Guid("0ec3030b-556c-462b-80b4-6ceaf841ae6f"), new DateTime(2024, 6, 26, 2, 42, 50, 585, DateTimeKind.Local).AddTicks(4139), "Jane Smith", "0934516636", false });
 
             migrationBuilder.InsertData(
                 table: "PayRates",
                 columns: new[] { "PayRateId", "IsDeleted", "PayrateName", "PayrateValue" },
                 values: new object[,]
                 {
-                    { new Guid("02c9adc0-e8db-40aa-bcf3-72f19782c0cc"), false, "Hoc viec", 20000m },
-                    { new Guid("17d7d325-1523-4786-90fc-f41f0c8e75a7"), false, "Senior", 30000m },
-                    { new Guid("ccba49c8-4bfc-48bb-a723-1a703b13a0cb"), false, "Junior", 25000m }
+                    { new Guid("1f37aa86-4f0a-4381-a8e2-b132188c1cb5"), false, "Hoc viec", 20000m },
+                    { new Guid("bd75ea48-cd13-45c4-9122-ff6a0a35a40b"), false, "Junior", 25000m },
+                    { new Guid("c8d0624d-d234-4a15-b895-5123949d6258"), false, "Senior", 30000m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserId", "FirstName", "HashPassword", "IsDeleted", "LastName", "Role", "Salt", "UserPosition", "UserWorkingHour", "Username" },
-                values: new object[] { new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb"), null, null, false, null, 0, null, null, null, "test" });
+                values: new object[] { new Guid("6cdad382-f4f9-44d7-9d85-87edad1f6ef0"), null, null, false, null, 0, null, null, null, "test" });
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "ProductId", "CategoryId", "IsDeleted", "ProductDescription", "ProductName", "ProductPrice" },
+                columns: new[] { "ProductId", "CategoryId", "ImageUrl", "IsDeleted", "ProductDescription", "ProductName", "ProductPrice" },
                 values: new object[,]
                 {
-                    { new Guid("3e2f883b-329b-4340-bb32-7e69e51e3b87"), new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"), false, "Coffee shot", "Espresso", 25000m },
-                    { new Guid("ac12a34c-93af-40a7-a7eb-8faaa0644477"), new Guid("e0fcd8f9-65fd-44ea-b28c-9cd2b1aba532"), false, "Milky coffee", "Cappuccino", 30000m },
-                    { new Guid("be6b678e-aaa0-4141-b12e-48d87317747e"), new Guid("df2645f1-008c-4e07-9f28-d7222dba8811"), false, "Green thing", "Green Tea", 15000m },
-                    { new Guid("f4c1859e-7e1c-47d8-b76f-d6f044928a95"), new Guid("fd5bfcfb-378d-4812-92a5-6954dcf54942"), false, "It's pronounced \"KhoaSoong\" ", "Croissant", 20000m }
+                    { new Guid("0611210e-8678-41a1-ab10-71599db5e6f7"), new Guid("48252c2b-85c1-41fc-a53a-0823d05e4d9a"), "", false, "Green thing", "Green Tea", 15000m },
+                    { new Guid("56da2756-a0a7-40eb-bb64-95551324a52c"), new Guid("1ab2fb68-0f7e-40a4-959a-4fc031ba78dc"), "", false, "It's pronounced \"KhoaSoong\" ", "Croissant", 20000m },
+                    { new Guid("5c2fb199-bb90-4d12-a71c-6d7624b63413"), new Guid("b34b4d69-a99e-446c-a023-f2395e4b5084"), "", false, "Milky coffee", "Cappuccino", 30000m },
+                    { new Guid("ba4bbea4-e343-4dd2-8df3-530355f6cf20"), new Guid("b34b4d69-a99e-446c-a023-f2395e4b5084"), "", false, "Coffee shot", "Espresso", 25000m }
                 });
 
             migrationBuilder.InsertData(
                 table: "Receipts",
                 columns: new[] { "ReceiptId", "CustomerId", "IsDeleted", "ReceiptDate", "ReceiptTotal", "Table", "UserId" },
-                values: new object[] { new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"), new Guid("8e2b5b72-0ed5-4e21-910e-99573884cd7c"), false, new DateTime(2024, 6, 17, 10, 24, 47, 530, DateTimeKind.Local).AddTicks(6444), 70000m, 1, new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb") });
+                values: new object[] { new Guid("0f45d45a-9d42-4fc7-8db0-ea0cfd1cd1f7"), new Guid("0ec3030b-556c-462b-80b4-6ceaf841ae6f"), false, new DateTime(2024, 6, 26, 2, 42, 50, 585, DateTimeKind.Local).AddTicks(4168), 70000m, 1, new Guid("6cdad382-f4f9-44d7-9d85-87edad1f6ef0") });
 
             migrationBuilder.InsertData(
                 table: "Salaries",
                 columns: new[] { "SalaryId", "IsDeleted", "PayrateId", "TotalSalary", "UserId" },
-                values: new object[] { new Guid("f37d9174-1bd3-47e1-bf55-3691d5ce1501"), false, new Guid("02c9adc0-e8db-40aa-bcf3-72f19782c0cc"), 250000m, new Guid("18839781-6a5d-4297-9cf0-ac8e898630fb") });
+                values: new object[] { new Guid("774a58bc-191e-442f-adaa-0355f7901197"), false, new Guid("1f37aa86-4f0a-4381-a8e2-b132188c1cb5"), 250000m, new Guid("6cdad382-f4f9-44d7-9d85-87edad1f6ef0") });
 
             migrationBuilder.InsertData(
                 table: "ReceiptDetail",
                 columns: new[] { "ProductId", "ReceiptId", "ProductPrice", "ProductQuantity" },
                 values: new object[,]
                 {
-                    { new Guid("3e2f883b-329b-4340-bb32-7e69e51e3b87"), new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"), 0m, 2 },
-                    { new Guid("f4c1859e-7e1c-47d8-b76f-d6f044928a95"), new Guid("348103dd-e57b-44c3-bf42-dd27dec27a27"), 0m, 1 }
+                    { new Guid("56da2756-a0a7-40eb-bb64-95551324a52c"), new Guid("0f45d45a-9d42-4fc7-8db0-ea0cfd1cd1f7"), 0m, 1 },
+                    { new Guid("ba4bbea4-e343-4dd2-8df3-530355f6cf20"), new Guid("0f45d45a-9d42-4fc7-8db0-ea0cfd1cd1f7"), 0m, 2 }
                 });
 
             migrationBuilder.CreateIndex(
