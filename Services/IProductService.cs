@@ -1,4 +1,6 @@
 ﻿using CoffeeShop.DTOs;
+using CoffeeShop.DTOs.Request;
+using CoffeeShop.DTOs.Responses;
 
 namespace CoffeeShop.Services
 {
@@ -8,12 +10,12 @@ namespace CoffeeShop.Services
 
         Task<ProductResponseDTO> GetProductDetail(Guid productId);
 
-        Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload);
+        //Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload);
 
         Task<ProductResponseDTO> DeleteProductAsync(Guid productId);
 
         Task<ProductResponseDTO> UpdateProduct(Guid id, ProductRequestDTO productRequest);
 
-        FileUpload ConvertToFileUpload(IFormFile formFile);
+        //FileUpload ConvertToFileUpload(IFormFile formFile);
     }
 }

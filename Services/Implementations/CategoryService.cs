@@ -3,6 +3,8 @@ using CoffeeShop.Models;
 using CoffeeShop.Exceptions;
 using CoffeeShop.Repositories.Interfaces;
 using CoffeeShop.UnitOfWork;
+using CoffeeShop.DTOs.Responses;
+using CoffeeShop.DTOs.Request;
 
 namespace CoffeeShop.Services.Implementations
 {
@@ -15,9 +17,9 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<CategoryResponseDTO> CreateCategoryAsync(CategoryRequestDTO categoryRequest)
+        public async Task<CategoryResponseDTO> CreateCategoryAsync(CategoryRequestDTO categoryDTO)
         {
-            var categoryNameExisted = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryName == categoryRequest.CategoryName);
+            var categoryNameExisted = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryName == categoryDTO.CategoryName);
             if (categoryNameExisted != null)
             {
                 throw new ArgumentException("Category is already existed. Please enter a different category");
@@ -25,7 +27,7 @@ namespace CoffeeShop.Services.Implementations
 
             var newCategory = new Category
             {
-                CategoryName = categoryRequest.CategoryName,
+                CategoryName = categoryDTO.CategoryName,
             };
 
             await _unitOfWork.CategoryRepository.AddAsync(newCategory);

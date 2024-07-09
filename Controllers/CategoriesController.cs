@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoffeeShop.DTOs;
+using CoffeeShop.DTOs.Request;
 using CoffeeShop.Exceptions;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;

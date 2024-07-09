@@ -15,7 +15,7 @@ namespace CoffeeShop.DTOs.Request
         [Required]
         public DateOnly DateOfBirth { get; set; }
         [Required]
-        public string UserPosition { get; set; }
+        public EnumPostition UserPosition { get; set; }
         [Required]
         public EnumRole Role { get; set; } = EnumRole.Employee;
         [Required]

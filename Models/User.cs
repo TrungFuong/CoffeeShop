@@ -33,7 +33,7 @@ namespace CoffeeShop.Models
         public string? Salt { get; set; }
         //[Required]
         [MaxLength(255)]
-        public string? UserPosition { get; set; }
+        public EnumPostition UserPosition { get; set; }
         //[Required]
         [Column(TypeName = "tinyint")]
         public int? UserWorkingHour { get; set; }

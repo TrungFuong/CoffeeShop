@@ -1,6 +1,6 @@
-﻿namespace CoffeeShop.DTOs
+﻿namespace CoffeeShop.DTOs.Request
 {
-    public class CheckTimeDTO
+    public class CheckinRecordRequestDTO
     {
         public DateTime CheckinTime { get; set; }
         public DateTime CheckoutTime { get; set; }

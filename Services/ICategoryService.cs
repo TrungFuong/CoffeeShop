@@ -1,4 +1,6 @@
 ﻿using CoffeeShop.DTOs;
+using CoffeeShop.DTOs.Request;
+using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;

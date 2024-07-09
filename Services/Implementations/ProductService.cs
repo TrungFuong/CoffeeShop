@@ -1,4 +1,6 @@
 ﻿using CoffeeShop.DTOs;
+using CoffeeShop.DTOs.Request;
+using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models;
 using CoffeeShop.UnitOfWork;
 using Google.Apis.Auth.OAuth2;
@@ -20,64 +22,64 @@ namespace CoffeeShop.Services.Implementations
             _storageClient = storageClient;
             _bucketName = bucketName;
         }
-        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload)
-        {
-            var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
-            if (category == null)
-            {
-                throw new KeyNotFoundException("Category not found");
-            }
+        //public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload)
+        //{
+        //    var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
+        //    if (category == null)
+        //    {
+        //        throw new KeyNotFoundException("Category not found");
+        //    }
 
-            var client = StorageClient.Create();
-            var obj = await client.UploadObjectAsync("coffee-shop-graduation-project", fileUpload.Name, fileUpload.Type, new MemoryStream(fileUpload.FileContent));
+        //    var client = StorageClient.Create();
+        //    var obj = await client.UploadObjectAsync("coffee-shop-graduation-project", fileUpload.Name, fileUpload.Type, new MemoryStream(fileUpload.FileContent));
 
-            string imageUrl = await UploadFileToCloudAsync(fileUpload);
+        //    string imageUrl = await UploadFileToCloudAsync(fileUpload);
 
-            var product = new Product
-            {
-                ProductId = Guid.NewGuid(),
-                ProductName = productRequest.ProductName,
-                ProductPrice = productRequest.ProductPrice,
-                ProductDescription = productRequest.ProductDescription,
-                CategoryId = productRequest.CategoryId,
-                ImageUrl = imageUrl
-            };
+        //    var product = new Product
+        //    {
+        //        ProductId = Guid.NewGuid(),
+        //        ProductName = productRequest.ProductName,
+        //        ProductPrice = productRequest.ProductPrice,
+        //        ProductDescription = productRequest.ProductDescription,
+        //        CategoryId = productRequest.CategoryId,
+        //        ImageUrl = imageUrl
+        //    };
 
-            await _unitOfWork.ProductRepository.AddAsync(product);
+        //    await _unitOfWork.ProductRepository.AddAsync(product);
 
-            if (await _unitOfWork.CommitAsync() > 0)
-            {
-                var productResponse = new ProductResponseDTO
-                {
-                    ProductId = product.ProductId,
-                    ProductName = product.ProductName,
-                    ProductPrice = product.ProductPrice,
-                    ProductDescription = product.ProductDescription,
-                    CategoryId = product.CategoryId,
-                    ImageUrl = product.ImageUrl
-                };
-                return productResponse;
-            }
-            else
-            {
-                throw new Exception("Failed to create product");
-            }
-        }
+        //    if (await _unitOfWork.CommitAsync() > 0)
+        //    {
+        //        var productResponse = new ProductResponseDTO
+        //        {
+        //            ProductId = product.ProductId,
+        //            ProductName = product.ProductName,
+        //            ProductPrice = product.ProductPrice,
+        //            ProductDescription = product.ProductDescription,
+        //            CategoryId = product.CategoryId,
+        //            ImageUrl = product.ImageUrl
+        //        };
+        //        return productResponse;
+        //    }
+        //    else
+        //    {
+        //        throw new Exception("Failed to create product");
+        //    }
+        //}
 
-        public FileUpload ConvertToFileUpload(IFormFile formFile)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                formFile.CopyTo(memoryStream);
+        //public FileUpload ConvertToFileUpload(IFormFile formFile)
+        //{
+        //    using (var memoryStream = new MemoryStream())
+        //    {
+        //        formFile.CopyTo(memoryStream);
 
-                return new FileUpload
-                {
-                    Name = formFile.FileName,
-                    Type = formFile.ContentType,
-                    FileContent = memoryStream.ToArray()
-                };
-            }
-        }
+        //        return new FileUpload
+        //        {
+        //            Name = formFile.FileName,
+        //            Type = formFile.ContentType,
+        //            FileContent = memoryStream.ToArray()
+        //        };
+        //    }
+        //}
 
         public async Task<ProductResponseDTO> DeleteProductAsync(Guid productId)
         {
@@ -150,38 +152,38 @@ namespace CoffeeShop.Services.Implementations
             };
         }
 
-        private async Task<string> UploadFileToCloudAsync(FileUpload fileUpload)
-        {
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(fileUpload.Name);
-            string contentType = GetContentType(fileUpload.Name);
+        //private async Task<string> UploadFileToCloudAsync(FileUpload fileUpload)
+        //{
+        //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(fileUpload.Name);
+        //    string contentType = GetContentType(fileUpload.Name);
 
-            using (var stream = new MemoryStream(fileUpload.FileContent))
-            {
-                var dataObject = await _storageClient.UploadObjectAsync(_bucketName, fileName, contentType, stream);
-                return GenerateSignedUrl(_bucketName, fileName);
-            }
-        }
+        //    using (var stream = new MemoryStream(fileUpload.FileContent))
+        //    {
+        //        var dataObject = await _storageClient.UploadObjectAsync(_bucketName, fileName, contentType, stream);
+        //        return GenerateSignedUrl(_bucketName, fileName);
+        //    }
+        //}
 
-        private string GetContentType(string fileName)
-        {
-            var extension = Path.GetExtension(fileName).ToLowerInvariant();
-            return extension switch
-            {
-                ".jpg" => "image/jpeg",
-                ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                ".pdf" => "application/pdf",
-                _ => "application/octet-stream",
-            };
-        }
+        //private string GetContentType(string fileName)
+        //{
+        //    var extension = Path.GetExtension(fileName).ToLowerInvariant();
+        //    return extension switch
+        //    {
+        //        ".jpg" => "image/jpeg",
+        //        ".jpeg" => "image/jpeg",
+        //        ".png" => "image/png",
+        //        ".gif" => "image/gif",
+        //        ".pdf" => "application/pdf",
+        //        _ => "application/octet-stream",
+        //    };
+        //}
 
-        private string GenerateSignedUrl(string bucketName, string objectName)
-        {
-            UrlSigner urlSigner = UrlSigner.FromServiceAccountCredential(GoogleCredential.GetApplicationDefault().UnderlyingCredential as ServiceAccountCredential);
-            string url = urlSigner.Sign(bucketName, objectName, TimeSpan.FromHours(1), HttpMethod.Get);
-            return url;
-        }
+        //private string GenerateSignedUrl(string bucketName, string objectName)
+        //{
+        //    UrlSigner urlSigner = UrlSigner.FromServiceAccountCredential(GoogleCredential.GetApplicationDefault().UnderlyingCredential as ServiceAccountCredential);
+        //    string url = urlSigner.Sign(bucketName, objectName, TimeSpan.FromHours(1), HttpMethod.Get);
+        //    return url;
+        //}
 
 
         public async Task<(IEnumerable<ProductResponseDTO> data, int totalCount)> GetAllProductsAsync(int pageNumber, Guid? category, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "", string? newProductName = "")

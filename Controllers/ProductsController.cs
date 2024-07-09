@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using CoffeeShop.DTOs;
 using NuGet.ContentModel;
 using Microsoft.AspNetCore.Http;
+using CoffeeShop.DTOs.Request;
 
 namespace CoffeeShop.Controllers
 {
@@ -54,38 +55,38 @@ namespace CoffeeShop.Controllers
             }
         }
 
-        [HttpPost]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateProductAsync([FromForm] ProductRequestDTO productRequest, [FromForm] IFormFile fileUpload)
-        {
-            try
-            {
-                var file = _productService.ConvertToFileUpload(fileUpload);
-                var product = await _productService.CreateProductAsync(productRequest, file);
-                if (product == null)
-                {
-                    return Conflict(new GeneralBoolResponse
-                    {
-                        Success = false,
-                        Message = "Product creation failed."
-                    });
-                }
-                return Ok(new GeneralCreateResponse
-                {
-                    Success = true,
-                    Message = "Product created successfully.",
-                    Data = product
-                });
-            }
-            catch (Exception ex)
-            {
-                return Conflict(new GeneralBoolResponse
-                {
-                    Success = false,
-                    Message = ex.Message
-                });
-            }
-        }
+        //[HttpPost]
+        //[Consumes("multipart/form-data")]
+        //public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest, IFormFile fileUpload)
+        //{
+        //    try
+        //    {
+        //        var file = _productService.ConvertToFileUpload(fileUpload);
+        //        var product = await _productService.CreateProductAsync(productRequest, file);
+        //        if (product == null)
+        //        {
+        //            return Conflict(new GeneralBoolResponse
+        //            {
+        //                Success = false,
+        //                Message = "Product creation failed."
+        //            });
+        //        }
+        //        return Ok(new GeneralCreateResponse
+        //        {
+        //            Success = true,
+        //            Message = "Product created successfully.",
+        //            Data = product
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Conflict(new GeneralBoolResponse
+        //        {
+        //            Success = false,
+        //            Message = ex.Message
+        //        });
+        //    }
+        //}
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductAsync(Guid id)
