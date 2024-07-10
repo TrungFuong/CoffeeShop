@@ -13,6 +13,8 @@ namespace CoffeeShop.UnitOfWork
         IReceiptRepository ReceiptRepository { get; }
         ISalaryRepository SalaryRepository { get; }
         IUserRepository UserRepository { get; }
+        IRefreshTokenRepository RefreshTokenRepository { get; }
+        ITokenRepository TokenRepository { get; }
         Task<int> CommitAsync();
         int Commit();
     }

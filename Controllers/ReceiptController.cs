@@ -1,4 +1,5 @@
-﻿using CoffeeShop.Models.Responses;
+﻿using CoffeeShop.DTOs.Request;
+using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,36 @@ namespace CoffeeShop.Controllers
             _receiptService = receiptService;
         }
 
-
+        [HttpPost]
+        public async Task<IActionResult> AddReceiptAsync([FromBody] ReceiptRequestDTO request)
+        {
+            try
+            {
+                var result = await _receiptService.AddReceiptAsync(request);
+                if (result != null)
+                {
+                    return Ok(new GeneralCreateResponse
+                    {
+                        Success = true,
+                        Message = "Receipt created successfully.",
+                        Data = result
+                    });
+                }
+                return Conflict(new GeneralCreateResponse
+                {
+                    Success = false,
+                    Message = "Receipt creation failed."
+                });
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralCreateResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate", Guid? newReceiptId = null)

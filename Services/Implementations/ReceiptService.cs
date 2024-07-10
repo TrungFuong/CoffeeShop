@@ -13,10 +13,12 @@ namespace CoffeeShop.Services.Implementations
     {
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IReceiptDetailService _receiptDetailService;
 
-        public ReceiptService(IUnitOfWork unitOfWork)
+        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService)
         {
             _unitOfWork = unitOfWork;
+            _receiptDetailService = receiptDetailService;
         }
         public async Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO)
         {
@@ -29,12 +31,12 @@ namespace CoffeeShop.Services.Implementations
 
             var receiptDetail = receiptRequestDTO.receiptDetailDTOs.Select(receiptRequestDTO => new ReceiptDetail
             {
+                ReceiptId = receiptRequestDTO.ReceiptId,
                 ProductId = receiptRequestDTO.ProductId,
-                ProductQuantity = receiptRequestDTO.ProductQuantity,
-                ProductPrice = receiptRequestDTO.ProductPrice
+                ProductQuantity = receiptRequestDTO.ProductQuantity
             }).ToList();
 
-            var receiptTotal = receiptDetail.Sum(r => r.ProductPrice * r.ProductQuantity);
+            var receiptTotal = receiptDetail.Sum(r => r.Product.ProductPrice * r.ProductQuantity);
 
             var receipt = new Receipt
             {

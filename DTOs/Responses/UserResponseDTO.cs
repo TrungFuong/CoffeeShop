@@ -4,13 +4,14 @@ namespace CoffeeShop.DTOs.Responses
 {
     public class UserResponseDTO
     {
-        public string Username { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
+        public Guid UserId { get; set; }
+        public string Username { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public DateOnly DateOfBirth { get; set; }
-        public EnumPostition UserPosition { get; set; } = EnumPostition.PhucVu;
-        public string Role { get; set; } = string.Empty;
-        public string PhoneNumber { get; set; } = string.Empty;
+        public EnumPostition UserPosition { get; set; }
+        public EnumRole Role { get; set; }
+        public string PhoneNumber { get; set; }
         public EnumGender Gender { get; set; }
     }
 }

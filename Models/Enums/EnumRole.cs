@@ -3,6 +3,6 @@
     public enum EnumRole
     {
         Employee = 0,
-        Owner = 1
+        Admin = 1
     }
 }

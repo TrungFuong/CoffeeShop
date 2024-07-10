@@ -29,7 +29,7 @@ namespace CoffeeShop.Services.Implementations
                 Username = userRegisterRequest.Username,
                 FirstName = userRegisterRequest.FirstName,
                 LastName = userRegisterRequest.LastName,
-                DateOfBirth = userRegisterRequest.DateOfBirth,
+                DateOfBirth = DateOnly.FromDateTime(userRegisterRequest.DateOfBirth),
                 Gender = userRegisterRequest.Gender,
                 PhoneNumber = userRegisterRequest.PhoneNumber,
                 Role = userRegisterRequest.Role,
@@ -102,7 +102,7 @@ namespace CoffeeShop.Services.Implementations
                 LastName = p.LastName,
                 DateOfBirth = p.DateOfBirth,
                 UserPosition = p.UserPosition,
-                Role = p.Role.ToString(),
+                Role = p.Role,
                 PhoneNumber = p.PhoneNumber,
                 //So gio lam viec
                 //Muc luong
@@ -123,7 +123,7 @@ namespace CoffeeShop.Services.Implementations
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 UserPosition = user.UserPosition,
-                Role = user.Role.ToString(),
+                Role = user.Role,
                 PhoneNumber = user.PhoneNumber,
                 //So gio lam viec
                 //Muc luong
@@ -152,7 +152,7 @@ namespace CoffeeShop.Services.Implementations
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 UserPosition = user.UserPosition,
-                Role = user.Role.ToString(),
+                Role = user.Role,
                 PhoneNumber = user.PhoneNumber
             };
         }

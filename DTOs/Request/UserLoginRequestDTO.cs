@@ -2,7 +2,7 @@
 
 namespace CoffeeShop.DTOs.Request
 {
-    public class UserLoginRequestDTOcs
+    public class UserLoginRequestDTO
     {
         [Required]
         public string Username { get; set; } = string.Empty;

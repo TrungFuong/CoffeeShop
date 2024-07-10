@@ -13,7 +13,7 @@ namespace CoffeeShop.DTOs.Request
         [RegularExpression(@"^[a-zA-Z]+([a-zA-Z ]*[a-zA-Z])?$", ErrorMessage = "Last name can only contain letters and spaces, and cannot start or end with a space.")]
         public string LastName { get; set; } = string.Empty;
         [Required]
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
         public EnumPostition UserPosition { get; set; }
         [Required]

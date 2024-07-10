@@ -15,7 +15,5 @@ namespace CoffeeShop.Models
         public Receipt Receipt { get; set; }
         [Required]
         public int ProductQuantity { get; set; }
-        [Required]
-        public decimal ProductPrice { get; set; }
     }
 }
