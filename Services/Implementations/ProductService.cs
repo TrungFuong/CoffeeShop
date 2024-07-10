@@ -14,57 +14,62 @@ namespace CoffeeShop.Services.Implementations
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly StorageClient _storageClient;
-        private readonly string _bucketName;
-        public ProductService(IUnitOfWork unitOfWork, StorageClient storageClient, string bucketName)
+        //private readonly StorageClient _storageClient;
+        //private readonly string _bucketName;
+        public ProductService(IUnitOfWork unitOfWork
+            //, StorageClient storageClient
+            //, string bucketName
+            )
         {
             _unitOfWork = unitOfWork;
-            _storageClient = storageClient;
-            _bucketName = bucketName;
+            //_storageClient = storageClient;
+            //_bucketName = bucketName;
         }
-        //public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload)
-        //{
-        //    var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
-        //    if (category == null)
-        //    {
-        //        throw new KeyNotFoundException("Category not found");
-        //    }
+        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest
+            //, FileUpload fileUpload
+            )
+        {
+            var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
+            if (category == null)
+            {
+                throw new KeyNotFoundException("Category not found");
+            }
 
-        //    var client = StorageClient.Create();
-        //    var obj = await client.UploadObjectAsync("coffee-shop-graduation-project", fileUpload.Name, fileUpload.Type, new MemoryStream(fileUpload.FileContent));
+            //var client = StorageClient.Create();
+            //var obj = await client.UploadObjectAsync("coffee-shop-graduation-project", fileUpload.Name, fileUpload.Type, new MemoryStream(fileUpload.FileContent));
 
-        //    string imageUrl = await UploadFileToCloudAsync(fileUpload);
+            //string imageUrl = await UploadFileToCloudAsync(fileUpload);
 
-        //    var product = new Product
-        //    {
-        //        ProductId = Guid.NewGuid(),
-        //        ProductName = productRequest.ProductName,
-        //        ProductPrice = productRequest.ProductPrice,
-        //        ProductDescription = productRequest.ProductDescription,
-        //        CategoryId = productRequest.CategoryId,
-        //        ImageUrl = imageUrl
-        //    };
+            var product = new Product
+            {
+                ProductId = Guid.NewGuid(),
+                ProductName = productRequest.ProductName,
+                ProductPrice = productRequest.ProductPrice,
+                ProductDescription = productRequest.ProductDescription,
+                CategoryId = productRequest.CategoryId,
+                //ImageUrl = imageUrl
+            };
 
-        //    await _unitOfWork.ProductRepository.AddAsync(product);
+            await _unitOfWork.ProductRepository.AddAsync(product);
 
-        //    if (await _unitOfWork.CommitAsync() > 0)
-        //    {
-        //        var productResponse = new ProductResponseDTO
-        //        {
-        //            ProductId = product.ProductId,
-        //            ProductName = product.ProductName,
-        //            ProductPrice = product.ProductPrice,
-        //            ProductDescription = product.ProductDescription,
-        //            CategoryId = product.CategoryId,
-        //            ImageUrl = product.ImageUrl
-        //        };
-        //        return productResponse;
-        //    }
-        //    else
-        //    {
-        //        throw new Exception("Failed to create product");
-        //    }
-        //}
+            if (await _unitOfWork.CommitAsync() > 0)
+            {
+                var productResponse = new ProductResponseDTO
+                {
+                    ProductId = product.ProductId,
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice,
+                    ProductDescription = product.ProductDescription,
+                    CategoryId = product.CategoryId,
+                    //ImageUrl = product.ImageUrl
+                };
+                return productResponse;
+            }
+            else
+            {
+                throw new Exception("Failed to create product");
+            }
+        }
 
         //public FileUpload ConvertToFileUpload(IFormFile formFile)
         //{
@@ -98,7 +103,7 @@ namespace CoffeeShop.Services.Implementations
                     ProductPrice = product.ProductPrice,
                     ProductDescription = product.ProductDescription,
                     CategoryId = product.CategoryId,
-                    ImageUrl = product.ImageUrl
+                    //ImageUrl = product.ImageUrl
                 };
             }
             else
@@ -123,7 +128,7 @@ namespace CoffeeShop.Services.Implementations
                 ProductDescription = product.ProductDescription,
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category.CategoryName,
-                ImageUrl = product.ImageUrl
+                //ImageUrl = product.ImageUrl
             };
         }
 

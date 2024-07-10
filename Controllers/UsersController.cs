@@ -9,7 +9,7 @@ namespace CoffeeShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
         private readonly IUserService _userService;
         public UsersController(IUserService userService)
@@ -71,7 +71,7 @@ namespace CoffeeShop.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUserDetailAsync(Guid id)
         {
             try

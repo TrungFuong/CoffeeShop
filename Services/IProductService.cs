@@ -10,7 +10,9 @@ namespace CoffeeShop.Services
 
         Task<ProductResponseDTO> GetProductDetail(Guid productId);
 
-        //Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, FileUpload fileUpload);
+        Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest
+            //, FileUpload fileUpload
+            );
 
         Task<ProductResponseDTO> DeleteProductAsync(Guid productId);
 

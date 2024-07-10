@@ -6,6 +6,6 @@ namespace CoffeeShop.Services
     public interface IReceiptService
     {
         Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO);
-        //Task<IEnumerable<ReceiptResponseDTO>> GetAllReceiptsAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
+        Task<(IEnumerable<ReceiptResponseDTO> data, int totalCount)> GetAllReceiptsAsync(int pageNumber, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate", string includeProperties = "", Guid? newReceiptId = null);
     }
 }

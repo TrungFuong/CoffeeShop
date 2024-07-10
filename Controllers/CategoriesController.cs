@@ -11,7 +11,7 @@ namespace CoffeeShop.Controllers
 {
     [Route("api/category")]
     [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
 

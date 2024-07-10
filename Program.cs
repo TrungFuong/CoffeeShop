@@ -37,15 +37,7 @@ namespace CoffeeShop
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CoffeeShop API", Version = "v1" });
-                c.OperationFilter<FileUploadOperation>();
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
+            builder.Services.AddSwaggerGen();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
@@ -57,10 +49,10 @@ namespace CoffeeShop
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             
-            builder.Services.AddSingleton(StorageClient.Create());
+            //builder.Services.AddSingleton(StorageClient.Create());
 
-            var bucketName = builder.Configuration["GoogleCloud:BucketName"];
-            builder.Services.AddSingleton(bucketName);
+            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
+            //builder.Services.AddSingleton(bucketName);
 
             var app = builder.Build();
 

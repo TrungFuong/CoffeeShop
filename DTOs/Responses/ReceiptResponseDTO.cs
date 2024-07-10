@@ -3,7 +3,7 @@
     public class ReceiptResponseDTO
     {
         public Guid ReceiptId { get; set; }
-        public Guid EmployeeId { get; set; }
+        public Guid UserId { get; set; }
         public String FullName { get; set; }
         public Guid CustomerId { get; set; }
         public String CustomerPhone { get; set; }
