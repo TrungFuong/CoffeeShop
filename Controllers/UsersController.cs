@@ -58,7 +58,7 @@ namespace CoffeeShop.Controllers
                 {
                     Success = true,
                     Message = "Users retrieved successfully!",
-                    Data = users
+                    Data = users.data
                 });
             }
             catch (Exception ex)
