@@ -20,39 +20,32 @@ namespace CoffeeShop
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-            //{
-            //    options.TokenValidationParameters = new TokenValidationParameters 
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true,
-            //        ValidIssuer = builder.Configuration["Jwt: Issuer"],
-            //        ValidAudience = builder.Configuration["Jwt: Audience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt: Key"]))
-            //    };
-            //});
-
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
-                options.UseSqlServer(connectionString));
+              options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
-            
-            //builder.Services.AddSingleton(StorageClient.Create());
-
-            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
-            //builder.Services.AddSingleton(bucketName);
 
             var app = builder.Build();
 
@@ -63,6 +56,8 @@ namespace CoffeeShop
                 app.UseSwaggerUI();
             }
 
+            // Enable CORS middleware
+            app.UseCors("AllowAnyOrigin");
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

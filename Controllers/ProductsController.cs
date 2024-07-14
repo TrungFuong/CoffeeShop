@@ -56,7 +56,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
-        [Consumes("multipart/form-data")]
+        
         public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest
             //, IFormFile fileUpload
             )
