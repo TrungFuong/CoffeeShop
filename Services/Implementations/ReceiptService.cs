@@ -20,6 +20,7 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork = unitOfWork;
             _receiptDetailService = receiptDetailService;
         }
+
         public async Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO)
         {
             var employee = await _unitOfWork.UserRepository.GetAsync(r => r.UserId == receiptRequestDTO.UserId);
@@ -28,11 +29,10 @@ namespace CoffeeShop.Services.Implementations
             {
                 throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
-            var receiptId = Guid.NewGuid();
 
             var receiptDetail = receiptRequestDTO.receiptDetailDTOs.Select(receiptRequestDTO => new ReceiptDetail
             {
-                ReceiptId = receiptId,
+                ReceiptId = receiptRequestDTO.ReceiptId,
                 ProductId = receiptRequestDTO.ProductId,
                 ProductQuantity = receiptRequestDTO.ProductQuantity
             }).ToList();
@@ -41,7 +41,6 @@ namespace CoffeeShop.Services.Implementations
 
             var receipt = new Receipt
             {
-                ReceiptId = receiptId,
                 UserId = receiptRequestDTO.UserId,
                 CustomerId = receiptRequestDTO.CustomerId,
                 ReceiptDate = receiptRequestDTO.ReceiptDate,
@@ -73,12 +72,12 @@ namespace CoffeeShop.Services.Implementations
         }
 
         public async Task<(IEnumerable<ReceiptResponseDTO> data, int totalCount)> GetAllReceiptsAsync(
-            int page, 
-            string? search, 
-            DateTime? receiptDate, 
-            string? sortOrder, 
-            string? sortBy = "receiptDate", 
-            string includeProperties = "", 
+            int page,
+            string? search,
+            DateTime? receiptDate,
+            string? sortOrder,
+            string? sortBy = "receiptDate",
+            string includeProperties = "",
             Guid? newReceiptId = null)
         {
             Func<IQueryable<Receipt>, IOrderedQueryable<Receipt>>? orderBy = GetOrderQuery(sortOrder, sortBy);
@@ -96,7 +95,7 @@ namespace CoffeeShop.Services.Implementations
                 ReceiptDate = r.ReceiptDate,
                 ReceiptTotal = r.ReceiptTotal,
                 Table = r.Table,
-                CustomerId = r.Customer.CustomerId,
+                CustomerId = r.Customer?.CustomerId,
                 UserId = r.User.UserId,
                 FullName = r.User.FirstName + " " + r.User.LastName,
                 CustomerPhone = r.Customer.CustomerPhone,
