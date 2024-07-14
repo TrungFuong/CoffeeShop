@@ -32,7 +32,7 @@ namespace CoffeeShop.Services.Implementations
             var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
             if (category == null)
             {
-                throw new KeyNotFoundException("Category not found");
+                throw new KeyNotFoundException("Không tìm thấy danh mục!");
             }
 
             //var client = StorageClient.Create();
@@ -67,7 +67,7 @@ namespace CoffeeShop.Services.Implementations
             }
             else
             {
-                throw new Exception("Failed to create product");
+                throw new Exception("Tạo sản phẩm thất bại!");
             }
         }
 
@@ -91,7 +91,7 @@ namespace CoffeeShop.Services.Implementations
             var product = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == productId);
             if (product == null)
             {
-                throw new Exception("Product not found");
+                throw new Exception("Không tìm thấy sản phẩm!");
             }
 
             _unitOfWork.ProductRepository.SoftDelete(product);
@@ -108,7 +108,7 @@ namespace CoffeeShop.Services.Implementations
             }
             else
             {
-                throw new Exception("Failed to delete product");
+                throw new Exception("Xóa sản phẩm thất bại!");
             }
         }
 
@@ -137,12 +137,13 @@ namespace CoffeeShop.Services.Implementations
             var currentProduct = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == id);
             if (currentProduct == null)
             {
-                throw new ArgumentException("Product not found");
+                throw new ArgumentException("Không tìm thấy sản phẩm!");
             }
-            currentProduct.ProductName = productRequest.ProductName;
-            currentProduct.ProductPrice = productRequest.ProductPrice;
-            currentProduct.ProductDescription = productRequest.ProductDescription;
-            currentProduct.CategoryId = productRequest.CategoryId;
+            
+            currentProduct.ProductName = productRequest.ProductName == string.Empty ? currentProduct.ProductName : productRequest.ProductName;
+            currentProduct.ProductPrice = productRequest.ProductPrice == null ? currentProduct.ProductPrice : productRequest.ProductPrice;
+            currentProduct.ProductDescription = productRequest.ProductDescription == string.Empty ? currentProduct.ProductDescription : productRequest.ProductDescription;
+            currentProduct.CategoryId = productRequest.CategoryId == Guid.Empty ? currentProduct.CategoryId : productRequest.CategoryId;
             //currentProduct.ImageUrl = productRequest.ImageUrl;
             _unitOfWork.ProductRepository.Update(currentProduct);
             await _unitOfWork.CommitAsync();
@@ -201,6 +202,7 @@ namespace CoffeeShop.Services.Implementations
             {
                 prioritizeCondition = p => p.ProductName == newProductName;
             }
+
             var products = await _unitOfWork.ProductRepository.GetAllAsync(pageNumber, filter, orderBy, includeProperties);
 
             return (products.items.Select(p => new ProductResponseDTO
@@ -210,6 +212,7 @@ namespace CoffeeShop.Services.Implementations
                 ProductPrice = p.ProductPrice,
                 ProductDescription = p.ProductDescription,
                 CategoryId = p.CategoryId,
+                CategoryName = p.Category.CategoryName,
                 ImageUrl = p.ImageUrl,
             }), products.totalCount);
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeShop.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class IniCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -225,8 +225,7 @@ namespace CoffeeShop.Migrations
                 {
                     ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ReceiptId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductQuantity = table.Column<int>(type: "int", nullable: false),
-                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    ProductQuantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,9 +262,7 @@ namespace CoffeeShop.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Receipts_CustomerId",
                 table: "Receipts",
-                column: "CustomerId",
-                unique: true,
-                filter: "[CustomerId] IS NOT NULL");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Receipts_UserId",

@@ -16,10 +16,10 @@ namespace CoffeeShop.Services.Implementations
         }
         public async Task<(string token, string refreshToken, UserResponseDTO userResponse)> LoginAsync(string username, string password)
         {
-            var user = await _unitOfWork.UserRepository.GetAsync(u => !u.IsDeleted && u.Username == username, u => u.Role);
+            var user = await _unitOfWork.UserRepository.GetAsync(u => !u.IsDeleted && u.Username == username);
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.HashPassword))
             {
-                throw new UnauthorizedAccessException("Incorrect username or password!!!");
+                throw new UnauthorizedAccessException("Sai tên đăng nhập hoặc mật khẩu!!!");
             }
             var token = _tokenService.GenerateToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
@@ -53,13 +53,13 @@ namespace CoffeeShop.Services.Implementations
             var token = await _unitOfWork.RefreshTokenRepository.GetAsync(rt => rt.TokenHash == refreshToken).ConfigureAwait(false);
             if (token == null || token.ExpiredAt <= DateTime.Now)
             {
-                throw new SecurityTokenException("Invalid refresh token!!!");
+                throw new SecurityTokenException("Refresh token không hợp lệ!!!");
             }
 
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.UserId == token.UserId);
             if (user == null)
             {
-                throw new KeyNotFoundException("User not found!!!");
+                throw new KeyNotFoundException("Không tìm thấy người dùng!!!");
             }
             var newJwtToken = _tokenService.GenerateToken(user);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
@@ -93,12 +93,12 @@ namespace CoffeeShop.Services.Implementations
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.Username == username);
             if (user == null)
             {
-                throw new KeyNotFoundException("User not found");
+                throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(oldPassword, user.HashPassword))
             {
-                throw new UnauthorizedAccessException("Password is incorrect");
+                throw new UnauthorizedAccessException("Sai mật khẩu!");
             }
             var passwordSalt = BCrypt.Net.BCrypt.GenerateSalt();
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(newPassword, passwordSalt);

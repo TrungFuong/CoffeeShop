@@ -46,7 +46,7 @@ namespace CoffeeShop.Services.Implementations
             await _unitOfWork.UserRepository.AddAsync(newUser);
             if (await _unitOfWork.CommitAsync() < 1)
             {
-                throw new InvalidOperationException("An error occurred while registering the user.");
+                throw new InvalidOperationException("Xảy ra lỗi trong quá trình thêm người dùng!");
             }
             else
             {
@@ -68,7 +68,7 @@ namespace CoffeeShop.Services.Implementations
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.UserId == id);
             if (user == null)
             {
-                throw new KeyNotFoundException("User not found.");
+                throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
             user.IsDeleted = true;
             _unitOfWork.UserRepository.Update(user);
@@ -114,7 +114,7 @@ namespace CoffeeShop.Services.Implementations
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.UserId == userId);
             if (user == null)
             {
-                throw new ArgumentException("User not found.");
+                throw new ArgumentException("Không tìm thấy người dùng!");
             }
             return new UserResponseDTO
             {
@@ -135,7 +135,7 @@ namespace CoffeeShop.Services.Implementations
             var user = await _unitOfWork.UserRepository.GetAsync(u => u.UserId == userId);
             if (user == null)
             {
-                throw new ArgumentException("User not found.");
+                throw new ArgumentException("Không tìm thấy người dùng!");
             }
             user.PhoneNumber = userRequest.PhoneNumber;
             user.UserPosition = userRequest.UserPosition;
@@ -143,7 +143,7 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork.UserRepository.Update(user);
             if (await _unitOfWork.CommitAsync() < 0)
             {
-                throw new ArgumentException("An error occurred while updating the user.");
+                throw new ArgumentException("Đã có lỗi xảy ra trong quá trình cập nhật thông tin người dùng!");
             };
             return new UserResponseDTO
             {
@@ -161,7 +161,7 @@ namespace CoffeeShop.Services.Implementations
         {
             // Determine the filtering criteria
             Expression<Func<User, bool>>? filter = null;
-            var parameter = Expression.Parameter(typeof(Product), "x");
+            var parameter = Expression.Parameter(typeof(User), "x");
             var conditions = new List<Expression>();
 
             // Add IsDelete

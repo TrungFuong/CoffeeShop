@@ -5,7 +5,9 @@ namespace CoffeeShop.DTOs.Request
     public class ReceiptRequestDTO
     { 
         public Guid UserId { get; set; }
+        public Guid Username { get; set; }
         public Guid CustomerId { get; set; }
+        public string? CustomerName { get; set; }
         public DateTime ReceiptDate { get; set; }
         public decimal ReceiptTotal { get; set; }
         public int Table { get; set; }

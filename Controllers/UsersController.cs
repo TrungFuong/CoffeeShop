@@ -53,7 +53,7 @@ namespace CoffeeShop.Controllers
         {
             try
             {
-                var users = _userService.GetAllUsersAsync(pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, includeProperties, newUsername);
+                var users = await _userService.GetAllUsersAsync(pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, includeProperties, newUsername);
                 return Ok(new GeneralGetsResponse
                 {
                     Success = true,

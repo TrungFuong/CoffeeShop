@@ -24,7 +24,13 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProductsAsync(int pageNumber, Guid? category, string? search, string? sortOrder, string? sortBy = "productName", string? newProductName = "")
+        public async Task<IActionResult> GetAllProductsAsync(
+            int pageNumber, 
+            Guid? category, 
+            string? search, 
+            string? sortOrder, 
+            string? sortBy = "productName", 
+            string? newProductName = "")
         {
             try
             {
@@ -56,7 +62,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
-        [Consumes("multipart/form-data")]
+        //[Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest
             //, IFormFile fileUpload
             )

@@ -56,15 +56,15 @@ namespace CoffeeShop
 
             modelBuilder.Entity<Receipt>()
                 .HasOne(receipt => receipt.Customer)
-                .WithOne(customer => customer.Receipt)
-                .HasForeignKey<Receipt>(receipt => receipt.CustomerId);
+                .WithMany(customer => customer.Receipts)
+                .HasForeignKey(receipt => receipt.CustomerId);
 
             modelBuilder.Entity<Receipt>()
                 .HasMany(receipt => receipt.ReceiptDetails)
                 .WithOne(receiptDetail => receiptDetail.Receipt);
 
             modelBuilder.Entity<Customer>()
-                .HasOne(customer => customer.Receipt)
+                .HasMany(customer => customer.Receipts)
                 .WithOne(receipt => receipt.Customer);
 
             modelBuilder.Entity<Product>()

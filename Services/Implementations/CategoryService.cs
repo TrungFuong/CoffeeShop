@@ -22,7 +22,7 @@ namespace CoffeeShop.Services.Implementations
             var categoryNameExisted = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryName == categoryDTO.CategoryName);
             if (categoryNameExisted != null)
             {
-                throw new ArgumentException("Category is already existed. Please enter a different category");
+                throw new ArgumentException("Danh mục sản phẩm đã tồn tại. Vui lòng nhập danh mục khác!");
             }
 
             var newCategory = new Category
@@ -42,7 +42,7 @@ namespace CoffeeShop.Services.Implementations
             }
             else
             {
-                throw new Exception("Failed to create category");
+                throw new Exception("Tạo danh mục thất bại!");
             }
         }
 

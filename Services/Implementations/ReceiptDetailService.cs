@@ -25,7 +25,7 @@ namespace CoffeeShop.Services.Implementations
             await _unitOfWork.ReceiptDetailRepository.AddAsync(receiptDetail);
             if (await _unitOfWork.CommitAsync() <1)
             {
-                throw new Exception("Failed to create receipt detail");
+                throw new Exception("Thêm thông tin chi tiết hóa đơn thất bại!");
             }
         }
     }

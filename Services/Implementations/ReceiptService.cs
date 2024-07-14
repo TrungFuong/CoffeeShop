@@ -26,7 +26,7 @@ namespace CoffeeShop.Services.Implementations
 
             if (employee == null)
             {
-                throw new KeyNotFoundException("User not found");
+                throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
 
             var receiptDetail = receiptRequestDTO.receiptDetailDTOs.Select(receiptRequestDTO => new ReceiptDetail
@@ -58,7 +58,7 @@ namespace CoffeeShop.Services.Implementations
 
             if (await _unitOfWork.CommitAsync() < 1)
             {
-                throw new ArgumentException("Insert failed");
+                throw new ArgumentException("Thêm hóa đơn thất bại!");
             }
             else
             {

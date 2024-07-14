@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeShop.Migrations
 {
     [DbContext(typeof(CoffeeShopDBContext))]
-    [Migration("20240709170057_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240714052239_IniCreate")]
+    partial class IniCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,9 +180,7 @@ namespace CoffeeShop.Migrations
 
                     b.HasKey("ReceiptId");
 
-                    b.HasIndex("CustomerId")
-                        .IsUnique()
-                        .HasFilter("[CustomerId] IS NOT NULL");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("UserId");
 
@@ -196,9 +194,6 @@ namespace CoffeeShop.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("ProductPrice")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductQuantity")
                         .HasColumnType("int");
@@ -377,8 +372,8 @@ namespace CoffeeShop.Migrations
             modelBuilder.Entity("CoffeeShop.Models.Receipt", b =>
                 {
                     b.HasOne("CoffeeShop.Models.Customer", "Customer")
-                        .WithOne("Receipt")
-                        .HasForeignKey("CoffeeShop.Models.Receipt", "CustomerId");
+                        .WithMany("Receipts")
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("CoffeeShop.Models.User", "User")
                         .WithMany("Receipts")
@@ -458,8 +453,7 @@ namespace CoffeeShop.Migrations
 
             modelBuilder.Entity("CoffeeShop.Models.Customer", b =>
                 {
-                    b.Navigation("Receipt")
-                        .IsRequired();
+                    b.Navigation("Receipts");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.PayRate", b =>
