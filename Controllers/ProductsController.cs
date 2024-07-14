@@ -61,6 +61,46 @@ namespace CoffeeShop.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductByIdAsync(Guid id)
+        {
+            try
+            {
+                var product = await _productService.GetProductDetail(id);
+                if (product != null)
+                {
+                    return Ok(new GeneralGetResponse
+                    {
+                        Success = true,
+                        Message = "Product retrieved successfully.",
+                        Data = product
+                    });
+                }
+                return Conflict(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = "Product not found."
+                });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+        }
+
+
         [HttpPost]
         //[Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest
@@ -140,6 +180,14 @@ namespace CoffeeShop.Controllers
                 response.Message = "Update successfully";
                 response.Data = result;
                 return Ok(response);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
             }
             catch (Exception ex)
             {

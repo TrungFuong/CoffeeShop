@@ -1,10 +1,12 @@
 ﻿using CoffeeShop.DTOs;
 using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
+using CoffeeShop.Exceptions;
 using CoffeeShop.Models;
 using CoffeeShop.UnitOfWork;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Mono.TextTemplating;
 using NuGet.ContentModel;
 using System.Linq.Expressions;
@@ -91,7 +93,7 @@ namespace CoffeeShop.Services.Implementations
             var product = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == productId);
             if (product == null)
             {
-                throw new Exception("Không tìm thấy sản phẩm!");
+                throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
             }
 
             _unitOfWork.ProductRepository.SoftDelete(product);
@@ -120,6 +122,11 @@ namespace CoffeeShop.Services.Implementations
                 return null;
             }
 
+            if (product.IsDeleted)
+            {
+                throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
+            }
+
             return new ProductResponseDTO
             {
                 ProductId = product.ProductId,
@@ -137,9 +144,14 @@ namespace CoffeeShop.Services.Implementations
             var currentProduct = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == id);
             if (currentProduct == null)
             {
-                throw new ArgumentException("Không tìm thấy sản phẩm!");
+                throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
             }
-            
+
+            if (currentProduct.IsDeleted)
+            {
+                throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
+            }
+
             currentProduct.ProductName = productRequest.ProductName == string.Empty ? currentProduct.ProductName : productRequest.ProductName;
             currentProduct.ProductPrice = productRequest.ProductPrice == null ? currentProduct.ProductPrice : productRequest.ProductPrice;
             currentProduct.ProductDescription = productRequest.ProductDescription == string.Empty ? currentProduct.ProductDescription : productRequest.ProductDescription;

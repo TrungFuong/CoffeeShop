@@ -1,4 +1,5 @@
 ﻿using CoffeeShop.DTOs.Request;
+using CoffeeShop.Models;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -49,16 +50,25 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "username", string includeProperties = "", string? newUsername = "")
+        public async Task<IActionResult> GetAllUsersAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "username", string? includeProperties = "", string? newUsername = "")
         {
             try
             {
                 var users = await _userService.GetAllUsersAsync(pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, includeProperties, newUsername);
-                return Ok(new GeneralGetsResponse
+                if(users.data.Any())
                 {
-                    Success = true,
-                    Message = "Users retrieved successfully!",
-                    Data = users
+                    return Ok(new GeneralGetsResponse
+                    {
+                        Success = true,
+                        Message = "Users retrieved successfully.",
+                        Data = users.data,
+                        TotalCount = users.totalCount
+                    });
+                }
+                return Conflict(new GeneralGetsResponse
+                {
+                    Success = false,
+                    Message = "No data.",
                 });
             }
             catch (Exception ex)
@@ -66,7 +76,7 @@ namespace CoffeeShop.Controllers
                 return Conflict(new GeneralGetsResponse
                 {
                     Success = false,
-                    Message = ex.Message
+                    Message = ex.Message,
                 });
             }
         }
@@ -76,7 +86,7 @@ namespace CoffeeShop.Controllers
         {
             try
             {
-                var user = _userService.GetUserDetailAsync(id);
+                var user = await _userService.GetUserDetailAsync(id);
                 return Ok(new GeneralGetResponse
                 {
                     Success = true,

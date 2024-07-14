@@ -31,7 +31,7 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetsResponse
                     {
                         Success = true,
-                        Message = "Categories retrieved successfully.",
+                        Message = "Truy vấn danh mục thành công!",
                         Data = categories,
                     });
                 }
@@ -43,6 +43,14 @@ namespace CoffeeShop.Controllers
                         Message = "No category."
                     });
                 }
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
             }
             catch (Exception ex)
             {

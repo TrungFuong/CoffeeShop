@@ -63,20 +63,13 @@ namespace CoffeeShop
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            //builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IProductService, ProductService>();
-            //builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IReceiptService, ReceiptService>();
-            //builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
             builder.Services.AddScoped<IReceiptDetailService, ReceiptDetailService>();
-            //builder.Services.AddScoped<IReceiptDetailRepository, ReceiptDetailRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-            //builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            //builder.Services.AddScoped<ITokenRepository, TokenRepository>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            //builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
             //builder.Services.AddSingleton(StorageClient.Create());

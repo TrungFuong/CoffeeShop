@@ -95,8 +95,10 @@ namespace CoffeeShop.Services.Implementations
             }
             var users = await _unitOfWork.UserRepository.GetAllAsync(pageNumber, filter, orderBy, includeProperties);
 
-            return (users.items.Select(p => new UserResponseDTO
+            var usersResponses = 
+            users.items.Select(p => new UserResponseDTO
             {
+                UserId = p.UserId,
                 Username = p.Username,
                 FirstName = p.FirstName,
                 LastName = p.LastName,
@@ -106,7 +108,9 @@ namespace CoffeeShop.Services.Implementations
                 PhoneNumber = p.PhoneNumber,
                 //So gio lam viec
                 //Muc luong
-            }), users.totalCount);
+            }).ToList();
+
+            return (usersResponses, users.totalCount);
         }
 
         public async Task<UserResponseDTO> GetUserDetailAsync(Guid userId)
@@ -118,6 +122,7 @@ namespace CoffeeShop.Services.Implementations
             }
             return new UserResponseDTO
             {
+                UserId = user.UserId,
                 Username = user.Username,
                 FirstName = user.FirstName,
                 LastName = user.LastName,

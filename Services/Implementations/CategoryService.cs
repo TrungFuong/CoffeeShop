@@ -49,6 +49,10 @@ namespace CoffeeShop.Services.Implementations
         public async Task<IEnumerable<CategoryResponseDTO>> GetAllCategoriesAsync()
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync(c => !c.IsDeleted);
+            if(categories == null)
+            {
+                throw new KeyNotFoundException("Không tìm thấy danh mục!");
+            }
             return categories.Select(c => new CategoryResponseDTO
             {
                 CategoryId = c.CategoryId,

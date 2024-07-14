@@ -28,10 +28,11 @@ namespace CoffeeShop.Services.Implementations
             {
                 throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
+            var receiptId = Guid.NewGuid();
 
             var receiptDetail = receiptRequestDTO.receiptDetailDTOs.Select(receiptRequestDTO => new ReceiptDetail
             {
-                ReceiptId = receiptRequestDTO.ReceiptId,
+                ReceiptId = receiptId,
                 ProductId = receiptRequestDTO.ProductId,
                 ProductQuantity = receiptRequestDTO.ProductQuantity
             }).ToList();
@@ -40,6 +41,7 @@ namespace CoffeeShop.Services.Implementations
 
             var receipt = new Receipt
             {
+                ReceiptId = receiptId,
                 UserId = receiptRequestDTO.UserId,
                 CustomerId = receiptRequestDTO.CustomerId,
                 ReceiptDate = receiptRequestDTO.ReceiptDate,

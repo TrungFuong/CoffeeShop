@@ -48,6 +48,7 @@ namespace CoffeeShop.Services.Implementations
 
             return (token, refreshToken.TokenHash, userResponse);
         }
+
         public async Task<(string token, string refreshToken, UserResponseDTO userResponse)> RefreshTokenAsync(string refreshToken)
         {
             var token = await _unitOfWork.RefreshTokenRepository.GetAsync(rt => rt.TokenHash == refreshToken).ConfigureAwait(false);
