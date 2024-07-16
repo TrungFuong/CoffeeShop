@@ -13,20 +13,34 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async void AddReceiptDetailAsync(ReceiptDetailDTO receiptDetailDTO)
+        public async Task<bool> AddReceiptDetailAsync(List<ReceiptDetailDTO> receiptDetailDTO)
         {
-            var receiptDetail = new ReceiptDetail
+            var receipt = await _unitOfWork.ReceiptRepository.GetAsync(rd => rd.ReceiptId == receiptDetailDTO[0].ReceiptId);
+            if (receipt == null)
             {
-                ReceiptId = receiptDetailDTO.ReceiptId,
-                ProductId = receiptDetailDTO.ProductId,
-                ProductQuantity = receiptDetailDTO.ProductQuantity
-            };
-
-            await _unitOfWork.ReceiptDetailRepository.AddAsync(receiptDetail);
-            if (await _unitOfWork.CommitAsync() <1)
-            {
-                throw new Exception("Thêm thông tin chi tiết hóa đơn thất bại!");
+                return false;
             }
+
+            foreach (var item in receiptDetailDTO)
+            {
+                var receiptDetail = new ReceiptDetail
+                {
+                    ReceiptId = item.ReceiptId,
+                    ProductId = item.ProductId,
+                    ProductQuantity = item.ProductQuantity
+                };
+                await _unitOfWork.ReceiptDetailRepository.AddAsync(receiptDetail);
+            }
+
+            if (_unitOfWork.Commit() > 0)
+            {
+                return true;
+            }
+            else
+            {
+                throw new ArgumentException("Thêm chi tiết hóa đơn thất bại!");
+            }
+        }
         }
     }
 }
