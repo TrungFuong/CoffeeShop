@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeShop.Migrations
 {
     [DbContext(typeof(CoffeeShopDBContext))]
-    [Migration("20240714052239_IniCreate")]
+    [Migration("20240717191018_IniCreate")]
     partial class IniCreate
     {
         /// <inheritdoc />
@@ -53,7 +53,8 @@ namespace CoffeeShop.Migrations
                     b.Property<DateTime>("CheckinTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CheckoutTime")
+                    b.Property<DateTime?>("CheckoutTime")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -75,7 +76,8 @@ namespace CoffeeShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CustomerBirthday")
+                    b.Property<DateTime?>("CustomerBirthday")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("datetime2");
 

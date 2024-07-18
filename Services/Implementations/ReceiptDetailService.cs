@@ -13,24 +13,33 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> AddReceiptDetailAsync(List<ReceiptDetailDTO> receiptDetailDTO)
+        public async Task<bool> AddReceiptDetailAsync(Guid receiptId, List<ReceiptDetailDTO> receiptDetailDTO)
         {
-            var receipt = await _unitOfWork.ReceiptRepository.GetAsync(rd => rd.ReceiptId == receiptDetailDTO[0].ReceiptId);
+            var receipt = await _unitOfWork.ReceiptRepository.GetAsync(rd => rd.ReceiptId == receiptId);
             if (receipt == null)
             {
-                return false;
+                throw new KeyNotFoundException("Không tìm thấy hóa đơn!");
             }
 
-            foreach (var item in receiptDetailDTO)
+            var receiptDetails = receiptDetailDTO.Select(dto => new ReceiptDetail
             {
-                var receiptDetail = new ReceiptDetail
-                {
-                    ReceiptId = item.ReceiptId,
-                    ProductId = item.ProductId,
-                    ProductQuantity = item.ProductQuantity
-                };
-                await _unitOfWork.ReceiptDetailRepository.AddAsync(receiptDetail);
+                ReceiptId = receiptId,
+                ProductId = dto.ProductId,
+                ProductQuantity = dto.ProductQuantity
+            }).ToList();
+
+            await _unitOfWork.ReceiptDetailRepository.AddRangeAsync(receiptDetails);
+
+            decimal receiptTotal = 0;
+            foreach (var item in receiptDetails)
+            {
+                item.Product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
+                receiptTotal += item.Product.ProductPrice * item.ProductQuantity;
             }
+
+            receipt.ReceiptTotal = receiptTotal;
+
+            _unitOfWork.ReceiptRepository.Update(receipt);
 
             if (_unitOfWork.Commit() > 0)
             {
@@ -40,7 +49,6 @@ namespace CoffeeShop.Services.Implementations
             {
                 throw new ArgumentException("Thêm chi tiết hóa đơn thất bại!");
             }
-        }
         }
     }
 }

@@ -50,7 +50,8 @@ namespace CoffeeShop.Migrations
                     b.Property<DateTime>("CheckinTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CheckoutTime")
+                    b.Property<DateTime?>("CheckoutTime")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
@@ -72,7 +73,8 @@ namespace CoffeeShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CustomerBirthday")
+                    b.Property<DateTime?>("CustomerBirthday")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("datetime2");
 

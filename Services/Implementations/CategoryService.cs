@@ -49,7 +49,7 @@ namespace CoffeeShop.Services.Implementations
         public async Task<IEnumerable<CategoryResponseDTO>> GetAllCategoriesAsync()
         {
             var categories = await _unitOfWork.CategoryRepository.GetAllAsync(c => !c.IsDeleted);
-            if(categories == null)
+            if (categories == null)
             {
                 throw new KeyNotFoundException("Không tìm thấy danh mục!");
             }
@@ -58,6 +58,37 @@ namespace CoffeeShop.Services.Implementations
                 CategoryId = c.CategoryId,
                 CategoryName = c.CategoryName,
             });
+        }
+
+        public async Task<CategoryResponseDTO> DeleteCategoryAsync(Guid categoryId)
+        {
+            var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == categoryId);
+
+            if (category == null)
+            {
+                throw new KeyNotFoundException("Không tìm thấy danh mục!");
+            }
+
+            var products = await _unitOfWork.ProductRepository.GetAllAsync(p => !p.IsDeleted && p.CategoryId == categoryId);
+            if (products.Any())
+            {
+                throw new Exception("Danh mục này đang chứa sản phẩm, không thể xóa!");
+            }
+
+            _unitOfWork.CategoryRepository.SoftDelete(category);
+
+            if (_unitOfWork.Commit() > 0)
+            {
+                return new CategoryResponseDTO
+                {
+                    CategoryId = category.CategoryId,
+                    CategoryName = category.CategoryName
+                };
+            }
+            else
+            {
+                throw new Exception("Xóa danh mục thất bại!");
+            }
         }
     }
 }

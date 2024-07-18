@@ -40,7 +40,7 @@ namespace CoffeeShop.Controllers
                     return Conflict(new GeneralBoolResponse
                     {
                         Success = false,
-                        Message = "No category."
+                        Message = "Không có danh mục!"
                     });
                 }
             }
@@ -73,7 +73,7 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetResponse
                     {
                         Success = true,
-                        Message = "Category added successfully.",
+                        Message = "Thêm danh mục thành công!",
                         Data = result,
                     });
                 }
@@ -82,7 +82,7 @@ namespace CoffeeShop.Controllers
                     return Conflict(new GeneralBoolResponse
                     {
                         Success = false,
-                        Message = "Category added failed."
+                        Message = "Thêm danh mục thất bại!"
                     });
                 }
             }
@@ -92,6 +92,40 @@ namespace CoffeeShop.Controllers
                 {
                     Success = false,
                     Message = ex.Message,
+                });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCategoryAsync(Guid id)
+        {
+            try
+            {
+                var result = await _categoryService.DeleteCategoryAsync(id);
+                if (result != null)
+                {
+                    return Ok(new GeneralCreateResponse
+                    {
+                        Success = true,
+                        Message = "Xóa danh mục thành công!",
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return Conflict(new GeneralBoolResponse
+                    {
+                        Success = false,
+                        Message = "Xóa danh mục thất bại!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralBoolResponse
+                {
+                    Success = false,
+                    Message = ex.Message
                 });
             }
         }

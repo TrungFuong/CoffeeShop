@@ -10,7 +10,7 @@ namespace CoffeeShop.Models
         [Required]
         public DateTime CheckinTime { get; set; }
         [Required]
-        public DateTime CheckoutTime { get; set; }
+        public DateTime? CheckoutTime { get; set; }
         [Required]
         public Guid UserId { get; set; }
         [Required]

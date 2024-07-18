@@ -14,11 +14,13 @@ namespace CoffeeShop.Services.Implementations
 
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReceiptDetailService _receiptDetailService;
+        private readonly IProductService _productService;
 
-        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService)
+        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService, IProductService productService)
         {
             _unitOfWork = unitOfWork;
             _receiptDetailService = receiptDetailService;
+            _productService = productService;
         }
 
         public async Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO)
@@ -30,45 +32,33 @@ namespace CoffeeShop.Services.Implementations
                 throw new KeyNotFoundException("Không tìm thấy người dùng!");
             }
 
-            var receiptDetail = receiptRequestDTO.receiptDetailDTOs.Select(receiptRequestDTO => new ReceiptDetail
-            {
-                ReceiptId = receiptRequestDTO.ReceiptId,
-                ProductId = receiptRequestDTO.ProductId,
-                ProductQuantity = receiptRequestDTO.ProductQuantity
-            }).ToList();
-
-            var receiptTotal = receiptDetail.Sum(r => r.Product.ProductPrice * r.ProductQuantity);
-
             var receipt = new Receipt
             {
                 UserId = receiptRequestDTO.UserId,
                 CustomerId = receiptRequestDTO.CustomerId,
                 ReceiptDate = receiptRequestDTO.ReceiptDate,
-                ReceiptTotal = receiptTotal,
+                ReceiptTotal = 0,
                 Table = receiptRequestDTO.Table,
-                IsDeleted = false,
-                ReceiptDetails = receiptDetail
+                IsDeleted = false
             };
 
-            _unitOfWork.ReceiptRepository.AddAsync(receipt);
-
-            foreach (var item in receiptDetail)
-            {
-                _unitOfWork.ReceiptDetailRepository.AddAsync(item);
-            }
+            await _unitOfWork.ReceiptRepository.AddAsync(receipt);
 
             if (await _unitOfWork.CommitAsync() < 1)
             {
                 throw new ArgumentException("Thêm hóa đơn thất bại!");
             }
-            else
+
+            var addedReceipt = await _unitOfWork.ReceiptRepository.GetAsync(r => r.ReceiptId == receipt.ReceiptId);
+            var receiptId = addedReceipt.ReceiptId;
+
+            _receiptDetailService.AddReceiptDetailAsync(receiptId, receiptRequestDTO.receiptDetailDTOs);
+
+            return new ReceiptResponseDTO
             {
-                return new ReceiptResponseDTO
-                {
-                    ReceiptId = receipt.ReceiptId,
-                    ReceiptDate = receipt.ReceiptDate
-                };
-            }
+                ReceiptId = receipt.ReceiptId,
+                ReceiptDate = receipt.ReceiptDate
+            };
         }
 
         public async Task<(IEnumerable<ReceiptResponseDTO> data, int totalCount)> GetAllReceiptsAsync(

@@ -22,6 +22,5 @@ namespace CoffeeShop.DTOs.Request
         public EnumGender Gender { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
-
     }
 }

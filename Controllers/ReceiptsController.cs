@@ -1,21 +1,23 @@
 ﻿using CoffeeShop.DTOs.Request;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
 {
     [Route("api/receipts")]
     [ApiController]
-    public class ReceiptController : BaseApiController
+    public class ReceiptsController : BaseApiController
     {
         private readonly IReceiptService _receiptService;
-        public ReceiptController(IReceiptService receiptService)
+        public ReceiptsController(IReceiptService receiptService)
         {
             _receiptService = receiptService;
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddReceiptAsync([FromBody] ReceiptRequestDTO request)
         {
             try
