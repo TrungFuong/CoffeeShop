@@ -1,4 +1,5 @@
 ﻿using CoffeeShop.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CoffeeShop.UnitOfWork
 {
@@ -17,5 +18,6 @@ namespace CoffeeShop.UnitOfWork
         ITokenRepository TokenRepository { get; }
         Task<int> CommitAsync();
         int Commit();
+        Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

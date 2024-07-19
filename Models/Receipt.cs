@@ -8,7 +8,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public Guid ReceiptId { get; set; } = Guid.NewGuid();
+        public Guid ReceiptId { get; set; }
         [ForeignKey("UserId")]
         public Guid UserId { get; set; }
         public User User { get; set; }

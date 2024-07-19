@@ -1,5 +1,6 @@
 ﻿using CoffeeShop.Repositories.Implements;
 using CoffeeShop.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CoffeeShop.UnitOfWork
 {
@@ -62,6 +63,11 @@ namespace CoffeeShop.UnitOfWork
         public int Commit()
         {
             return _context.SaveChanges();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
     }
 }

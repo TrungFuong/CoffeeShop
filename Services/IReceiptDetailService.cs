@@ -5,6 +5,6 @@ namespace CoffeeShop.Services
 {
     public interface IReceiptDetailService
     {
-        Task<bool> AddReceiptDetailAsync(Guid receiptId, List<ReceiptDetailDTO> receiptDetailDTO);
+        Task AddReceiptDetailAsync(Guid receiptId, List<ReceiptDetailDTO> receiptDetailDTO);
     }
 }
