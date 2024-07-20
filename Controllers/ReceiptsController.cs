@@ -59,8 +59,7 @@ namespace CoffeeShop.Controllers
                     receiptDate,
                     sortOrder,
                     sortBy,
-                    "User,Customer,ReceiptDetails",
-                    newReceiptId);
+                    "User,Customer,ReceiptDetails");
                 if (receipts.data.Any())
                 {
                     return Ok(new GeneralGetsResponse

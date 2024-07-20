@@ -11,7 +11,7 @@ namespace CoffeeShop.DTOs.Responses
         public String FullName { get; set; }
         public Guid? CustomerId { get; set; }
         public Customer? Customer { get; set; }
-        public string CustomerPhone { get; set; }
+        //public string? CustomerPhone { get; set; }
         public DateTime ReceiptDate { get; set; }
         public int Table { get; set; }
         public decimal ReceiptTotal { get; set; }

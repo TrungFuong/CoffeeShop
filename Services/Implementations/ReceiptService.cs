@@ -86,24 +86,17 @@ namespace CoffeeShop.Services.Implementations
             }
         }
 
-
         public async Task<(IEnumerable<ReceiptResponseDTO> data, int totalCount)> GetAllReceiptsAsync(
             int page,
             string? search,
             DateTime? receiptDate,
             string? sortOrder,
             string? sortBy = "receiptDate",
-            string includeProperties = "",
-            Guid? newReceiptId = null)
+            string includeProperties = "")
         {
             Func<IQueryable<Receipt>, IOrderedQueryable<Receipt>>? orderBy = GetOrderQuery(sortOrder, sortBy);
             Expression<Func<Receipt, bool>> filter = await GetFilterQuery(search);
-            Expression<Func<Receipt, bool>> prioritizeCondition = null;
 
-            if (newReceiptId != null)
-            {
-                prioritizeCondition = r => r.ReceiptId == newReceiptId;
-            }
             var receipts = await _unitOfWork.ReceiptRepository.GetAllAsync(page, filter, orderBy, includeProperties);
             var receiptResponses = receipts.items.Select(r => new ReceiptResponseDTO
             {
@@ -113,8 +106,7 @@ namespace CoffeeShop.Services.Implementations
                 Table = r.Table,
                 CustomerId = r.Customer?.CustomerId,
                 UserId = r.User.UserId,
-                FullName = r.User.FirstName + " " + r.User.LastName,
-                CustomerPhone = r.Customer.CustomerPhone,
+                FullName = r.User.FirstName + " " + r.User.LastName
             }).ToList();
             return (receiptResponses, receipts.totalCount);
         }
@@ -136,7 +128,6 @@ namespace CoffeeShop.Services.Implementations
             {
                 var searchCondition =
                     Expression.Call(
-                        //REMEMBER TO FINISH
                         Expression.Property(parameter, nameof(Receipt.User.FirstName)),
                         nameof(string.Contains),
                         Type.EmptyTypes,
