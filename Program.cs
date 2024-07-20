@@ -27,8 +27,7 @@ namespace CoffeeShop
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
-                            (builder.Configuration["Jwt:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                     };
                 });
 
@@ -59,7 +58,7 @@ namespace CoffeeShop
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -69,19 +68,12 @@ namespace CoffeeShop
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
-
-            //builder.Services.AddSingleton(StorageClient.Create());
-
-            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
-            //builder.Services.AddSingleton(bucketName);
 
             builder.Services.AddCors(options =>
             {
-                options.AddDefaultPolicy(builder =>
+                options.AddPolicy("AllowAll", builder =>
                 {
-                    builder.WithOrigins("*")
+                    builder.AllowAnyOrigin()
                            .AllowAnyHeader()
                            .AllowAnyMethod();
                 });
@@ -97,7 +89,13 @@ namespace CoffeeShop
             }
 
             app.UseHttpsRedirection();
+
+            // Ensure CORS is applied before authorization
+            app.UseCors("AllowAll");
+
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllers();
             app.Run();
         }
