@@ -31,7 +31,7 @@ namespace CoffeeShop.Services.Implementations
             }
         }
 
-        public async Task UpdateCustomer(string phone, CustomerRequestDTO customerRequest)
+        public async Task<CustomerResponseDTO> UpdateCustomer(string phone, CustomerRequestDTO customerRequest)
         {
             var currentCustomer = await _unitOfWork.CustomerRepository.GetAsync(c => c.CustomerPhone == phone);
             if (currentCustomer == null)
@@ -47,6 +47,13 @@ namespace CoffeeShop.Services.Implementations
             {
                 throw new ArgumentException("Chỉnh sửa thông tin khách hàng thất bại");
             }
+            return new CustomerResponseDTO
+            {
+                CustomerId = currentCustomer.CustomerId,
+                CustomerName = currentCustomer.CustomerName,
+                CustomerPhone = currentCustomer.CustomerPhone,
+                CustomerBirthday = DateOnly.FromDateTime(currentCustomer.CustomerBirthday)
+            };
         }
 
         public async Task<(IEnumerable<CustomerResponseDTO> data, int totalCount)> GetAllCustomersAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "customerName", string includeProperties = "")
