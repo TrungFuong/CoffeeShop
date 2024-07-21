@@ -15,12 +15,14 @@ namespace CoffeeShop.Services.Implementations
         private readonly IUnitOfWork _unitOfWork;
         private readonly IReceiptDetailService _receiptDetailService;
         private readonly IProductService _productService;
+        private readonly ICustomerService _customerService;
 
-        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService, IProductService productService)
+        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService, IProductService productService, ICustomerService customerService)
         {
             _unitOfWork = unitOfWork;
             _receiptDetailService = receiptDetailService;
             _productService = productService;
+            _customerService = customerService;
         }
 
         public async Task AddReceiptInfoAsync(Guid receiptId, ReceiptRequestDTO receiptRequestDTO)
@@ -37,8 +39,8 @@ namespace CoffeeShop.Services.Implementations
             foreach (var item in receiptRequestDTO.receiptDetailDTOs)
             {
 
-                    var product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
-                    receiptTotal += product.ProductPrice * item.ProductQuantity;
+                var product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
+                receiptTotal += product.ProductPrice * item.ProductQuantity;
             }
 
             var receipt = new Receipt
@@ -61,12 +63,38 @@ namespace CoffeeShop.Services.Implementations
             {
                 try
                 {
-                    var receiptId = Guid.NewGuid();
+                    Task addCustomerTask = null;
+                    var customerId = Guid.NewGuid();
+                    if (receiptRequestDTO.CustomerPhone != null)
+                    {
+                        var existingCustomer = await _customerService.GetCustomerDetailAsync(receiptRequestDTO.CustomerPhone);
+                        if (existingCustomer == null)
+                        {
+                            var customer = new CustomerRequestDTO
+                            {
+                                CustomerId = customerId,
+                                CustomerName = receiptRequestDTO.CustomerName,
+                                CustomerPhone = receiptRequestDTO.CustomerPhone,
+                                CustomerBirthday = receiptRequestDTO.CustomerBirthday
+                            };
+                            addCustomerTask = _customerService.AddCustomerAsync(customer);
+                            receiptRequestDTO.CustomerId = customerId;
+                        }
+                        else
+                        {
+                            receiptRequestDTO.CustomerId = existingCustomer.CustomerId;
+                        }
+                    }
 
+                    var receiptId = Guid.NewGuid();
                     var addReceiptTask = AddReceiptInfoAsync(receiptId, receiptRequestDTO);
                     var addReceiptDetailTask = _receiptDetailService.AddReceiptDetailAsync(receiptId, receiptRequestDTO.receiptDetailDTOs);
 
                     var tasks = new List<Task> { addReceiptTask, addReceiptDetailTask };
+                    if (addCustomerTask != null)
+                    {
+                        tasks.Add(addCustomerTask);
+                    }
 
                     await Task.WhenAll(tasks);
                     await _unitOfWork.CommitAsync();
@@ -86,6 +114,7 @@ namespace CoffeeShop.Services.Implementations
             }
         }
 
+
         public async Task<(IEnumerable<ReceiptResponseDTO> data, int totalCount)> GetAllReceiptsAsync(
             int page,
             string? search,
@@ -104,9 +133,9 @@ namespace CoffeeShop.Services.Implementations
                 ReceiptDate = r.ReceiptDate,
                 ReceiptTotal = r.ReceiptTotal,
                 Table = r.Table,
-                CustomerId = r.Customer?.CustomerId,
                 UserId = r.User.UserId,
-                FullName = r.User.FirstName + " " + r.User.LastName
+                FullName = r.User.FirstName + " " + r.User.LastName,
+                CustomerPhone = r.Customer.CustomerPhone,
             }).ToList();
             return (receiptResponses, receipts.totalCount);
         }

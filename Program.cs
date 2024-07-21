@@ -71,6 +71,8 @@ namespace CoffeeShop
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            
 
             //builder.Services.AddSingleton(StorageClient.Create());
 
