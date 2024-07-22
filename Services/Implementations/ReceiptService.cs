@@ -1,4 +1,5 @@
-﻿using CoffeeShop.DTOs.Request;
+﻿using CoffeeShop.DTOs;
+using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models;
 using CoffeeShop.UnitOfWork;
@@ -139,6 +140,33 @@ namespace CoffeeShop.Services.Implementations
             }).ToList();
             return (receiptResponses, receipts.totalCount);
         }
+
+
+        public async Task<ReceiptResponseDTO> GetReceiptDetailAsync(Guid id)
+        {
+            var receipt = await _unitOfWork.ReceiptRepository.GetAsync(r => r.ReceiptId == id, r => r.ReceiptDetails, r => r.User, r => r.Customer);
+            if (receipt == null)
+            {
+                throw new KeyNotFoundException("Không tìm thấy hóa đơn!");
+            }
+            return new ReceiptResponseDTO
+            {
+                ReceiptId = receipt.ReceiptId,
+                ReceiptDate = receipt.ReceiptDate,
+                ReceiptTotal = receipt.ReceiptTotal,
+                Table = receipt.Table,
+                UserId = receipt.User.UserId,
+                FullName = receipt.User.FirstName + " " + receipt.User.LastName,
+                CustomerPhone = receipt.Customer.CustomerPhone,
+                ReceiptDetails = receipt.ReceiptDetails.Select(rd => new ReceiptDetailResponseDTO
+                {
+                    ProductId = rd.ProductId,
+                    ProductName = rd.Product.ProductName,
+                    ProductPrice = rd.Product.ProductPrice,
+                    ProductQuantity = rd.ProductQuantity
+                }).ToList()
+            };
+        } 
 
         private async Task<Expression<Func<Receipt, bool>>>? GetFilterQuery(string? search)
         {

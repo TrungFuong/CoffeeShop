@@ -20,7 +20,7 @@ namespace CoffeeShop.Models
         [ForeignKey("CategoryId")]
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
-        public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
+        public ICollection<ReceiptDetail> ReceiptDetails { get; set; } = new List<ReceiptDetail>();
         public string? ImageUrl { get; set; }
         public bool IsDeleted { get; set; }
     }

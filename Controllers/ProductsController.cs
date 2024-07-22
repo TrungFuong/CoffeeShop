@@ -9,6 +9,8 @@ using CoffeeShop.DTOs;
 using NuGet.ContentModel;
 using Microsoft.AspNetCore.Http;
 using CoffeeShop.DTOs.Request;
+using System.Drawing.Printing;
+using System.Globalization;
 
 namespace CoffeeShop.Controllers
 {
@@ -194,6 +196,39 @@ namespace CoffeeShop.Controllers
                 response.Success = false;
                 response.Message = ex.Message;
                 return Conflict(response);
+            }
+        }
+
+        [HttpGet("reports")]
+        public async Task<IActionResult> GetReportAsync(int pageNumber, string? search, string? sortOrder, string sortBy = "productName")
+        {
+            try
+            {
+                var (reports, count) = await _productService.GetReports(pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, "Receipt, ReceiptDetails");
+                if (reports.Any())
+                {
+                    return Ok(new GeneralGetsResponse
+                    {
+                        Success = true,
+                        Message = "Truy vấn báo cáo sản phẩm thành công!",
+                        Data = reports,
+                        TotalCount = count
+                    });
+                }
+                return Conflict(new GeneralGetsResponse
+                {
+                    Success = false,
+                    Message = "Không có dữ liệu!",
+                });
+            }
+
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralGetsResponse
+                {
+                    Success = false,
+                    Message = ex.Message,
+                });
             }
         }
     }

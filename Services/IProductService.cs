@@ -8,7 +8,7 @@ namespace CoffeeShop.Services
     {
         Task<(IEnumerable<ProductResponseDTO> data, int totalCount)> GetAllProductsAsync(int pageNumber, Guid? category, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "", string? newProductName = "");
 
-        Task<ProductResponseDTO> GetProductDetail(Guid productId);
+        Task<ProductDetailResponseDTO> GetProductDetail(Guid productId);
 
         Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest
             //, FileUpload fileUpload
@@ -17,6 +17,8 @@ namespace CoffeeShop.Services
         Task<ProductResponseDTO> DeleteProductAsync(Guid productId);
 
         Task<ProductResponseDTO> UpdateProduct(Guid id, ProductRequestDTO productRequest);
+
+        Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
 
         //FileUpload ConvertToFileUpload(IFormFile formFile);
     }

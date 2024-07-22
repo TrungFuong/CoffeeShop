@@ -16,6 +16,7 @@ namespace CoffeeShop.Services.Implementations
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
+        
         //private readonly StorageClient _storageClient;
         //private readonly string _bucketName;
         public ProductService(IUnitOfWork unitOfWork
@@ -114,7 +115,7 @@ namespace CoffeeShop.Services.Implementations
             }
         }
 
-        public async Task<ProductResponseDTO> GetProductDetail(Guid productId)
+        public async Task<ProductDetailResponseDTO> GetProductDetail(Guid productId)
         {
             var product = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == productId, x => x.Category);
             if (product == null)
@@ -127,7 +128,7 @@ namespace CoffeeShop.Services.Implementations
                 throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
             }
 
-            return new ProductResponseDTO
+            return new ProductDetailResponseDTO
             {
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
@@ -136,6 +137,7 @@ namespace CoffeeShop.Services.Implementations
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category.CategoryName,
                 //ImageUrl = product.ImageUrl
+                
             };
         }
 
@@ -292,6 +294,27 @@ namespace CoffeeShop.Services.Implementations
                     break;
             }
             return orderBy;
+        }
+
+        public async Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "")
+        {
+            Func<IQueryable<Product>, IOrderedQueryable<Product>>? orderBy = GetOrderQuery(sortOrder, sortBy);
+            Expression<Func<Product, bool>> filter = await GetFilterQuery(null, search);
+
+            includeProperties = "Receipts, ReceiptDetail";
+
+            var products = await _unitOfWork.ProductRepository.GetAllAsync(p => !p.IsDeleted);
+            var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllAsync();
+            var reportResults = products.Select(product => new ReportResponseDTO
+            {
+                ProductName = product.ProductName,
+                Price = product.ProductPrice,
+                Quantity = receiptDetails
+                    .Where(rd => rd.ProductId == product.ProductId)
+                    .Sum(rd => rd.ProductQuantity),
+                Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
+            }).ToList();
+            return (reportResults, products.Count());
         }
     }
 }

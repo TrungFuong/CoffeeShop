@@ -14,6 +14,6 @@ namespace CoffeeShop.DTOs.Responses
         public DateTime ReceiptDate { get; set; }
         public int Table { get; set; }
         public decimal ReceiptTotal { get; set; }
-        public ICollection<ReceiptDetail> ReceiptDetails { get; set; }
+        public IEnumerable<ReceiptDetailResponseDTO> ReceiptDetails { get; set; }
     }
 }
