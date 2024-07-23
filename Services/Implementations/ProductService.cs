@@ -296,7 +296,9 @@ namespace CoffeeShop.Services.Implementations
             return orderBy;
         }
 
-        public async Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "")
+        // ...
+
+        public async Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "")
         {
             Func<IQueryable<Product>, IOrderedQueryable<Product>>? orderBy = GetOrderQuery(sortOrder, sortBy);
             Expression<Func<Product, bool>> filter = await GetFilterQuery(null, search);
@@ -304,16 +306,34 @@ namespace CoffeeShop.Services.Implementations
             includeProperties = "Receipts, ReceiptDetail";
 
             var products = await _unitOfWork.ProductRepository.GetAllAsync(p => !p.IsDeleted);
-            var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllAsync();
-            var reportResults = products.Select(product => new ReportResponseDTO
+            var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllAsync(includeProperties: "Receipt");
+            var receiptDetailResult = receiptDetails.items;
+            var reportResults = new List<ReportResponseDTO>();
+            if (startDate != null && startDate != DateTime.MinValue && endDate != null && endDate != DateTime.MinValue)
             {
-                ProductName = product.ProductName,
-                Price = product.ProductPrice,
-                Quantity = receiptDetails
-                    .Where(rd => rd.ProductId == product.ProductId)
-                    .Sum(rd => rd.ProductQuantity),
-                Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
-            }).ToList();
+                reportResults = products.Select(product => new ReportResponseDTO
+                {
+                    ProductName = product.ProductName,
+                    Price = product.ProductPrice,
+                    Quantity = receiptDetailResult
+                        .Where(rd => rd.ProductId == product.ProductId && rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
+                        .Sum(rd => rd.ProductQuantity),
+                    Total = product.ReceiptDetails?.Where(rd => rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
+                        .Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
+                }).ToList();
+            }
+            else
+            {
+                reportResults = products.Select(product => new ReportResponseDTO
+                {
+                    ProductName = product.ProductName,
+                    Price = product.ProductPrice,
+                    Quantity = receiptDetailResult
+                        .Where(rd => rd.ProductId == product.ProductId)
+                        .Sum(rd => rd.ProductQuantity),
+                    Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
+                }).ToList();
+            }
             return (reportResults, products.Count());
         }
     }

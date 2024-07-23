@@ -18,7 +18,7 @@ namespace CoffeeShop.Services
 
         Task<ProductResponseDTO> UpdateProduct(Guid id, ProductRequestDTO productRequest);
 
-        Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
+        Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
 
         //FileUpload ConvertToFileUpload(IFormFile formFile);
     }

@@ -200,11 +200,11 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("reports")]
-        public async Task<IActionResult> GetReportAsync(int pageNumber, string? search, string? sortOrder, string sortBy = "productName")
+        public async Task<IActionResult> GetReportAsync(DateTime startDate, DateTime endDate, int pageNumber, string? search, string? sortOrder, string sortBy = "productName")
         {
             try
             {
-                var (reports, count) = await _productService.GetReports(pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, "Receipt, ReceiptDetails");
+                var (reports, count) = await _productService.GetReports(startDate, endDate, pageNumber == 0 ? 1 : pageNumber, search, sortOrder, sortBy, "Receipt, ReceiptDetails");
                 if (reports.Any())
                 {
                     return Ok(new GeneralGetsResponse
