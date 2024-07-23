@@ -27,7 +27,8 @@ namespace CoffeeShop
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = builder.Configuration["Jwt:Issuer"],
                         ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
+                            (builder.Configuration["Jwt:Key"]))
                     };
                 });
 
@@ -68,6 +69,15 @@ namespace CoffeeShop
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            
+
+            //builder.Services.AddSingleton(StorageClient.Create());
+
+            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
+            //builder.Services.AddSingleton(bucketName);
 
             builder.Services.AddCors(options =>
             {

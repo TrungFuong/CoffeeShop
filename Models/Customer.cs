@@ -6,16 +6,16 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public Guid CustomerId { get; set; }
+        public Guid CustomerId { get; set; } = Guid.NewGuid();
         [Required]
         [MaxLength(255)]
-        public string CustomerName { get; set; }
+        public string? CustomerName { get; set; }
         [Required]
         [MaxLength(255)]
         public string? CustomerPhone { get; set; }
         [Required]
         [MaxLength(255)]
-        public DateTime? CustomerBirthday { get; set; }
+        public DateTime CustomerBirthday { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Receipt> Receipts{ get; set; }
     }

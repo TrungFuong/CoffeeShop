@@ -49,7 +49,8 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate", Guid? newReceiptId = null)
+        
+        public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate")
         {
             try
             {
@@ -59,7 +60,7 @@ namespace CoffeeShop.Controllers
                     receiptDate,
                     sortOrder,
                     sortBy,
-                    "User,Customer,ReceiptDetails");
+                    "User, Customer, ReceiptDetails");
                 if (receipts.data.Any())
                 {
                     return Ok(new GeneralGetsResponse
