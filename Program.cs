@@ -57,9 +57,20 @@ namespace CoffeeShop
                 });
             });
 
+            // Configure CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+            });
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -69,25 +80,7 @@ namespace CoffeeShop
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
-            
-
-            //builder.Services.AddSingleton(StorageClient.Create());
-
-            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
-            //builder.Services.AddSingleton(bucketName);
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("*")
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
-                });
-            });
 
             var app = builder.Build();
 
@@ -99,6 +92,7 @@ namespace CoffeeShop
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
