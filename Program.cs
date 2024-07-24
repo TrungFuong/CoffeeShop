@@ -59,7 +59,7 @@ namespace CoffeeShop
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -93,6 +93,7 @@ namespace CoffeeShop
             }
 
             app.UseHttpsRedirection();
+            app.UseCors();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

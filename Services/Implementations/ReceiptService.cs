@@ -100,7 +100,7 @@ namespace CoffeeShop.Services.Implementations
                     await Task.WhenAll(tasks);
                     await _unitOfWork.CommitAsync();
                     await transaction.CommitAsync();
-
+                        
                     return new ReceiptResponseDTO
                     {
                         ReceiptId = receiptId,
