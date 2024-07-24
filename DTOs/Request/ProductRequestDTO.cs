@@ -6,6 +6,6 @@
         public decimal ProductPrice { get; set; }
         public string ProductDescription { get; set; }
         public Guid CategoryId { get; set; }
-        //public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

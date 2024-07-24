@@ -72,13 +72,7 @@ namespace CoffeeShop
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
-            
-
-            //builder.Services.AddSingleton(StorageClient.Create());
-
-            //var bucketName = builder.Configuration["GoogleCloud:BucketName"];
-            //builder.Services.AddSingleton(bucketName);
-
+            builder.Services.AddSingleton<CloudinaryService>();
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>

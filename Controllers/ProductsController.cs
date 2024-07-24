@@ -106,16 +106,11 @@ namespace CoffeeShop.Controllers
         [HttpPost]
         [Authorize(Roles = RoleConstant.ADMIN)]
         //[Consumes("multipart/form-data")]
-        public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest
-            //, IFormFile fileUpload
-            )
+        public async Task<IActionResult> CreateProductAsync([FromForm] ProductRequestDTO productRequest, IFormFile fileUpload)
         {
             try
             {
-                //var file = _productService.ConvertToFileUpload(fileUpload);
-                var product = await _productService.CreateProductAsync(productRequest
-                    //, file
-                    );
+                var product = await _productService.CreateProductAsync(productRequest, fileUpload);
                 if (product == null)
                 {
                     return Conflict(new GeneralBoolResponse

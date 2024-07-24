@@ -16,32 +16,34 @@ namespace CoffeeShop.Services.Implementations
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        
-        //private readonly StorageClient _storageClient;
-        //private readonly string _bucketName;
-        public ProductService(IUnitOfWork unitOfWork
-            //, StorageClient storageClient
-            //, string bucketName
-            )
+        private readonly CloudinaryService _cloudinaryService;
+
+        public ProductService(IUnitOfWork unitOfWork, CloudinaryService cloudinaryService)
+
         {
             _unitOfWork = unitOfWork;
-            //_storageClient = storageClient;
-            //_bucketName = bucketName;
+            _cloudinaryService = cloudinaryService;
         }
-        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest
-            //, FileUpload fileUpload
-            )
+        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, IFormFile imageFile)
         {
             var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
             if (category == null)
             {
                 throw new KeyNotFoundException("Không tìm thấy danh mục!");
             }
-
-            //var client = StorageClient.Create();
-            //var obj = await client.UploadObjectAsync("coffee-shop-graduation-project", fileUpload.Name, fileUpload.Type, new MemoryStream(fileUpload.FileContent));
-
-            //string imageUrl = await UploadFileToCloudAsync(fileUpload);
+            string imageUrl;
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var stream = imageFile.OpenReadStream())
+                {
+                    imageUrl = await _cloudinaryService.UploadImageAsync(stream, imageFile.FileName);
+                    productRequest.ImageUrl = imageUrl;
+                }
+            }
+            else
+            {
+                productRequest.ImageUrl = null;
+            }
 
             var product = new Product
             {
@@ -50,44 +52,28 @@ namespace CoffeeShop.Services.Implementations
                 ProductPrice = productRequest.ProductPrice,
                 ProductDescription = productRequest.ProductDescription,
                 CategoryId = productRequest.CategoryId,
-                //ImageUrl = imageUrl
+                ImageUrl = productRequest.ImageUrl
             };
 
             await _unitOfWork.ProductRepository.AddAsync(product);
 
             if (await _unitOfWork.CommitAsync() > 0)
             {
-                var productResponse = new ProductResponseDTO
+                return new ProductResponseDTO
                 {
                     ProductId = product.ProductId,
                     ProductName = product.ProductName,
                     ProductPrice = product.ProductPrice,
                     ProductDescription = product.ProductDescription,
                     CategoryId = product.CategoryId,
-                    //ImageUrl = product.ImageUrl
+                    ImageUrl = product.ImageUrl
                 };
-                return productResponse;
             }
             else
             {
                 throw new Exception("Tạo sản phẩm thất bại!");
             }
         }
-
-        //public FileUpload ConvertToFileUpload(IFormFile formFile)
-        //{
-        //    using (var memoryStream = new MemoryStream())
-        //    {
-        //        formFile.CopyTo(memoryStream);
-
-        //        return new FileUpload
-        //        {
-        //            Name = formFile.FileName,
-        //            Type = formFile.ContentType,
-        //            FileContent = memoryStream.ToArray()
-        //        };
-        //    }
-        //}
 
         public async Task<ProductResponseDTO> DeleteProductAsync(Guid productId)
         {
@@ -100,13 +86,14 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork.ProductRepository.SoftDelete(product);
             if (await _unitOfWork.CommitAsync() > 0)
             {
-                return new ProductResponseDTO {
+                return new ProductResponseDTO
+                {
                     ProductId = product.ProductId,
                     ProductName = product.ProductName,
                     ProductPrice = product.ProductPrice,
                     ProductDescription = product.ProductDescription,
                     CategoryId = product.CategoryId,
-                    //ImageUrl = product.ImageUrl
+                    ImageUrl = product.ImageUrl
                 };
             }
             else
