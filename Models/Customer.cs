@@ -6,7 +6,7 @@ namespace CoffeeShop.Models
     {
         [Required]
         [Key]
-        public Guid CustomerId { get; set; } = Guid.NewGuid();
+        public Guid CustomerId { get; set; }
         [Required]
         [MaxLength(255)]
         public string? CustomerName { get; set; }

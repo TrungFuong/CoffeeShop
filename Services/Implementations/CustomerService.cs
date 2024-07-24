@@ -19,16 +19,17 @@ namespace CoffeeShop.Services.Implementations
         {
             var customer = new Customer
             {
+                CustomerId = customerDTO.CustomerId,
                 CustomerName = customerDTO.CustomerName,
                 CustomerPhone = customerDTO.CustomerPhone,
                 CustomerBirthday = customerDTO.CustomerBirthday
             };
 
             await _unitOfWork.CustomerRepository.AddAsync(customer);
-            if (await _unitOfWork.CommitAsync() < 1)
-            {
-                throw new ArgumentException("Thêm khách hàng không thành công!");
-            }
+            //if (await _unitOfWork.CommitAsync() < 1)
+            //{
+            //    throw new ArgumentException("Thêm khách hàng không thành công!");
+            //}
         }
 
         public async Task<CustomerResponseDTO> UpdateCustomer(string phone, CustomerRequestDTO customerRequest)
