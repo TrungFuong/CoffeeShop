@@ -59,7 +59,7 @@ namespace CoffeeShop
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<CoffeeShopDBContext>(options =>
-                options.UseSqlServer(connectionString));
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork.UnitOfWork>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -69,10 +69,9 @@ namespace CoffeeShop
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddSingleton<CloudinaryService>();
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -93,6 +92,7 @@ namespace CoffeeShop
             }
 
             app.UseHttpsRedirection();
+            app.UseCors();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
