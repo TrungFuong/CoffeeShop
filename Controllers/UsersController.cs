@@ -1,7 +1,9 @@
-﻿using CoffeeShop.DTOs.Request;
+﻿using CoffeeShop.Constants;
+using CoffeeShop.DTOs.Request;
 using CoffeeShop.Models;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -50,6 +52,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllUsersAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "username", string? includeProperties = "", string? newUsername = "")
         {
             try
@@ -82,6 +85,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetUserDetailAsync(Guid id)
         {
             try
@@ -104,7 +108,8 @@ namespace CoffeeShop.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateRequestDTO userUpdateRequest)
         {
             try
@@ -127,6 +132,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             try

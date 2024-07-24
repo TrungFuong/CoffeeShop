@@ -49,7 +49,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
-        
+        [Authorize]
         public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate")
         {
             try

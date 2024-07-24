@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CoffeeShop.Constants;
 using CoffeeShop.DTOs;
 using CoffeeShop.DTOs.Request;
 using CoffeeShop.Exceptions;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoffeeShop.Controllers
@@ -21,6 +23,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategoriesAsync()
         {
             try
@@ -63,6 +66,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryRequestDTO request)
         {
             try
@@ -97,6 +101,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> DeleteCategoryAsync(Guid id)
         {
             try

@@ -137,7 +137,6 @@ namespace CoffeeShop.Services.Implementations
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category.CategoryName,
                 //ImageUrl = product.ImageUrl
-                
             };
         }
 

@@ -3,6 +3,7 @@ using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models.Responses;
 using CoffeeShop.Services;
 using CoffeeShop.Services.Implementations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.ContentModel;
 
@@ -18,6 +19,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPut("{phone}")]
+        [Authorize]
         public async Task<IActionResult> UpdateCustomer(string phone, CustomerRequestDTO customerRequest)
         {
             try
@@ -41,6 +43,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCustomersAsync(int pageNumber, string? search, string? sortOrder, string? sortBy = "customerName", string includeProperties = "")
         {
             try
@@ -73,6 +76,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("{phone}")]
+        [Authorize]
         public async Task<ActionResult<CustomerResponseDTO>> GetCustomerDetailAsync(string phone)
         {
             try

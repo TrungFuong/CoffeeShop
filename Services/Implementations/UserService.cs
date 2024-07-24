@@ -106,6 +106,7 @@ namespace CoffeeShop.Services.Implementations
                 UserPosition = p.UserPosition,
                 Role = p.Role,
                 PhoneNumber = p.PhoneNumber,
+                Gender = p.Gender
                 //So gio lam viec
                 //Muc luong
             }).ToList();

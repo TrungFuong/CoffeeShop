@@ -104,6 +104,7 @@ namespace CoffeeShop.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         //[Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateProductAsync([FromBody] ProductRequestDTO productRequest
             //, IFormFile fileUpload
@@ -141,6 +142,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> DeleteProductAsync(Guid id)
         {
             try
@@ -172,6 +174,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> UpdateProduct(Guid id, ProductRequestDTO productRequest)
         {
             var response = new GeneralGetResponse();
@@ -200,6 +203,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("reports")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> GetReportAsync(DateTime startDate, DateTime endDate, int pageNumber, string? search, string? sortOrder, string sortBy = "productName")
         {
             try
