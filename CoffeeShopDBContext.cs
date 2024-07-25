@@ -16,6 +16,7 @@ namespace CoffeeShop
         public DbSet<Salary> Salaries { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Cart> Carts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -93,6 +94,17 @@ namespace CoffeeShop
                 .HasMany(category => category.Products)
                 .WithOne(product => product.Category);
 
+            modelBuilder.Entity<Cart>()
+                .HasMany(cart => cart.CartDetails)
+                .WithOne(cartDetail => cartDetail.Cart);
+
+            modelBuilder.Entity<CartDetail>()
+                .HasOne(cartDetail => cartDetail.Product)
+                .WithMany(product => product.CartDetails)
+                .HasForeignKey(receiptDetail => receiptDetail.ProductId);
+
+            modelBuilder.Entity<CartDetail>()
+                .HasKey(cartDetail => new { cartDetail.CartId, cartDetail.ProductId });
         }
     }
 }

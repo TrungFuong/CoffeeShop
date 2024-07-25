@@ -39,7 +39,6 @@ namespace CoffeeShop.Services.Implementations
 
             foreach (var item in receiptRequestDTO.receiptDetailDTOs)
             {
-
                 var product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
                 receiptTotal += product.ProductPrice * item.ProductQuantity;
             }

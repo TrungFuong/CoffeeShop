@@ -16,6 +16,8 @@ namespace CoffeeShop.UnitOfWork
         IUserRepository UserRepository { get; }
         IRefreshTokenRepository RefreshTokenRepository { get; }
         ITokenRepository TokenRepository { get; }
+        ICartRepository CartRepository { get; }
+        ICartDetailRepository CartDetailRepository { get; }
         Task<int> CommitAsync();
         int Commit();
         Task<IDbContextTransaction> BeginTransactionAsync();

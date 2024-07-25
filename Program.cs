@@ -72,6 +72,8 @@ namespace CoffeeShop
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<ICartDetailService, CartDetailService>();
             builder.Services.AddSingleton<CloudinaryService>();
             builder.Services.AddCors(options =>
             {

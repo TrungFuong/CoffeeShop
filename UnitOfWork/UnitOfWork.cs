@@ -18,6 +18,8 @@ namespace CoffeeShop.UnitOfWork
         private IUserRepository _userRepository;
         private IRefreshTokenRepository _refreshTokenRepository;
         private ITokenRepository _tokenRepository;
+        private CartRepository _cartRepository;
+        private CartDetailRepository _cartDetailRepository;
 
         public UnitOfWork(CoffeeShopDBContext context)
         {
@@ -38,7 +40,7 @@ namespace CoffeeShop.UnitOfWork
 
         public IProductRepository ProductRepository
             => _productRepository ??= new ProductRepository(_context);
-        
+
         public IReceiptDetailRepository ReceiptDetailRepository
             => _receiptDetailRepository ??= new ReceiptDetailRepository(_context);
 
@@ -47,14 +49,20 @@ namespace CoffeeShop.UnitOfWork
 
         public ISalaryRepository SalaryRepository
             => _salaryRepository ??= new SalaryRepository(_context);
-       
-        public IUserRepository  UserRepository
+
+        public IUserRepository UserRepository
             => _userRepository ??= new UserRepository(_context);
         public IRefreshTokenRepository RefreshTokenRepository
             => _refreshTokenRepository ??= new RefreshTokenRepository(_context);
 
         public ITokenRepository TokenRepository
             => _tokenRepository ??= new TokenRepository(_context);
+
+        public ICartRepository CartRepository
+            => _cartRepository ??= new CartRepository(_context);
+
+        public ICartDetailRepository CartDetailRepository
+            => _cartDetailRepository ??= new CartDetailRepository(_context);
 
         public async Task<int> CommitAsync()
         {

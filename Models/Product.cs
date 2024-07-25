@@ -21,6 +21,7 @@ namespace CoffeeShop.Models
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
         public ICollection<ReceiptDetail> ReceiptDetails { get; set; } = new List<ReceiptDetail>();
+        public ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
         public string? ImageUrl { get; set; }
         public bool IsDeleted { get; set; }
     }

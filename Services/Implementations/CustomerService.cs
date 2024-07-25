@@ -26,10 +26,6 @@ namespace CoffeeShop.Services.Implementations
             };
 
             await _unitOfWork.CustomerRepository.AddAsync(customer);
-            //if (await _unitOfWork.CommitAsync() < 1)
-            //{
-            //    throw new ArgumentException("Thêm khách hàng không thành công!");
-            //}
         }
 
         public async Task<CustomerResponseDTO> UpdateCustomer(string phone, CustomerRequestDTO customerRequest)

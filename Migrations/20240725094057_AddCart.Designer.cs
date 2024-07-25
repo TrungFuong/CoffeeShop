@@ -4,6 +4,7 @@ using CoffeeShop;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeShop.Migrations
 {
     [DbContext(typeof(CoffeeShopDBContext))]
-    partial class CoffeeShopDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240725094057_AddCart")]
+    partial class AddCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,18 +31,18 @@ namespace CoffeeShop.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CustomerBirthday")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.Property<int>("Table")
                         .HasColumnType("int");
@@ -49,25 +52,9 @@ namespace CoffeeShop.Migrations
 
                     b.HasKey("CartId");
 
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("CoffeeShop.Models.CartDetail", b =>
-                {
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ProductQuantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartId", "ProductId");
-
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartDetail");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("CoffeeShop.Models.Category", b =>
@@ -393,21 +380,13 @@ namespace CoffeeShop.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("CoffeeShop.Models.CartDetail", b =>
+            modelBuilder.Entity("CoffeeShop.Models.Cart", b =>
                 {
-                    b.HasOne("CoffeeShop.Models.Cart", "Cart")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CoffeeShop.Models.Product", "Product")
-                        .WithMany("CartDetails")
+                        .WithMany("Carts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cart");
 
                     b.Navigation("Product");
                 });
@@ -511,11 +490,6 @@ namespace CoffeeShop.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("CoffeeShop.Models.Cart", b =>
-                {
-                    b.Navigation("CartDetails");
-                });
-
             modelBuilder.Entity("CoffeeShop.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -533,7 +507,7 @@ namespace CoffeeShop.Migrations
 
             modelBuilder.Entity("CoffeeShop.Models.Product", b =>
                 {
-                    b.Navigation("CartDetails");
+                    b.Navigation("Carts");
 
                     b.Navigation("ReceiptDetails");
                 });
