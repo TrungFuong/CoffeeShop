@@ -10,10 +10,11 @@ namespace CoffeeShop.DTOs.Responses
         public User User { get; set; }
         public String FullName { get; set; }
         public Customer? Customer { get; set; }
+        public string? CustomerName { get; set; }
         public string? CustomerPhone { get; set; }
         public DateTime ReceiptDate { get; set; }
         public int Table { get; set; }
         public decimal ReceiptTotal { get; set; }
-        public IEnumerable<ReceiptDetailResponseDTO> ReceiptDetails { get; set; }
+        public List<ReceiptDetailResponseDTO> ReceiptDetails { get; set; }
     }
 }

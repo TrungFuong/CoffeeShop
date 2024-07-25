@@ -7,6 +7,8 @@ namespace CoffeeShop.Services
     {
         Task AddCartInfoAsync(Guid cartId, CartRequestDTO cartRequest);
         Task<CartResponseDTO> AddCartAsync(CartRequestDTO cartRequest);
-
+        Task<(IEnumerable<CartResponseDTO> data, int totalCount)> GetAllCartsAsync(int pageNumber, string? sortOrder, string? sortBy = "carttime", string includeProperties = "");
+        Task<CartResponseDTO> GetCartDetailAsync(Guid id);
+        Task DeleteCartAsync(int table);
     }
 }

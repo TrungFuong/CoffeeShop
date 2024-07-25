@@ -8,6 +8,7 @@ namespace CoffeeShop.DTOs.Responses
         public string? CustomerName { get; set; }
         public string CustomerPhone { get; set; }
         public int Table { get; set; }
+        public DateTime CartTime { get; set; }
         public decimal Total { get; set; }
         public List<CartDetailResponseDTO> CartDetails { get; set; }
     }

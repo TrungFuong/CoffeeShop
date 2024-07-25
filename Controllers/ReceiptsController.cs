@@ -60,7 +60,7 @@ namespace CoffeeShop.Controllers
                     receiptDate,
                     sortOrder,
                     sortBy,
-                    "User, Customer, ReceiptDetails");
+                    "User,Customer,ReceiptDetails");
                 if (receipts.data.Any())
                 {
                     return Ok(new GeneralGetsResponse
@@ -83,6 +83,38 @@ namespace CoffeeShop.Controllers
                 {
                     Success = false,
                     Message = ex.Message,
+                });
+            }
+        }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetReceiptDetailAsync(Guid id)
+        {
+            try
+            {
+                var receipt = await _receiptService.GetReceiptDetailAsync(id);
+                if (receipt != null)
+                {
+                    return Ok(new GeneralGetResponse
+                    {
+                        Success = true,
+                        Message = "Receipt retrieved successfully.",
+                        Data = receipt
+                    });
+                }
+                return Conflict(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = "Receipt not found."
+                });
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralGetResponse
+                {
+                    Success = false,
+                    Message = ex.Message
                 });
             }
         }

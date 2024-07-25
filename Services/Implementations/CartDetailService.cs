@@ -23,5 +23,18 @@ namespace CoffeeShop.Services.Implementations
 
             await _unitOfWork.CartDetailRepository.AddRangeAsync(cartDetails);
         }
+
+        public async Task DeleteCartDetailAsync(Guid id)
+        {
+            var cartDetail = await _unitOfWork.CartDetailRepository.GetAllAsync(c => c.CartId == id);
+            if (cartDetail == null)
+            {
+                throw new KeyNotFoundException("Không tìm thấy chi tiết giỏ hàng!");
+            }
+            foreach (var item in cartDetail)
+            {
+                _unitOfWork.CartDetailRepository.Delete(item);
+            }
+        }
     }
 }

@@ -6,6 +6,6 @@ namespace CoffeeShop.Services
     public interface ICartDetailService
     {
         Task AddCartDetailAsync(Guid cartId, List<CartDetailRequestDTO> cartDetailRequestDTO);
-
+        Task DeleteCartDetailAsync(Guid id);
     }
 }

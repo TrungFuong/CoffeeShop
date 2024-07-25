@@ -17,13 +17,17 @@ namespace CoffeeShop.Services.Implementations
         private readonly IReceiptDetailService _receiptDetailService;
         private readonly IProductService _productService;
         private readonly ICustomerService _customerService;
+        private readonly ICartService _cartService;
+        private readonly ICartDetailService _cartDetailService;
 
-        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService, IProductService productService, ICustomerService customerService)
+        public ReceiptService(IUnitOfWork unitOfWork, IReceiptDetailService receiptDetailService, IProductService productService, ICustomerService customerService, ICartService cartService, ICartDetailService cartDetailService)
         {
             _unitOfWork = unitOfWork;
             _receiptDetailService = receiptDetailService;
             _productService = productService;
             _customerService = customerService;
+            _cartService = cartService;
+            _cartDetailService = cartDetailService;
         }
 
         public async Task AddReceiptInfoAsync(Guid receiptId, ReceiptRequestDTO receiptRequestDTO)
@@ -64,6 +68,8 @@ namespace CoffeeShop.Services.Implementations
                 try
                 {
                     Task addCustomerTask = null;
+                    Task deleteCartTask = null;
+                    Task deleteCartDetailTask = null;
                     var customerId = Guid.NewGuid();
                     if (receiptRequestDTO.CustomerPhone != null)
                     {
@@ -86,11 +92,21 @@ namespace CoffeeShop.Services.Implementations
                         }
                     }
 
+
                     var receiptId = Guid.NewGuid();
                     var addReceiptTask = AddReceiptInfoAsync(receiptId, receiptRequestDTO);
                     var addReceiptDetailTask = _receiptDetailService.AddReceiptDetailAsync(receiptId, receiptRequestDTO.receiptDetailDTOs);
 
                     var tasks = new List<Task> { addReceiptTask, addReceiptDetailTask };
+
+                    var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table == receiptRequestDTO.Table);
+                    if (cart != null)
+                    {
+                        deleteCartTask = _cartService.DeleteCartAsync(receiptRequestDTO.Table);
+                        deleteCartDetailTask = _cartDetailService.DeleteCartDetailAsync(cart.CartId);
+                        tasks.Add(deleteCartTask);
+                        tasks.Add(deleteCartDetailTask);
+                    }
                     if (addCustomerTask != null)
                     {
                         tasks.Add(addCustomerTask);
@@ -135,7 +151,7 @@ namespace CoffeeShop.Services.Implementations
                 Table = r.Table,
                 UserId = r.User.UserId,
                 FullName = r.User.FirstName + " " + r.User.LastName,
-                CustomerPhone = r.Customer.CustomerPhone,
+                CustomerPhone = r.Customer?.CustomerPhone
             }).ToList();
             return (receiptResponses, receipts.totalCount);
         }
@@ -143,7 +159,7 @@ namespace CoffeeShop.Services.Implementations
 
         public async Task<ReceiptResponseDTO> GetReceiptDetailAsync(Guid id)
         {
-            var receipt = await _unitOfWork.ReceiptRepository.GetAsync(r => r.ReceiptId == id, r => r.ReceiptDetails, r => r.User, r => r.Customer);
+            var receipt = await _unitOfWork.ReceiptRepository.GetReceiptDetailAsync(id);
             if (receipt == null)
             {
                 throw new KeyNotFoundException("Không tìm thấy hóa đơn!");
@@ -156,6 +172,7 @@ namespace CoffeeShop.Services.Implementations
                 Table = receipt.Table,
                 UserId = receipt.User.UserId,
                 FullName = receipt.User.FirstName + " " + receipt.User.LastName,
+                CustomerName = receipt.Customer.CustomerName,
                 CustomerPhone = receipt.Customer.CustomerPhone,
                 ReceiptDetails = receipt.ReceiptDetails.Select(rd => new ReceiptDetailResponseDTO
                 {

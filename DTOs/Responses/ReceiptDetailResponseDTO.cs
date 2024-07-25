@@ -1,4 +1,6 @@
-﻿namespace CoffeeShop.DTOs.Responses
+﻿using CoffeeShop.Models;
+
+namespace CoffeeShop.DTOs.Responses
 {
     public class ReceiptDetailResponseDTO
     {
