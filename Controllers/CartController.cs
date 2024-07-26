@@ -51,7 +51,7 @@ namespace CoffeeShop.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCartsAsync(
             int pageNumber,
-            string? sortOrder,
+            string? sortOrder = "desc",
             string? sortBy = "carttime")
         {
             try
