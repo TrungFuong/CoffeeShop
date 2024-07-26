@@ -229,5 +229,23 @@ namespace CoffeeShop.Controllers
                 });
             }
         }
+
+        [HttpGet("export-to-excel")]
+        public async Task<IActionResult> ExportToExcel(DateTime? startDate, DateTime? endDate)
+        {
+            try
+            {
+                var file = await _productService.ExportToExcelAsync(startDate, endDate);
+                return File(file, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SalesReport.xlsx");
+            }
+            catch (Exception ex)
+            {
+                return Conflict(new GeneralBoolResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+        }
     }
 }

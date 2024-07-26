@@ -18,6 +18,6 @@ namespace CoffeeShop.Services
 
         Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
 
-        //FileUpload ConvertToFileUpload(IFormFile formFile);
+        Task<byte[]> ExportToExcelAsync(DateTime? startDate, DateTime? endDate);
     }
 }

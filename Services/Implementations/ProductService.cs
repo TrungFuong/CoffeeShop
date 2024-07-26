@@ -1,4 +1,5 @@
-﻿using CoffeeShop.DTOs;
+﻿using ClosedXML.Excel;
+using CoffeeShop.DTOs;
 using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Exceptions;
@@ -123,7 +124,7 @@ namespace CoffeeShop.Services.Implementations
                 ProductDescription = product.ProductDescription,
                 CategoryId = product.CategoryId,
                 CategoryName = product.Category.CategoryName,
-                //ImageUrl = product.ImageUrl
+                ImageUrl = product.ImageUrl
             };
         }
 
@@ -186,40 +187,6 @@ namespace CoffeeShop.Services.Implementations
                 ImageUrl = currentProduct.ImageUrl
             };
         }
-
-        //private async Task<string> UploadFileToCloudAsync(FileUpload fileUpload)
-        //{
-        //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(fileUpload.Name);
-        //    string contentType = GetContentType(fileUpload.Name);
-
-        //    using (var stream = new MemoryStream(fileUpload.FileContent))
-        //    {
-        //        var dataObject = await _storageClient.UploadObjectAsync(_bucketName, fileName, contentType, stream);
-        //        return GenerateSignedUrl(_bucketName, fileName);
-        //    }
-        //}
-
-        //private string GetContentType(string fileName)
-        //{
-        //    var extension = Path.GetExtension(fileName).ToLowerInvariant();
-        //    return extension switch
-        //    {
-        //        ".jpg" => "image/jpeg",
-        //        ".jpeg" => "image/jpeg",
-        //        ".png" => "image/png",
-        //        ".gif" => "image/gif",
-        //        ".pdf" => "application/pdf",
-        //        _ => "application/octet-stream",
-        //    };
-        //}
-
-        //private string GenerateSignedUrl(string bucketName, string objectName)
-        //{
-        //    UrlSigner urlSigner = UrlSigner.FromServiceAccountCredential(GoogleCredential.GetApplicationDefault().UnderlyingCredential as ServiceAccountCredential);
-        //    string url = urlSigner.Sign(bucketName, objectName, TimeSpan.FromHours(1), HttpMethod.Get);
-        //    return url;
-        //}
-
 
         public async Task<(IEnumerable<ProductResponseDTO> data, int totalCount)> GetAllProductsAsync(int pageNumber, Guid? category, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "", string? newProductName = "")
         {
@@ -311,8 +278,6 @@ namespace CoffeeShop.Services.Implementations
             return orderBy;
         }
 
-        // ...
-
         public async Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "")
         {
             Func<IQueryable<Product>, IOrderedQueryable<Product>>? orderBy = GetOrderQuery(sortOrder, sortBy);
@@ -351,5 +316,69 @@ namespace CoffeeShop.Services.Implementations
             }
             return (reportResults, products.Count());
         }
+
+        public async Task<byte[]> ExportToExcelAsync(DateTime? startDate, DateTime? endDate)
+        {
+            var products = await _unitOfWork.ProductRepository.GetAllAsync(p => !p.IsDeleted);
+            var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllAsync(includeProperties: "Receipt");
+            var receiptDetailResult = receiptDetails.items;
+
+            IEnumerable<ReportResponseDTO> report; 
+
+            if (startDate != null && startDate != DateTime.MinValue && endDate != null && endDate != DateTime.MinValue)
+            {
+                report = products.Select(product => new ReportResponseDTO
+                {
+                    ProductName = product.ProductName,
+                    Price = product.ProductPrice,
+                    Quantity = receiptDetailResult
+                        .Where(rd => rd.ProductId == product.ProductId && rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
+                        .Sum(rd => rd.ProductQuantity),
+                    Total = product.ReceiptDetails?.Where(rd => rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
+                        .Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
+                }).OrderBy(r => r.Total);
+            }
+            else
+            {
+                report = products.Select(product => new ReportResponseDTO
+                {
+                    ProductName = product.ProductName,
+                    Price = product.ProductPrice,
+                    Quantity = receiptDetailResult
+                        .Where(rd => rd.ProductId == product.ProductId)
+                        .Sum(rd => rd.ProductQuantity),
+                    Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
+                }).OrderBy(r => r.Total);
+            }
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Report");
+                var properties = typeof(ReportResponseDTO).GetProperties();
+
+                for (int i = 0; i < properties.Length; i++)
+                {
+                    worksheet.Cell(1, i + 1).Value = properties[i].Name;
+                }
+
+                int row = 2;
+                foreach (var item in report)
+                {
+                    worksheet.Cell(row, 1).Value = item.ProductName;
+                    worksheet.Cell(row, 2).Value = item.Price;
+                    worksheet.Cell(row, 3).Value = item.Quantity;
+                    worksheet.Cell(row, 4).Value = item.Total;
+                    row++;
+                }
+
+                using (var stream = new System.IO.MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    return stream.ToArray();
+                }
+            }
+
+        }
+
     }
 }

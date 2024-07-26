@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="CloudinaryDotNet" Version="1.26.2" />
     <PackageReference Include="EntityFramework.Triggers" Version="6.2.3" />
     <PackageReference Include="Google.Cloud.Storage.V1" Version="4.10.0" />
