@@ -73,6 +73,7 @@ namespace CoffeeShop.Services.Implementations
                 UserId = user.UserId,
                 HashToken = newJwtToken,
             });
+
             await _unitOfWork.CommitAsync();
             var userResponse = new UserResponseDTO
             {

@@ -377,8 +377,6 @@ namespace CoffeeShop.Services.Implementations
                     return stream.ToArray();
                 }
             }
-
         }
-
     }
 }

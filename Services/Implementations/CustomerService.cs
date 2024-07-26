@@ -33,7 +33,7 @@ namespace CoffeeShop.Services.Implementations
             var currentCustomer = await _unitOfWork.CustomerRepository.GetAsync(c => c.CustomerPhone == phone);
             if (currentCustomer == null)
             {
-                throw new KeyNotFoundException("Khách hàng chưa tồn tại, bạn có muốn thêm khách hàng mới không?");
+                throw new KeyNotFoundException("Khách hàng không tồn tại!");
             }
             currentCustomer.CustomerName = customerRequest.CustomerName == string.Empty ? currentCustomer.CustomerName : customerRequest.CustomerName;
             currentCustomer.CustomerPhone = customerRequest.CustomerPhone == string.Empty ? currentCustomer.CustomerPhone : customerRequest.CustomerPhone;
