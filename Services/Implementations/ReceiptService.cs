@@ -60,16 +60,12 @@ namespace CoffeeShop.Services.Implementations
 
             await _unitOfWork.ReceiptRepository.AddAsync(receipt);
         }
-
         public async Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO)
         {
             using (var transaction = await _unitOfWork.BeginTransactionAsync())
             {
                 try
                 {
-                    Task addCustomerTask = null;
-                    Task deleteCartTask = null;
-                    Task deleteCartDetailTask = null;
                     var customerId = Guid.NewGuid();
                     if (receiptRequestDTO.CustomerPhone != null)
                     {
@@ -83,7 +79,7 @@ namespace CoffeeShop.Services.Implementations
                                 CustomerPhone = receiptRequestDTO.CustomerPhone,
                                 CustomerBirthday = receiptRequestDTO.CustomerBirthday
                             };
-                            addCustomerTask = _customerService.AddCustomerAsync(customer);
+                            await _customerService.AddCustomerAsync(customer);
                             receiptRequestDTO.CustomerId = customerId;
                         }
                         else
@@ -92,27 +88,17 @@ namespace CoffeeShop.Services.Implementations
                         }
                     }
 
-
                     var receiptId = Guid.NewGuid();
-                    var addReceiptTask = AddReceiptInfoAsync(receiptId, receiptRequestDTO);
-                    var addReceiptDetailTask = _receiptDetailService.AddReceiptDetailAsync(receiptId, receiptRequestDTO.receiptDetailDTOs);
-
-                    var tasks = new List<Task> { addReceiptTask, addReceiptDetailTask };
+                    await AddReceiptInfoAsync(receiptId, receiptRequestDTO);
+                    await _receiptDetailService.AddReceiptDetailAsync(receiptId, receiptRequestDTO.receiptDetailDTOs);
 
                     var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table == receiptRequestDTO.Table);
                     if (cart != null)
                     {
-                        deleteCartTask = _cartService.DeleteCartAsync(receiptRequestDTO.Table);
-                        deleteCartDetailTask = _cartDetailService.DeleteCartDetailAsync(cart.CartId);
-                        tasks.Add(deleteCartTask);
-                        tasks.Add(deleteCartDetailTask);
-                    }
-                    if (addCustomerTask != null)
-                    {
-                        tasks.Add(addCustomerTask);
+                        await _cartService.DeleteCartAsync(receiptRequestDTO.Table);
+                        await _cartDetailService.DeleteCartDetailAsync(cart.CartId);
                     }
 
-                    await Task.WhenAll(tasks);
                     await _unitOfWork.CommitAsync();
                     await transaction.CommitAsync();
 
@@ -122,10 +108,11 @@ namespace CoffeeShop.Services.Implementations
                         ReceiptDate = receiptRequestDTO.ReceiptDate
                     };
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-                    throw new ArgumentException("Thêm hóa đơn thất bại!");
+                    Console.WriteLine(ex.Message);
+                    throw new ArgumentException("Thêm hóa đơn thất bại!", ex);
                 }
             }
         }
@@ -182,7 +169,7 @@ namespace CoffeeShop.Services.Implementations
                     ProductQuantity = rd.ProductQuantity
                 }).ToList()
             };
-        } 
+        }
 
         private async Task<Expression<Func<Receipt, bool>>>? GetFilterQuery(string? search)
         {
