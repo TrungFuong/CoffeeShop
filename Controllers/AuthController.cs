@@ -22,7 +22,7 @@ namespace CoffeeShop.Controllers
                 var (token, refreshToken, user) = await _authService.LoginAsync(request.Username, request.Password);
                 var response = new GeneralGetResponse
                 {
-                    Message = "Đang nhập thành công!",
+                    Message = "Đăng nhập thành công!",
                     Data = new { token, refreshToken, user }
                 };
                 return Ok(response);
@@ -86,29 +86,7 @@ namespace CoffeeShop.Controllers
                 return Conflict(response);
             }
         }
-        [HttpPost("logout")]
-        public async Task<IActionResult> LogoutAsync([FromBody] Guid userId)
-        {
-            try
-            {
-                await _authService.LogoutAsync(userId);
-                var response = new GeneralBoolResponse
-                {
-                    Success = true,
-                    Message = "Đăng xuất thành công!",
-                };
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                var response = new GeneralBoolResponse
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
-                return Conflict(response);
-            }
-        }
+        
     }
 }
 

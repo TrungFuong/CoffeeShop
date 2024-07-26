@@ -35,7 +35,7 @@ namespace CoffeeShop.Controllers
                 return Conflict(new GeneralCreateResponse
                 {
                     Success = false,
-                    Message = "Tạo hóa đơn thất bại!
+                    Message = "Tạo hóa đơn thất bại!"
                 });
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace CoffeeShop.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder, string? sortBy = "receiptDate")
+        public async Task<IActionResult> GetAllReceiptsAsync(int page, string? search, DateTime? receiptDate, string? sortOrder = "desc", string? sortBy = "receiptDate")
         {
             try
             {
