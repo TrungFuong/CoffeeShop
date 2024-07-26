@@ -1,7 +1,6 @@
-﻿using CoffeeShop.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoffeeShop
+namespace CoffeeShop.Models
 {
     public class RefreshToken
     {

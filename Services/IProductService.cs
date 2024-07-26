@@ -14,7 +14,7 @@ namespace CoffeeShop.Services
 
         Task<ProductResponseDTO> DeleteProductAsync(Guid productId);
 
-        Task<ProductResponseDTO> UpdateProduct(Guid id, ProductRequestDTO productRequest);
+        Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile imageFile);
 
         Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
 

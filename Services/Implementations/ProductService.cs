@@ -127,7 +127,7 @@ namespace CoffeeShop.Services.Implementations
             };
         }
 
-        public async Task<ProductResponseDTO> UpdateProduct(Guid id, ProductRequestDTO productRequest)
+        public async Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile imageFile)
         {
             var currentProduct = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == id);
             if (currentProduct == null)
@@ -140,11 +140,40 @@ namespace CoffeeShop.Services.Implementations
                 throw new KeyNotFoundException("Không tìm thấy sản phẩm!");
             }
 
-            currentProduct.ProductName = productRequest.ProductName == string.Empty ? currentProduct.ProductName : productRequest.ProductName;
-            currentProduct.ProductPrice = productRequest.ProductPrice == null ? currentProduct.ProductPrice : productRequest.ProductPrice;
-            currentProduct.ProductDescription = productRequest.ProductDescription == string.Empty ? currentProduct.ProductDescription : productRequest.ProductDescription;
-            currentProduct.CategoryId = productRequest.CategoryId == Guid.Empty ? currentProduct.CategoryId : productRequest.CategoryId;
-            //currentProduct.ImageUrl = productRequest.ImageUrl;
+            string imageUrl;
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                using (var stream = imageFile.OpenReadStream())
+                {
+                    imageUrl = await _cloudinaryService.UploadImageAsync(stream, imageFile.FileName);
+                    productRequest.ImageUrl = imageUrl;
+                }
+            }
+            else
+            {
+                productRequest.ImageUrl = null;
+            }
+
+            if (productRequest.ProductPrice != null)
+            {
+                currentProduct.ProductPrice = productRequest.ProductPrice.Value;
+            }
+
+            if (productRequest.ProductName != null && productRequest.ProductName != string.Empty)
+            {
+                currentProduct.ProductName = productRequest.ProductName;
+            }
+            if (productRequest.ProductDescription != null && productRequest.ProductDescription != string.Empty)
+            {
+                currentProduct.ProductDescription = productRequest.ProductDescription;
+            }
+            if (productRequest.CategoryId != null && productRequest.CategoryId != Guid.Empty)
+            {
+                currentProduct.CategoryId = (Guid)productRequest.CategoryId;
+            }
+
+            currentProduct.ImageUrl = productRequest.ImageUrl == null ? currentProduct.ImageUrl : productRequest.ImageUrl;
+
             _unitOfWork.ProductRepository.Update(currentProduct);
             await _unitOfWork.CommitAsync();
             return new ProductResponseDTO
@@ -154,7 +183,7 @@ namespace CoffeeShop.Services.Implementations
                 ProductPrice = currentProduct.ProductPrice,
                 ProductDescription = currentProduct.ProductDescription,
                 CategoryId = currentProduct.CategoryId,
-                //ImageUrl = currentProduct.ImageUrl
+                ImageUrl = currentProduct.ImageUrl
             };
         }
 

@@ -1,4 +1,5 @@
-﻿using CoffeeShop.Repositories.Interfaces;
+﻿using CoffeeShop.Models;
+using CoffeeShop.Repositories.Interfaces;
 
 namespace CoffeeShop.Repositories.Implements
 {

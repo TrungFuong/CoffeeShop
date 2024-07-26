@@ -105,7 +105,6 @@ namespace CoffeeShop.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleConstant.ADMIN)]
-        //[Consumes("multipart/form-data")]
         public async Task<IActionResult> CreateProductAsync([FromForm] ProductRequestDTO productRequest, IFormFile fileUpload)
         {
             try
@@ -170,12 +169,12 @@ namespace CoffeeShop.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = RoleConstant.ADMIN)]
-        public async Task<IActionResult> UpdateProduct(Guid id, ProductRequestDTO productRequest)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] ProductUpdateRequestDTO productRequest, IFormFile imageFile)
         {
             var response = new GeneralGetResponse();
             try
             {
-                var result = await _productService.UpdateProduct(id, productRequest);
+                var result = await _productService.UpdateProduct(id, productRequest, imageFile);
                 response.Success = true;
                 response.Message = "Cập nhật thông tin sản phẩm thành công!";
                 response.Data = result;
