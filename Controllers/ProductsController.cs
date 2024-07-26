@@ -105,7 +105,7 @@ namespace CoffeeShop.Controllers
 
         [HttpPost]
         [Authorize(Roles = RoleConstant.ADMIN)]
-        public async Task<IActionResult> CreateProductAsync([FromForm] ProductRequestDTO productRequest, IFormFile fileUpload)
+        public async Task<IActionResult> CreateProductAsync([FromForm] ProductRequestDTO productRequest, IFormFile? fileUpload)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace CoffeeShop.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = RoleConstant.ADMIN)]
-        public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] ProductUpdateRequestDTO productRequest, IFormFile imageFile)
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromForm] ProductUpdateRequestDTO productRequest, IFormFile? imageFile)
         {
             var response = new GeneralGetResponse();
             try

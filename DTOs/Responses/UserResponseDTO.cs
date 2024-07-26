@@ -13,5 +13,6 @@ namespace CoffeeShop.DTOs.Responses
         public EnumRole Role { get; set; }
         public string PhoneNumber { get; set; }
         public EnumGender Gender { get; set; }
+        public bool IsFirstLogin { get; set; }
     }
 }

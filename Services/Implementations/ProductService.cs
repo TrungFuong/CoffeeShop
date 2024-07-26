@@ -25,7 +25,7 @@ namespace CoffeeShop.Services.Implementations
             _unitOfWork = unitOfWork;
             _cloudinaryService = cloudinaryService;
         }
-        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, IFormFile imageFile)
+        public async Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, IFormFile? imageFile)
         {
             var category = await _unitOfWork.CategoryRepository.GetAsync(c => c.CategoryId == productRequest.CategoryId);
             if (category == null)
@@ -128,7 +128,7 @@ namespace CoffeeShop.Services.Implementations
             };
         }
 
-        public async Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile imageFile)
+        public async Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile? imageFile)
         {
             var currentProduct = await _unitOfWork.ProductRepository.GetAsync(x => x.ProductId == id);
             if (currentProduct == null)

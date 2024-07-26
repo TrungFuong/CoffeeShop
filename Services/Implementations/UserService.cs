@@ -131,6 +131,7 @@ namespace CoffeeShop.Services.Implementations
                 UserPosition = user.UserPosition,
                 Role = user.Role,
                 PhoneNumber = user.PhoneNumber,
+                IsFirstLogin = user.IsFirstLogin
                 //So gio lam viec
                 //Muc luong
             };

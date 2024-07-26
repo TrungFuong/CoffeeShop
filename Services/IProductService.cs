@@ -10,11 +10,11 @@ namespace CoffeeShop.Services
 
         Task<ProductDetailResponseDTO> GetProductDetail(Guid productId);
 
-        Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, IFormFile imageFile);
+        Task<ProductResponseDTO> CreateProductAsync(ProductRequestDTO productRequest, IFormFile? imageFile);
 
         Task<ProductResponseDTO> DeleteProductAsync(Guid productId);
 
-        Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile imageFile);
+        Task<ProductResponseDTO> UpdateProduct(Guid id, ProductUpdateRequestDTO productRequest, IFormFile? imageFile);
 
         Task<(IEnumerable<ReportResponseDTO>, int count)> GetReports(DateTime? startDate, DateTime? endDate, int pageNumber, string? search, string? sortOrder, string? sortBy = "productName", string includeProperties = "");
 
