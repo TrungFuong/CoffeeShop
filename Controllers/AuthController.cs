@@ -22,7 +22,7 @@ namespace CoffeeShop.Controllers
                 var (token, refreshToken, user) = await _authService.LoginAsync(request.Username, request.Password);
                 var response = new GeneralGetResponse
                 {
-                    Message = "User logged in successfully",
+                    Message = "Đang nhập thành công!",
                     Data = new { token, refreshToken, user }
                 };
                 return Ok(response);
@@ -46,7 +46,7 @@ namespace CoffeeShop.Controllers
                 await _authService.ChangePasswordAsync(request.Username, request.OldPassword, request.NewPassword, request.RefreshToken, CurrentToken);
                 var response = new GeneralBoolResponse
                 {
-                    Message = "Password changed successfully",
+                    Message = "Đổi mật khẩu thành công!",
                 };
                 return Ok(response);
             }
@@ -71,8 +71,31 @@ namespace CoffeeShop.Controllers
                 var (token, refreshToken, user) = await _authService.RefreshTokenAsync(refreshTokenRequest.RefreshToken);
                 var response = new GeneralGetResponse
                 {
-                    Message = "Token refreshed successfully",
+                    Message = "Làm mới token thành công!",
                     Data = new { token, refreshToken, user }
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                var response = new GeneralBoolResponse
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+                return Conflict(response);
+            }
+        }
+        [HttpPost("logout")]
+        public async Task<IActionResult> LogoutAsync([FromBody] Guid userId)
+        {
+            try
+            {
+                await _authService.LogoutAsync(userId);
+                var response = new GeneralBoolResponse
+                {
+                    Success = true,
+                    Message = "Đăng xuất thành công!",
                 };
                 return Ok(response);
             }

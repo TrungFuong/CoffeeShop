@@ -28,14 +28,14 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralCreateResponse
                     {
                         Success = true,
-                        Message = "Receipt created successfully.",
+                        Message = "Tạo hóa đơn thành công!",
                         Data = result
                     });
                 }
                 return Conflict(new GeneralCreateResponse
                 {
                     Success = false,
-                    Message = "Receipt creation failed."
+                    Message = "Tạo hóa đơn thất bại!
                 });
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetsResponse
                     {
                         Success = true,
-                        Message = "Receipts retrieved successfully.",
+                        Message = "Truy vấn hóa đơn thành công!",
                         Data = receipts.data,
                         TotalCount = receipts.totalCount
                     });
@@ -99,14 +99,14 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetResponse
                     {
                         Success = true,
-                        Message = "Receipt retrieved successfully.",
+                        Message = "Truy vấn hóa đơn thành công!",
                         Data = receipt
                     });
                 }
                 return Conflict(new GeneralGetResponse
                 {
                     Success = false,
-                    Message = "Receipt not found."
+                    Message = "Không tìm thấy hóa đơn!"
                 });
             }
             catch (Exception ex)

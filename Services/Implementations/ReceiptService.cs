@@ -1,11 +1,7 @@
-﻿using CoffeeShop.DTOs;
-using CoffeeShop.DTOs.Request;
+﻿using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models;
 using CoffeeShop.UnitOfWork;
-using Google.Cloud.Storage.V1;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Mono.TextTemplating;
 using System.Linq.Expressions;
 
 namespace CoffeeShop.Services.Implementations

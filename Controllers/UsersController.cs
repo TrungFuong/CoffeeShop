@@ -6,7 +6,6 @@ using CoffeeShop.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace CoffeeShop.Controllers
 {
@@ -31,14 +30,14 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetResponse
                     {
                         Success = true,
-                        Message = "User registered successfully.",
+                        Message = "Đăng ký tài khoản thành công!",
                         Data = result
                     });
                 }
                 return Conflict(new GeneralGetResponse
                 {
                     Success = false,
-                    Message = "User registration failed."
+                    Message = "Đăng ký tài khoản thất bại"
                 });
             }
             catch (Exception ex)
@@ -63,7 +62,7 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetsResponse
                     {
                         Success = true,
-                        Message = "Users retrieved successfully.",
+                        Message = "Truy vấn người dùng thành công!",
                         Data = users.data,
                         TotalCount = users.totalCount
                     });
@@ -71,7 +70,7 @@ namespace CoffeeShop.Controllers
                 return Conflict(new GeneralGetsResponse
                 {
                     Success = false,
-                    Message = "No data.",
+                    Message = "Không có dữ liệu!",
                 });
             }
             catch (Exception ex)
@@ -94,7 +93,7 @@ namespace CoffeeShop.Controllers
                 return Ok(new GeneralGetResponse
                 {
                     Success = true,
-                    Message = "User retrieved successfully!",
+                    Message = "Truy vấn người dùng thành công!",
                     Data = user
                 });
             }
@@ -118,7 +117,7 @@ namespace CoffeeShop.Controllers
                 return Ok(new GeneralBoolResponse
                 {
                     Success = true,
-                    Message = "User updated successfully."
+                    Message = "Cập nhật người dùng thất bại!"
                 });
             }
             catch (Exception ex)
@@ -143,13 +142,13 @@ namespace CoffeeShop.Controllers
                     return Ok(new GeneralGetResponse
                     {
                         Success = true,
-                        Message = "User deleted successfully."
+                        Message = "Xóa người dùng thành công!"
                     });
                 }
                 return Conflict(new GeneralGetResponse
                 {
                     Success = false,
-                    Message = "User deletion failed."
+                    Message = "Xóa người dùng thất bại!"
                 });
             }
             catch (Exception ex)
