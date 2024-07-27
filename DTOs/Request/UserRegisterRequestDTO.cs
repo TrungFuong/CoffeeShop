@@ -17,7 +17,7 @@ namespace CoffeeShop.DTOs.Request
         [Required]
         public EnumPostition UserPosition { get; set; }
         [Required]
-        public EnumRole Role { get; set; } = EnumRole.Employee;
+        public EnumRole Role { get; set; } 
         [Required]
         public EnumGender Gender { get; set; }
         [Required]
