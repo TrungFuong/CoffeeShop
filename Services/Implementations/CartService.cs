@@ -88,7 +88,7 @@ namespace CoffeeShop.Services.Implementations
 
                     var cartId = Guid.NewGuid();
 
-                    var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table == cartRequestDTO.Table);
+                    var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table.Equals(cartRequestDTO.Table));
                     var tasks = new List<Task> { };
 
                     if (cart == null)

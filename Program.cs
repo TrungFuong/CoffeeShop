@@ -84,8 +84,10 @@ namespace CoffeeShop
                            .AllowAnyMethod();
                 });
             });
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
+            app.MapHub<OrderHub>("/orderHub");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
