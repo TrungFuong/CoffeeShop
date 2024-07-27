@@ -11,7 +11,7 @@ namespace CoffeeShop.DTOs.Request
         public DateTime CustomerBirthday { get; set; }
         public DateTime ReceiptDate { get; set; }
         public decimal ReceiptTotal { get; set; }
-        public int Table { get; set; }
+        public string Table { get; set; }
         public List<ReceiptDetailDTO> receiptDetailDTOs { get; set; }
     }
 }

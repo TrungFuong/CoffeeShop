@@ -231,6 +231,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("export-to-excel")]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> ExportToExcel(DateTime? startDate, DateTime? endDate)
         {
             try

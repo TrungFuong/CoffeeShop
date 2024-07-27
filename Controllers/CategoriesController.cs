@@ -109,11 +109,10 @@ namespace CoffeeShop.Controllers
                 var result = await _categoryService.DeleteCategoryAsync(id);
                 if (result != null)
                 {
-                    return Ok(new GeneralCreateResponse
+                    return Ok(new GeneralBoolResponse
                     {
                         Success = true,
-                        Message = "Xóa danh mục thành công!",
-                        Data = result
+                        Message = "Xóa danh mục thành công!"
                     });
                 }
                 else

@@ -1,15 +1,8 @@
 ﻿using ClosedXML.Excel;
-using CoffeeShop.DTOs;
 using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
-using CoffeeShop.Exceptions;
 using CoffeeShop.Models;
 using CoffeeShop.UnitOfWork;
-using Google.Apis.Auth.OAuth2;
-using Google.Cloud.Storage.V1;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Mono.TextTemplating;
-using NuGet.ContentModel;
 using System.Linq.Expressions;
 
 namespace CoffeeShop.Services.Implementations
@@ -295,9 +288,7 @@ namespace CoffeeShop.Services.Implementations
                 {
                     ProductName = product.ProductName,
                     Price = product.ProductPrice,
-                    Quantity = receiptDetailResult
-                        .Where(rd => rd.ProductId == product.ProductId && rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
-                        .Sum(rd => rd.ProductQuantity),
+
                     Total = product.ReceiptDetails?.Where(rd => rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
                         .Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
                 }).ToList();
@@ -308,9 +299,7 @@ namespace CoffeeShop.Services.Implementations
                 {
                     ProductName = product.ProductName,
                     Price = product.ProductPrice,
-                    Quantity = receiptDetailResult
-                        .Where(rd => rd.ProductId == product.ProductId)
-                        .Sum(rd => rd.ProductQuantity),
+
                     Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
                 }).ToList();
             }
@@ -323,7 +312,7 @@ namespace CoffeeShop.Services.Implementations
             var receiptDetails = await _unitOfWork.ReceiptDetailRepository.GetAllAsync(includeProperties: "Receipt");
             var receiptDetailResult = receiptDetails.items;
 
-            IEnumerable<ReportResponseDTO> report; 
+            IEnumerable<ReportResponseDTO> report;
 
             if (startDate != null && startDate != DateTime.MinValue && endDate != null && endDate != DateTime.MinValue)
             {
@@ -331,9 +320,6 @@ namespace CoffeeShop.Services.Implementations
                 {
                     ProductName = product.ProductName,
                     Price = product.ProductPrice,
-                    Quantity = receiptDetailResult
-                        .Where(rd => rd.ProductId == product.ProductId && rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
-                        .Sum(rd => rd.ProductQuantity),
                     Total = product.ReceiptDetails?.Where(rd => rd.Receipt.ReceiptDate >= startDate && rd.Receipt.ReceiptDate <= endDate)
                         .Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
                 }).OrderBy(r => r.Total);
@@ -344,9 +330,7 @@ namespace CoffeeShop.Services.Implementations
                 {
                     ProductName = product.ProductName,
                     Price = product.ProductPrice,
-                    Quantity = receiptDetailResult
-                        .Where(rd => rd.ProductId == product.ProductId)
-                        .Sum(rd => rd.ProductQuantity),
+
                     Total = product.ReceiptDetails?.Sum(rd => rd.ProductQuantity * rd.Product.ProductPrice) ?? 0
                 }).OrderBy(r => r.Total);
             }
@@ -366,8 +350,7 @@ namespace CoffeeShop.Services.Implementations
                 {
                     worksheet.Cell(row, 1).Value = item.ProductName;
                     worksheet.Cell(row, 2).Value = item.Price;
-                    worksheet.Cell(row, 3).Value = item.Quantity;
-                    worksheet.Cell(row, 4).Value = item.Total;
+                    worksheet.Cell(row, 3).Value = item.Total;
                     row++;
                 }
 

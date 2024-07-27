@@ -107,7 +107,6 @@ namespace CoffeeShop.Services.Implementations
                 catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-                    Console.WriteLine(ex.Message);
                     throw new ArgumentException("Thêm hóa đơn thất bại!", ex);
                 }
             }

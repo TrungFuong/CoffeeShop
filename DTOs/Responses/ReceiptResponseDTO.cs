@@ -13,7 +13,7 @@ namespace CoffeeShop.DTOs.Responses
         public string? CustomerName { get; set; }
         public string? CustomerPhone { get; set; }
         public DateTime ReceiptDate { get; set; }
-        public int Table { get; set; }
+        public string Table { get; set; }
         public decimal ReceiptTotal { get; set; }
         public List<ReceiptDetailResponseDTO> ReceiptDetails { get; set; }
     }

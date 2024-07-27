@@ -20,6 +20,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> RegisterUserAsync([FromBody] UserRegisterRequestDTO userRegisterRequest)
         {
             try
@@ -84,7 +85,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> GetUserDetailAsync(Guid id)
         {
             try
@@ -108,7 +109,7 @@ namespace CoffeeShop.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Roles = RoleConstant.ADMIN)]
         public async Task<IActionResult> UpdateUserAsync(Guid id, UserUpdateRequestDTO userUpdateRequest)
         {
             try

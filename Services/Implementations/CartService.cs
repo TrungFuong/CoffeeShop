@@ -175,9 +175,9 @@ namespace CoffeeShop.Services.Implementations
             };
         }
 
-        public async Task DeleteCartAsync(int table)
+        public async Task DeleteCartAsync(string table)
         {
-            var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table == table);
+            var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table.Equals(table));
             if (cart == null)
             {
                 throw new KeyNotFoundException("Không tìm thấy giỏ hàng!");
