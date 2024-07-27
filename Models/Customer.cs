@@ -16,7 +16,7 @@ namespace CoffeeShop.Models
         public string? CustomerPhone { get; set; }
         [Required]
         [MaxLength(255)]
-        public DateTime CustomerBirthday { get; set; }
+        public DateTime? CustomerBirthday { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<Cart> Carts { get; set; }
         public ICollection<Receipt> Receipts{ get; set; }

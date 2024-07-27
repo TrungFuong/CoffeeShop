@@ -49,7 +49,7 @@ namespace CoffeeShop.Services.Implementations
                 CustomerId = currentCustomer.CustomerId,
                 CustomerName = currentCustomer.CustomerName,
                 CustomerPhone = currentCustomer.CustomerPhone,
-                CustomerBirthday = DateOnly.FromDateTime(currentCustomer.CustomerBirthday)
+                CustomerBirthday = currentCustomer.CustomerBirthday != null ? DateOnly.FromDateTime(currentCustomer.CustomerBirthday.Value) : null
             };
         }
 
@@ -65,7 +65,7 @@ namespace CoffeeShop.Services.Implementations
                 CustomerId = p.CustomerId,
                 CustomerName = p.CustomerName,
                 CustomerPhone = p.CustomerPhone,
-                CustomerBirthday = DateOnly.FromDateTime(p.CustomerBirthday)
+                CustomerBirthday = p.CustomerBirthday != null ? DateOnly.FromDateTime(p.CustomerBirthday.Value) : null
             }), customers.totalCount); 
         }
 
@@ -82,7 +82,7 @@ namespace CoffeeShop.Services.Implementations
                 CustomerId = customer.CustomerId,
                 CustomerName = customer.CustomerName,
                 CustomerPhone = customer.CustomerPhone,
-                CustomerBirthday = DateOnly.FromDateTime(customer.CustomerBirthday),
+                CustomerBirthday = customer.CustomerBirthday != null ? DateOnly.FromDateTime(customer.CustomerBirthday.Value) : null,
                 Receipts = customer.Receipts.Select(r => new ReceiptResponseDTO
                 {
                     ReceiptId = r.ReceiptId,

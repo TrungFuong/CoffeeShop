@@ -53,7 +53,6 @@ namespace CoffeeShop.Services.Implementations
                 Table = receiptRequestDTO.Table,
                 IsDeleted = false
             };
-
             await _unitOfWork.ReceiptRepository.AddAsync(receipt);
         }
         public async Task<ReceiptResponseDTO> AddReceiptAsync(ReceiptRequestDTO receiptRequestDTO)
