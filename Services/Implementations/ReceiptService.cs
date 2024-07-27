@@ -74,14 +74,9 @@ namespace CoffeeShop.Services.Implementations
                                 CustomerPhone = receiptRequestDTO.CustomerPhone,
                                 CustomerBirthday = receiptRequestDTO.CustomerBirthday
                             };
-                            if (customer.CustomerName != null && customer.CustomerBirthday != null && customer.CustomerPhone != null)
-                            {
-                                if (customer.CustomerName != string.Empty && customer.CustomerBirthday != DateTime.MinValue && customer.CustomerPhone != string.Empty)
-                                {
-                                    await _customerService.AddCustomerAsync(customer);
-                                    receiptRequestDTO.CustomerId = customerId;
-                                }
-                            }
+
+                            await _customerService.AddCustomerAsync(customer);
+                            receiptRequestDTO.CustomerId = customerId;
                         }
                         else
                         {
