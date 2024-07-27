@@ -1,4 +1,4 @@
-﻿using CoffeeShop.DTOs;
+﻿﻿using CoffeeShop.DTOs;
 using CoffeeShop.DTOs.Request;
 using CoffeeShop.DTOs.Responses;
 using CoffeeShop.Models;
@@ -6,7 +6,6 @@ using CoffeeShop.UnitOfWork;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Linq.Expressions;
-
 namespace CoffeeShop.Services.Implementations
 {
     public class CartService : ICartService
@@ -15,7 +14,6 @@ namespace CoffeeShop.Services.Implementations
         private readonly ICustomerService _customerService;
         private readonly ICartDetailService _cartDetailService;
         private readonly IProductService _productService;
-
         public CartService(IUnitOfWork unitOfWork, ICartDetailService cartDetailService, IProductService productService, ICustomerService customerService)
         {
             _unitOfWork = unitOfWork;
@@ -23,17 +21,14 @@ namespace CoffeeShop.Services.Implementations
             _productService = productService;
             _customerService = customerService;
         }
-
         public async Task AddCartInfoAsync(Guid cartId, CartRequestDTO cartRequest)
         {
             decimal total = 0;
-
             foreach (var item in cartRequest.CartDetails)
             {
                 var product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
                 total += product.ProductPrice * item.ProductQuantity;
             }
-
             var cart = new Cart
             {
                 CartId = cartId,
@@ -42,22 +37,15 @@ namespace CoffeeShop.Services.Implementations
                 Table = cartRequest.Table,
                 Total = total
             };
-
             await _unitOfWork.CartRepository.AddAsync(cart);
         }
-
         public async Task<CartResponseDTO> AddCartAsync(CartRequestDTO cartRequestDTO)
         {
             using (var transaction = await _unitOfWork.BeginTransactionAsync())
             {
                 try
                 {
-                    Task addCustomerTask = null;
-                    Task addCartTask = null;
-                    Task addCartDetailTask = null;
-
                     decimal total = 0;
-
                     foreach (var item in cartRequestDTO.CartDetails)
                     {
                         var product = await _unitOfWork.ProductRepository.GetAsync(p => p.ProductId == item.ProductId);
@@ -65,7 +53,9 @@ namespace CoffeeShop.Services.Implementations
                     }
 
                     var customerId = Guid.NewGuid();
-                    if (cartRequestDTO.CustomerPhone != null)
+                    Task addCustomerTask = null;
+
+                    if (!string.IsNullOrEmpty(cartRequestDTO.CustomerPhone))
                     {
                         var existingCustomer = await _customerService.GetCustomerDetailAsync(cartRequestDTO.CustomerPhone);
                         if (existingCustomer == null)
@@ -87,32 +77,30 @@ namespace CoffeeShop.Services.Implementations
                     }
 
                     var cartId = Guid.NewGuid();
-
-                    var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table.Equals(cartRequestDTO.Table));
-                    var tasks = new List<Task> { };
+                    var cart = await _unitOfWork.CartRepository.GetAsync(c => c.Table == cartRequestDTO.Table);
 
                     if (cart == null)
                     {
-                        addCartTask = AddCartInfoAsync(cartId, cartRequestDTO);
-                        tasks.Add(addCartTask);
-                        addCartDetailTask = _cartDetailService.AddCartDetailAsync(cartId, cartRequestDTO.CartDetails);
+                        cartId = Guid.NewGuid();
+                        await AddCartInfoAsync(cartId, cartRequestDTO);
                     }
                     else
                     {
-                        cart.Total = total + cart.Total;
+                        cart.Total += total;
                         _unitOfWork.CartRepository.Update(cart);
                         cartId = cart.CartId;
-                        addCartDetailTask = _cartDetailService.AddCartDetailAsync(cartId, cartRequestDTO.CartDetails);
                     }
-                        tasks.Add(addCartDetailTask);
 
+                    // Add or update cart details
+                    await AddOrUpdateCartDetailsAsync(cartId, cartRequestDTO.CartDetails);
 
+                    var tasks = new List<Task>();
                     if (addCustomerTask != null)
                     {
                         tasks.Add(addCustomerTask);
                     }
-
                     await Task.WhenAll(tasks);
+
                     await _unitOfWork.CommitAsync();
                     await transaction.CommitAsync();
 
@@ -120,7 +108,7 @@ namespace CoffeeShop.Services.Implementations
                     {
                         CartId = cartId,
                         Table = cartRequestDTO.Table,
-                        Total = cartRequestDTO.Total
+                        Total = total
                     };
                 }
                 catch (Exception)
@@ -131,6 +119,28 @@ namespace CoffeeShop.Services.Implementations
             }
         }
 
+        private async Task AddOrUpdateCartDetailsAsync(Guid cartId, IEnumerable<CartDetailRequestDTO> cartDetails)
+        {
+            foreach (var item in cartDetails)
+            {
+                var cartDetail = await _unitOfWork.CartDetailRepository.GetAsync(cd => cd.CartId == cartId && cd.ProductId == item.ProductId);
+                if (cartDetail != null)
+                {
+                    cartDetail.ProductQuantity += item.ProductQuantity; // Update quantity
+                    _unitOfWork.CartDetailRepository.Update(cartDetail);
+                }
+                else
+                {
+                    var newCartDetail = new CartDetail
+                    {
+                        CartId = cartId,
+                        ProductId = item.ProductId,
+                        ProductQuantity = item.ProductQuantity
+                    };
+                    await _unitOfWork.CartDetailRepository.AddAsync(newCartDetail);
+                }
+            }
+        }
         public async Task<(IEnumerable<CartResponseDTO> data, int totalCount)> GetAllCartsAsync(
             int page,
             string? sortOrder,
@@ -138,7 +148,6 @@ namespace CoffeeShop.Services.Implementations
             string includeProperties = "CartDetail")
         {
             Func<IQueryable<Cart>, IOrderedQueryable<Cart>>? orderBy = GetOrderQuery(sortOrder, sortBy);
-
             var carts = await _unitOfWork.CartRepository.GetAllAsync(page, filter: null, orderBy, includeProperties);
             var cartResponses = carts.items.Select(c => new CartResponseDTO
             {
@@ -149,7 +158,6 @@ namespace CoffeeShop.Services.Implementations
             }).ToList();
             return (cartResponses, carts.totalCount);
         }
-
         public async Task<CartResponseDTO> GetCartDetailAsync(Guid id)
         {
             var cart = await _unitOfWork.CartRepository.GetCartDetailAsync(id);
